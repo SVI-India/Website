@@ -71,6 +71,14 @@ const TRANSLATIONS = {
         "products.title2": "Our Products",
         "products.subtitle2": "Premium quality detergents for every need",
 
+        // Product detail pages
+        "product.enquire": "📞 Enquire Now",
+        "product.allProducts": "← All Products",
+        "product.keyFeatures": "Key Features",
+        "product.specs": "Product Specifications",
+        "product.usage": "How to Use",
+        "product.bulkEnquiry": "📦 Bulk Enquiry",
+
         // Gallery page
         "gallery.title": "Gallery",
         "gallery.subtitle": "Glimpses of our manufacturing excellence",
@@ -152,6 +160,14 @@ const TRANSLATIONS = {
         // Products page
         "products.title2": "हमारे उत्पाद",
         "products.subtitle2": "हर ज़रूरत के लिए प्रीमियम गुणवत्ता वाले डिटर्जेंट",
+
+        // Product detail pages
+        "product.enquire": "📞 अभी पूछताछ करें",
+        "product.allProducts": "← सभी उत्पाद",
+        "product.keyFeatures": "मुख्य विशेषताएँ",
+        "product.specs": "उत्पाद विवरण",
+        "product.usage": "उपयोग कैसे करें",
+        "product.bulkEnquiry": "📦 थोक पूछताछ",
 
         // Gallery page
         "gallery.title": "गैलरी",

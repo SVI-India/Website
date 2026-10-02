@@ -1,5 +1,5 @@
 // ============================================================
-// ADMIN SHARED HELPERS
+// ADMIN SHARED HELPERS — Complete
 // ============================================================
 
 // ---------- AUTH GUARD ----------
@@ -94,13 +94,14 @@ function renderSidebar(activePage) {
 
     const items = [
         { id: 'index',      icon: '📊', label: 'Dashboard',       href: 'index.html' },
-        { id: 'header',     icon: '🔝', label: 'Header',           href: 'header.html' },
-        { id: 'footer',     icon: '🔻', label: 'Footer',           href: 'footer.html' },
-        { id: 'pages',      icon: '📄', label: 'Pages',            href: 'pages.html' },
+        { id: 'header',     icon: '🔝', label: 'Header',          href: 'header.html' },
+        { id: 'footer',     icon: '🔻', label: 'Footer',          href: 'footer.html' },
+        { id: 'pages',      icon: '📄', label: 'Pages',           href: 'pages.html' },
+        { id: 'products',   icon: '📦', label: 'Products',        href: 'products.html' },
         { id: 'notices',    icon: '📢', label: 'Notices & Popups', href: 'notices.html' },
-        { id: 'theme',      icon: '🎨', label: 'Theme & CSS',      href: 'theme.html' },
-        { id: 'settings',   icon: '⚙️', label: 'Settings',         href: 'settings.html' },
-        { id: 'enquiries',  icon: '✉️', label: 'Enquiries',        href: 'enquiries.html' }
+        { id: 'theme',      icon: '🎨', label: 'Theme & CSS',     href: 'theme.html' },
+        { id: 'settings',   icon: '⚙️', label: 'Settings',        href: 'settings.html' },
+        { id: 'enquiries',  icon: '✉️', label: 'Enquiries',       href: 'enquiries.html' }
     ];
 
     el.innerHTML = `

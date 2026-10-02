@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .list-item-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+            align-items: center;
+        }
+        .spec-row {
+            display: grid;
+            grid-template-columns: minmax(120px, 1fr) minmax(180px, 2fr) auto;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .spec-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1 id="pageTitle">✏️ Edit Product</h1>
+            </div>
+            <div class="topbar-actions">
+                <a id="previewLink" href="#" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+                <a href="products.html" class="btn btn-outline btn-sm">← Back</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <!-- Basic Info -->
+        <div class="card">
+            <h3>📝 Basic Info</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input id="name" placeholder="Nikolux">
+                </div>
+                <div class="form-group">
+                    <label>Badge <small>(e.g. Bestseller, New)</small></label>
+                    <input id="badge" placeholder="Bestseller">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tagline <small>(short punchline)</small></label>
+                <input id="tagline" placeholder="Powerful Cleaning for Sparkling Whites">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="desc" rows="4" placeholder="Long description..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Image URL <small>(relative to public root)</small></label>
+                <input id="image" placeholder="images/nikolux.jpg">
+                <div class="help">Path from site root. Public pages use <code>images/nikolux.jpg</code></div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="card">
+            <h3>✨ Key Features</h3>
+            <p class="card-desc">Each line is one feature bullet.</p>
+            <div id="featuresList"></div>
+            <button class="btn btn-outline btn-sm" onclick="addFeature()">➕ Add Feature</button>
+        </div>
+
+        <!-- Specs -->
+        <div class="card">
+            <h3>📊 Specifications</h3>
+            <p class="card-desc">Key-value pairs shown in the specs table.</p>
+            <div id="specsList"></div>
+            <button class="btn btn-outline btn-sm" onclick="addSpec()">➕ Add Spec Row</button>
+        </div>
+
+        <!-- Usage -->
+        <div class="card">
+            <h3>📖 How to Use</h3>
+            <p class="card-desc">HTML allowed. Each step in a &lt;p&gt; tag.</p>
+            <textarea id="usage" class="code-editor" style="min-height:200px;" rows="6"></textarea>
+        </div>
+
+        <!-- CTA -->
+        <div class="card">
+            <h3>📢 CTA Section</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>CTA Heading</label>
+                    <input id="ctaHeading" placeholder="Interested in Bulk Order?">
+                </div>
+                <div class="form-group">
+                    <label>CTA Text</label>
+                    <input id="ctaText" placeholder="Get special pricing...">
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <button class="btn btn-success" onclick="saveProduct()">💾 Save Product</button>
+            <button class="btn btn-outline" onclick="loadProduct()">🔄 Reset (Reload)</button>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const productId = params.get('product') || 'nikolux';
+
+        const PAGES = {
+            'nikolux':   { name: 'Nikolux',   page: '../products/nikolux.html' },
+            'life-star': { name: 'Life Star', page: '../products/life-star.html' },
+            'sanjivni':  { name: 'Sanjivni',  page: '../products/sanjivni.html' }
+        };
+
+        let features = [];
+        let specs = [];
+
+        (async () => {
+            renderSidebar('products');
+            initSidebar();
+            await guardAdmin();
+            loadProduct();
+        })();
+
+        async function loadProduct() {
+            const meta = PAGES[productId] || { name: productId };
+            document.getElementById('pageTitle').textContent = `✏️ Edit: ${meta.name}`;
+            if (meta.page) document.getElementById('previewLink').href = meta.page;
+
+            try {
+                const doc = await db.collection('products').doc(productId).get();
+                const d = doc.exists ? doc.data() : {};
+
+                document.getElementById('name').value = d.name || meta.name || '';
+                document.getElementById('badge').value = d.badge || '';
+                document.getElementById('tagline').value = d.tagline || '';
+                document.getElementById('desc').value = d.desc || d.description || '';
+                document.getElementById('image').value = d.image || d.img || ('images/' + productId + '.jpg');
+                document.getElementById('usage').value = d.usage || '';
+                document.getElementById('ctaHeading').value = d.ctaHeading || '';
+                document.getElementById('ctaText').value = d.ctaText || '';
+
+                features = d.features ? [...d.features] : [];
+                specs = d.specs ? d.specs.map(s => [s[0], s[1]]) : [];
+
+                renderFeatures();
+                renderSpecs();
+            } catch (e) {
+                toast('Load failed: ' + e.message, 'error');
+            }
+        }
+
+        function renderFeatures() {
+            const el = document.getElementById('featuresList');
+            if (!features.length) {
+                el.innerHTML = '<div style="color:#94a3b8;font-size:0.85rem;padding:0.5rem 0;">No features yet. Click "Add Feature" below.</div>';
+                return;
+            }
+            el.innerHTML = features.map((f, i) => `
+                <div class="list-item-grid">
+                    <input value="${esc(f)}" oninput="features[${i}]=this.value" placeholder="Feature ${i + 1}">
+                    <button class="btn btn-danger btn-sm" onclick="removeFeature(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addFeature() {
+            features.push('');
+            renderFeatures();
+        }
+
+        function removeFeature(i) {
+            features.splice(i, 1);
+            renderFeatures();
+        }
+
+        function renderSpecs() {
+            const el = document.getElementById('specsList');
+            if (!specs.length) {
+                el.innerHTML = '<div style="color:#94a3b8;font-size:0.85rem;padding:0.5rem 0;">No specs yet. Click "Add Spec Row" below.</div>';
+                return;
+            }
+            el.innerHTML = specs.map((s, i) => `
+                <div class="spec-row">
+                    <input value="${esc(s[0] || '')}" oninput="specs[${i}][0]=this.value" placeholder="Label (e.g. Brand)">
+                    <input value="${esc(s[1] || '')}" oninput="specs[${i}][1]=this.value" placeholder="Value (e.g. Nikolux)">
+                    <button class="btn btn-danger btn-sm" onclick="removeSpec(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addSpec() {
+            specs.push(['', '']);
+            renderSpecs();
+        }
+
+        function removeSpec(i) {
+            specs.splice(i, 1);
+            renderSpecs();
+        }
+
+        async function saveProduct() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                const data = {
+                    name: document.getElementById('name').value.trim(),
+                    badge: document.getElementById('badge').value.trim(),
+                    tagline: document.getElementById('tagline').value.trim(),
+                    desc: document.getElementById('desc').value.trim(),
+                    image: document.getElementById('image').value.trim(),
+                    usage: document.getElementById('usage').value,
+                    ctaHeading: document.getElementById('ctaHeading').value.trim(),
+                    ctaText: document.getElementById('ctaText').value.trim(),
+                    features: features.filter(f => f.trim() !== ''),
+                    specs: specs.filter(s => s[0].trim() !== '' && s[1].trim() !== ''),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: auth.currentUser.email
+                };
+
+                await db.collection('products').doc(productId).set(data, { merge: true });
+                showAlert('pageAlert', '✅ Product saved! Refresh the public site to see changes.', 'success');
+                toast('Product saved successfully', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+                showAlert('pageAlert', '❌ ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Product';
+        }
+    </script>
+</body>
+</html>

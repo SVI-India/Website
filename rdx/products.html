@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Manager | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>📦 Products Manager</h1>
+            </div>
+            <div class="topbar-actions">
+                <a href="../products.html" target="_blank" class="btn btn-outline btn-sm">👁 View Products</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>📋 All Products</h3>
+            <p class="card-desc">Edit product details shown on the public products page and individual product pages.</p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable">
+                        <tr><td colspan="6" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>ℹ️ About Products</h3>
+            <p class="card-desc">
+                Each product has its own detail page (<code>/products/[id].html</code>). 
+                Click "Edit" to modify the product's name, description, features, specifications, 
+                and image. Changes are reflected immediately on the public site.
+            </p>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Products that have detail pages
+        const PAGES = {
+            'nikolux':   { name: 'Nikolux',   category: 'powder', page: '../products/nikolux.html' },
+            'life-star': { name: 'Life Star', category: 'powder', page: '../products/life-star.html' },
+            'sanjivni':  { name: 'Sanjivni',  category: 'herbal', page: '../products/sanjivni.html' }
+        };
+
+        (async () => {
+            renderSidebar('products');
+            initSidebar();
+            await guardAdmin();
+            loadProducts();
+        })();
+
+        async function loadProducts() {
+            const tbody = document.getElementById('productsTable');
+            try {
+                const snap = await db.collection('products').get();
+                const dbProducts = {};
+                snap.forEach(d => dbProducts[d.id] = d.data());
+
+                // Merge page-defined products with DB overrides
+                const all = Object.entries(PAGES).map(([id, meta]) => {
+                    const data = dbProducts[id] || {};
+                    return {
+                        id,
+                        name: data.name || meta.name,
+                        category: data.category || meta.category,
+                        image: data.image || data.img || `../images/${id}.jpg`,
+                        custom: !!dbProducts[id],
+                        page: meta.page
+                    };
+                });
+
+                // Also include any products in DB that don't have pages (custom)
+                snap.forEach(d => {
+                    if (!PAGES[d.id]) {
+                        const data = d.data();
+                        all.push({
+                            id: d.id,
+                            name: data.name || d.id,
+                            category: data.category || 'powder',
+                            image: data.image || data.img || '',
+                            custom: true,
+                            page: null
+                        });
+                    }
+                });
+
+                if (!all.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94a3b8;">No products found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = all.map(p => `
+                    <tr>
+                        <td>
+                            <img src="${esc(p.image)}" alt="${esc(p.name)}"
+                                 style="width:50px;height:50px;border-radius:8px;object-fit:cover;background:#f1f5f9;"
+                                 onerror="this.style.background='#e2e8f0';this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 50 50%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23e2e8f0%22/%3E%3C/svg%3E'">
+                        </td>
+                        <td><code style="font-size:0.78rem;background:#f1f5f9;padding:0.2rem 0.5rem;border-radius:4px;">${p.id}</code></td>
+                        <td><strong>${esc(p.name)}</strong></td>
+                        <td><span class="badge gray">${esc(p.category)}</span></td>
+                        <td>${p.custom ? '<span class="badge success">Customized</span>' : '<span class="badge gray">Default</span>'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-primary btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
+                                ${p.page ? `<a href="${p.page}" target="_blank" class="btn btn-outline btn-sm">👁 View</a>` : ''}
+                                ${p.custom ? `<button class="btn btn-danger btn-sm" onclick="resetProduct('${p.id}','${esc(p.name)}')">↺ Reset</button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#ef4444;">Error: ${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function editProduct(id) {
+            location.href = 'edit-product.html?product=' + encodeURIComponent(id);
+        }
+
+        async function resetProduct(id, name) {
+            if (!confirmAction(`Reset "${name}" to defaults? All customizations will be lost.`)) return;
+            try {
+                await db.collection('products').doc(id).delete();
+                toast(`"${name}" reset to default`, 'success');
+                loadProducts();
+            } catch (e) {
+                toast('Reset failed: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
