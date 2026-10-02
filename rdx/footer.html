@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Editor | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>🔻 Footer Editor</h1>
+            </div>
+            <div class="topbar-actions">
+                <a href="../index.html" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>🏢 Brand Info</h3>
+            <div class="form-group">
+                <label>Brand Name</label>
+                <input id="brandName" placeholder="Siddhi Vinayak Industries">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>About Text (English)</label>
+                    <textarea id="aboutText" placeholder="Powerful Clean. Assured Quality..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>About Text (Hindi)</label>
+                    <textarea id="aboutTextHi" placeholder="शक्तिशाली सफाई। सुनिश्चित गुणवत्ता..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📞 Contact Info</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Address (EN)</label>
+                    <input id="address" placeholder="Lachharsar, Rajasthan, India">
+                </div>
+                <div class="form-group">
+                    <label>Address (HI)</label>
+                    <input id="addressHi" placeholder="लछारसर, राजस्थान, भारत">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input id="phone" placeholder="+91 8119964445">
+                </div>
+                <div class="form-group">
+                    <label>General Email</label>
+                    <input id="email" placeholder="info@sve-in.xubi.org">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Sales Email</label>
+                    <input id="salesEmail" placeholder="sales@sve-in.xubi.org">
+                </div>
+                <div class="form-group">
+                    <label>B2B Email</label>
+                    <input id="b2bEmail" placeholder="b2b@sve-in.xubi.org">
+                </div>
+                <div class="form-group">
+                    <label>Grievance Email</label>
+                    <input id="grievanceEmail" placeholder="grievance@sve-in.xubi.org">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📩 Reply Configuration</h3>
+            <p class="card-desc">This notice appears in footer and contact pages.</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Reply From Email</label>
+                    <input id="replyFrom" placeholder="sve.raj.in@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Reply Notice Message</label>
+                    <input id="replyNotice" placeholder="Reply will be from sve.raj.in@gmail.com">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔗 Social Links</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Facebook URL</label><input id="facebook" placeholder="https://facebook.com/..."></div>
+                <div class="form-group"><label>Instagram URL</label><input id="instagram" placeholder="https://instagram.com/..."></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Twitter/X URL</label><input id="twitter" placeholder="https://x.com/..."></div>
+                <div class="form-group"><label>YouTube URL</label><input id="youtube" placeholder="https://youtube.com/..."></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>WhatsApp URL</label><input id="whatsapp" placeholder="https://wa.me/918119964445"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>© Copyright</h3>
+            <div class="form-group">
+                <label>Copyright Text</label>
+                <input id="copyright" placeholder="© 2025 Siddhi Vinayak Industries. All rights reserved.">
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <button class="btn btn-success" onclick="saveFooter()">💾 Save Footer</button>
+            <button class="btn btn-outline" onclick="loadFooter()">🔄 Reset (Reload)</button>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/emails.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        (async () => {
+            renderSidebar('footer');
+            initSidebar();
+            await guardAdmin();
+            loadFooter();
+        })();
+
+        async function loadFooter() {
+            try {
+                const doc = await db.collection('settings').doc('footer').get();
+                const d = doc.exists ? doc.data() : {};
+                const c = d.contactInfo || {};
+                const s = d.socialLinks || {};
+
+                document.getElementById('brandName').value = d.brandName || 'Siddhi Vinayak Industries';
+                document.getElementById('aboutText').value = d.aboutText || '';
+                document.getElementById('aboutTextHi').value = d.aboutTextHi || '';
+                document.getElementById('address').value = c.address || '';
+                document.getElementById('addressHi').value = c.addressHi || '';
+                document.getElementById('phone').value = c.phone || '+91 8119964445';
+                document.getElementById('email').value = c.email || window.SVI_EMAILS.general;
+                document.getElementById('salesEmail').value = c.salesEmail || window.SVI_EMAILS.sales;
+                document.getElementById('b2bEmail').value = c.b2bEmail || window.SVI_EMAILS.b2b;
+                document.getElementById('grievanceEmail').value = c.grievanceEmail || window.SVI_EMAILS.grievance;
+                document.getElementById('replyFrom').value = c.replyFrom || window.SVI_REPLY_FROM;
+                document.getElementById('replyNotice').value = c.replyNotice || window.SVI_REPLY_NOTICE;
+                document.getElementById('facebook').value = s.facebook || '';
+                document.getElementById('instagram').value = s.instagram || '';
+                document.getElementById('twitter').value = s.twitter || '';
+                document.getElementById('youtube').value = s.youtube || '';
+                document.getElementById('whatsapp').value = s.whatsapp || '';
+                document.getElementById('copyright').value = d.copyright || '';
+            } catch (e) {
+                toast('Failed to load footer: ' + e.message, 'error');
+            }
+        }
+
+        async function saveFooter() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            try {
+                const data = {
+                    brandName: document.getElementById('brandName').value.trim(),
+                    aboutText: document.getElementById('aboutText').value.trim(),
+                    aboutTextHi: document.getElementById('aboutTextHi').value.trim(),
+                    contactInfo: {
+                        address: document.getElementById('address').value.trim(),
+                        addressHi: document.getElementById('addressHi').value.trim(),
+                        phone: document.getElementById('phone').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        salesEmail: document.getElementById('salesEmail').value.trim(),
+                        b2bEmail: document.getElementById('b2bEmail').value.trim(),
+                        grievanceEmail: document.getElementById('grievanceEmail').value.trim(),
+                        replyFrom: document.getElementById('replyFrom').value.trim(),
+                        replyNotice: document.getElementById('replyNotice').value.trim()
+                    },
+                    socialLinks: {
+                        facebook: document.getElementById('facebook').value.trim(),
+                        instagram: document.getElementById('instagram').value.trim(),
+                        twitter: document.getElementById('twitter').value.trim(),
+                        youtube: document.getElementById('youtube').value.trim(),
+                        whatsapp: document.getElementById('whatsapp').value.trim()
+                    },
+                    copyright: document.getElementById('copyright').value.trim(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await db.collection('settings').doc('footer').set(data, { merge: true });
+                showAlert('pageAlert', '✅ Footer saved! Refresh the public site to see changes.', 'success');
+                toast('Footer saved successfully', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+                showAlert('pageAlert', '❌ ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Footer';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>Siddhi Vinayak Industries | Premium Detergent Manufacturer</title>
+    <meta name="description" content="India's trusted detergent manufacturer. Nikolux, Life Star, Sanjivni brands.">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body data-page="home">
+
+    <div id="site-header"></div>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="hero-badge" data-cms="heroBadge" data-i18n="hero.badge">🏆 India's Trusted Detergent Manufacturer</span>
+                <h1 id="heroTitle" data-cms="heroTitle" data-i18n="hero.title">Powerful Clean. <span>Assured Quality.</span></h1>
+                <p id="heroText" data-cms="heroText" data-i18n="hero.text">Premium quality detergents crafted with advanced technology.</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary" data-i18n="hero.cta1">View Products</a>
+                    <a href="contact.html" class="btn btn-outline" data-i18n="hero.cta2">Contact Us</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img id="heroImage" src="images/nikolux.jpg" alt="Siddhi Vinayak" loading="lazy"
+                     onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22400%22 viewBox=%220 0 500 400%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%231e40af%22/%3E%3Cstop offset=%221%22 stop-color=%22%233b82f6%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22500%22 height=%22400%22 fill=%22url(%23g)%22/%3E%3Ctext x=%22250%22 y=%22200%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-size=%2232%22 font-weight=%22bold%22%3ESiddhi Vinayak%3C/text%3E%3Ctext x=%22250%22 y=%22240%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-size=%2216%22 opacity=%220.85%22%3EPremium Detergents%3C/text%3E%3C/svg%3E'">
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <h3 data-cms="stat1Num">15+</h3>
+                <p data-i18n="stats.years">Years Experience</p>
+            </div>
+            <div class="stat">
+                <h3 data-cms="stat2Num">50+</h3>
+                <p data-i18n="stats.dist">Distributors</p>
+            </div>
+            <div class="stat">
+                <h3 data-cms="stat3Num">3</h3>
+                <p data-i18n="stats.brands">Premium Brands</p>
+            </div>
+            <div class="stat">
+                <h3 data-cms="stat4Num">1M+</h3>
+                <p data-i18n="stats.customers">Happy Customers</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2 data-i18n="products.title">Our Premium Brands</h2>
+            <p data-i18n="products.subtitle">Discover our range of high-performance detergents</p>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <section class="section" style="background:var(--bg-soft); max-width:none;">
+        <div style="max-width:1280px; margin:0 auto; padding:0 0.5rem;">
+            <div class="section-header">
+                <h2 data-i18n="features.title">Why Choose Us?</h2>
+                <p data-i18n="features.subtitle">Manufacturing excellence with quality assurance</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🏭</div>
+                    <h3 data-i18n="feature1.title">Modern Facility</h3>
+                    <p data-i18n="feature1.desc">State-of-the-art manufacturing unit</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔬</div>
+                    <h3 data-i18n="feature2.title">Lab Tested</h3>
+                    <p data-i18n="feature2.desc">Every batch tested for quality</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📦</div>
+                    <h3 data-i18n="feature3.title">Bulk Supply</h3>
+                    <p data-i18n="feature3.desc">Reliable distribution network</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✅</div>
+                    <h3 data-i18n="feature4.title">ISO Certified</h3>
+                    <p data-i18n="feature4.desc">Quality standards you can trust</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+    <script>
+        (async () => {
+            const grid = document.getElementById('productsGrid');
+            let products = [
+                { id:'nikolux', name:'Nikolux', desc:'Premium detergent powder for sparkling clean clothes.', img:'images/nikolux.jpg', link:'products/nikolux.html' },
+                { id:'life-star', name:'Life Star', desc:'Economical detergent for everyday use.', img:'images/life-star.jpg', link:'products/life-star.html' },
+                { id:'sanjivni', name:'Sanjivni', desc:'Herbal-based detergent for sensitive fabrics.', img:'images/sanjivni.jpg', link:'products/sanjivni.html' }
+            ];
+            try {
+                const snap = await db.collection('products').get();
+                if (!snap.empty) products = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+            } catch(e) {}
+
+            grid.innerHTML = products.map(p => {
+                const fallback = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240">' +
+                    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+                    '<stop offset="0" stop-color="#1e40af"/><stop offset="1" stop-color="#3b82f6"/>' +
+                    '</linearGradient></defs>' +
+                    '<rect width="400" height="240" fill="url(#g)"/>' +
+                    '<text x="200" y="115" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="28" font-weight="bold">' + p.name + '</text>' +
+                    '<text x="200" y="145" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="14" opacity="0.85">Siddhi Vinayak Industries</text>' +
+                    '</svg>'
+                )}`;
+                const img = p.img || p.image || fallback;
+                return `
+                    <div class="product-card">
+                        <img src="${img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='${fallback}'">
+                        <div class="product-card-body">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc || p.description || ''}</p>
+                            <a href="${p.link || 'products/'+p.id+'.html'}" class="btn btn-primary" data-i18n="btn.learnMore">Learn More</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            if (typeof applyTranslations === 'function') applyTranslations();
+        })();
+    </script>
+</body>
+</html>

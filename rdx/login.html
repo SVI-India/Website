@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <link rel="icon" href="../images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="login-wrap">
+        <div class="login-card">
+            <div class="logo-wrap">
+                <img src="../images/logo.png" alt="SVI Logo" onerror="this.style.display='none'">
+                <h1>🔐 Admin Panel</h1>
+                <p class="sub">Siddhi Vinayak Industries CMS</p>
+            </div>
+
+            <div class="alert" id="loginAlert"></div>
+
+            <button class="google-btn" id="googleBtn" onclick="signInWithGoogle()">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                </svg>
+                <span id="googleBtnText">Sign in with Google</span>
+            </button>
+
+            <div class="login-divider">Authorized Access Only</div>
+
+            <p class="login-note">
+                🔒 Login is restricted to the authorized administrator account.<br>
+                Only <strong>shidhivinayakindustry.svi@gmail.com</strong> can access this panel.
+            </p>
+
+            <a href="../index.html" class="login-back">← Back to Website</a>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script>
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
+        // Auto-redirect if already logged in as admin
+        auth.onAuthStateChanged(user => {
+            if (user && user.email === window.ADMIN_EMAIL) {
+                location.href = 'index.html';
+            } else if (user && user.email !== window.ADMIN_EMAIL) {
+                auth.signOut();
+            }
+        });
+
+        async function signInWithGoogle() {
+            const btn = document.getElementById('googleBtn');
+            const txt = document.getElementById('googleBtnText');
+            const alert = document.getElementById('loginAlert');
+
+            btn.disabled = true;
+            txt.textContent = 'Signing in...';
+            alert.className = 'alert';
+
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+
+                if (user.email !== window.ADMIN_EMAIL) {
+                    await auth.signOut();
+                    throw new Error('Access denied — this Google account is not authorized.');
+                }
+
+                alert.className = 'alert alert-success show';
+                alert.textContent = '✅ Login successful! Redirecting...';
+                setTimeout(() => { location.href = 'index.html'; }, 700);
+
+            } catch (err) {
+                console.error(err);
+                let msg = err.message.replace('Firebase: ', '').replace('Error: ', '');
+                if (err.code === 'auth/popup-closed-by-user') msg = 'Login cancelled. Please try again.';
+                else if (err.code === 'auth/popup-blocked') msg = 'Popup blocked by browser. Please allow popups.';
+                else if (err.code === 'auth/unauthorized-domain') msg = 'Domain not authorized. Add it in Firebase Console.';
+                else if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your internet connection.';
+
+                alert.className = 'alert alert-error show';
+                alert.textContent = '❌ ' + msg;
+                btn.disabled = false;
+                txt.textContent = 'Sign in with Google';
+            }
+        }
+    </script>
+</body>
+</html>

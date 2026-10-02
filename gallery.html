@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>Gallery | Siddhi Vinayak Industries</title>
+    <meta name="description" content="Photo gallery of Siddhi Vinayak Industries — factory, machines, lab, products">
+    <link rel="icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Gallery-specific styles */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .gallery-filter {
+            padding: 0.5rem 1.1rem;
+            border-radius: 50px;
+            background: var(--bg-soft);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            font-size: clamp(0.78rem, 1.4vw, 0.88rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .gallery-filter:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .gallery-filter.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+            gap: clamp(0.75rem, 2vw, 1.25rem);
+            width: 100%;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            aspect-ratio: 1;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            background: var(--bg-soft);
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 0;
+        }
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            display: block;
+        }
+        .gallery-item:hover img { transform: scale(1.08); }
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 40%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: clamp(0.75rem, 2vw, 1.25rem);
+            color: #fff;
+            pointer-events: none;
+        }
+        .gallery-item:hover .overlay,
+        .gallery-item:focus .overlay { opacity: 1; }
+        .gallery-item .caption {
+            font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+            font-weight: 600;
+            line-height: 1.3;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            word-break: break-word;
+        }
+        .gallery-item .zoom-icon {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 34px;
+            height: 34px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: scale(0.7);
+        }
+        .gallery-item:hover .zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.25s;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox-img {
+            max-width: 92vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .lightbox-caption {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: clamp(0.85rem, 1.5vw, 1rem);
+            font-weight: 600;
+            text-align: center;
+            max-width: 90vw;
+            padding: 0.5rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50px;
+            backdrop-filter: blur(6px);
+            word-break: break-word;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            backdrop-filter: blur(6px);
+        }
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            backdrop-filter: blur(6px);
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+        .lightbox-prev { left: 1rem; }
+        .lightbox-next { right: 1rem; }
+
+        .gallery-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            .gallery-item .overlay { opacity: 1; }
+            .gallery-item .zoom-icon { opacity: 1; transform: scale(1); }
+            .lightbox-nav { width: 40px; height: 40px; font-size: 1.15rem; }
+            .lightbox-prev { left: 0.5rem; }
+            .lightbox-next { right: 0.5rem; }
+        }
+    </style>
+</head>
+<body data-page="gallery">
+
+    <div id="site-header"></div>
+
+    <section class="section">
+        <div class="section-header">
+            <h1 data-cms="title" data-i18n="gallery.title">Gallery</h1>
+            <p data-cms="subtitle" data-i18n="gallery.subtitle">Glimpses of our manufacturing excellence</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="gallery-filters" id="galleryFilters">
+            <button class="gallery-filter active" data-filter="all">All</button>
+            <button class="gallery-filter" data-filter="factory">Factory</button>
+            <button class="gallery-filter" data-filter="products">Products</button>
+            <button class="gallery-filter" data-filter="team">Team</button>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" title="Close">✕</button>
+        <button class="lightbox-nav lightbox-prev" onclick="prevImage()" title="Previous">‹</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+        <button class="lightbox-nav lightbox-next" onclick="nextImage()" title="Next">›</button>
+    </div>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+
+    <script>
+        // ============================================================
+        // GALLERY LOADER + FILTERS + LIGHTBOX
+        // ============================================================
+        let allImages = [];
+        let filteredImages = [];
+        let currentIndex = 0;
+        let activeFilter = 'all';
+
+        // SVG fallback for missing images
+        function makeFallback(label) {
+            return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">' +
+                '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0" stop-color="#1e40af"/><stop offset="1" stop-color="#3b82f6"/>' +
+                '</linearGradient></defs>' +
+                '<rect width="400" height="400" fill="url(#g)"/>' +
+                '<text x="200" y="200" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="24" font-weight="bold">' + (label || 'Image') + '</text>' +
+                '<text x="200" y="230" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="13" opacity="0.85">Siddhi Vinayak Industries</text>' +
+                '</svg>'
+            )}`;
+        }
+
+        // Load images from Firestore or use defaults
+        async function loadGallery() {
+            const grid = document.getElementById('galleryGrid');
+
+            // Default images (in case Firestore is empty)
+            allImages = [
+                { url: 'images/factory.jpg',   title: 'Factory View',    category: 'factory' },
+                { url: 'images/machines.jpg',  title: 'Machines',        category: 'factory' },
+                { url: 'images/lab.jpg',       title: 'Quality Lab',     category: 'factory' },
+                { url: 'images/packing.jpg',   title: 'Packing Unit',    category: 'factory' },
+                { url: 'images/nikolux.jpg',   title: 'Nikolux',         category: 'products' },
+                { url: 'images/life-star.jpg', title: 'Life Star',       category: 'products' },
+                { url: 'images/sanjivni.jpg',  title: 'Sanjivni',        category: 'products' }
+            ];
+
+            try {
+                const snap = await db.collection('gallery').get();
+                if (!snap.empty) {
+                    allImages = snap.docs.map(d => {
+                        const x = d.data();
+                        return {
+                            url: x.url || x.image || '',
+                            title: x.title || x.caption || '',
+                            category: (x.category || 'factory').toLowerCase()
+                        };
+                    }).filter(i => i.url);
+                }
+            } catch (e) {
+                console.warn('Gallery Firestore load failed, using defaults');
+            }
+
+            applyFilter('all');
+        }
+
+        function applyFilter(filter) {
+            activeFilter = filter;
+
+            // Update active button
+            document.querySelectorAll('.gallery-filter').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+
+            // Filter images
+            filteredImages = filter === 'all'
+                ? allImages
+                : allImages.filter(i => (i.category || '').toLowerCase() === filter);
+
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+
+            if (!filteredImages.length) {
+                grid.innerHTML = `<div class="gallery-empty">📷 No images in this category yet.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filteredImages.map((img, idx) => {
+                const fallback = makeFallback(img.title);
+                return `
+                    <div class="gallery-item" onclick="openLightbox(${idx})" tabindex="0" role="button" aria-label="${img.title || 'Image'}">
+                        <img src="${img.url}" alt="${img.title || 'Gallery image'}"
+                             loading="lazy"
+                             onerror="this.onerror=null;this.src='${fallback}'">
+                        <div class="zoom-icon">🔍</div>
+                        ${img.title ? `<div class="overlay"><div class="caption">${img.title}</div></div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---------- LIGHTBOX ----------
+        function openLightbox(idx) {
+            if (!filteredImages[idx]) return;
+            currentIndex = idx;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateLightbox() {
+            const img = filteredImages[currentIndex];
+            if (!img) return;
+            const fallback = makeFallback(img.title);
+            const el = document.getElementById('lightboxImg');
+            el.src = img.url;
+            el.onerror = function () { this.onerror = null; this.src = fallback; };
+            el.alt = img.title || 'Gallery image';
+            document.getElementById('lightboxCaption').textContent = img.title || '';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
+            updateLightbox();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % filteredImages.length;
+            updateLightbox();
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', e => {
+            const lb = document.getElementById('lightbox');
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            else if (e.key === 'ArrowLeft') prevImage();
+            else if (e.key === 'ArrowRight') nextImage();
+        });
+
+        // Filter click handlers
+        document.querySelectorAll('.gallery-filter').forEach(btn => {
+            btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+        });
+
+        // Swipe support for mobile
+        (function () {
+            let touchStartX = 0;
+            const lb = document.getElementById('lightbox');
+            lb.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+            lb.addEventListener('touchend', e => {
+                const diff = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(diff) > 60) {
+                    if (diff > 0) prevImage();
+                    else nextImage();
+                }
+            }, { passive: true });
+        })();
+
+        // Kick off
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

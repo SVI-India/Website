@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>Contact | Siddhi Vinayak Industries</title>
+    <meta name="description" content="Contact Siddhi Vinayak Industries — Sales, Support, B2B, Grievance">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body data-page="contact">
+
+    <div id="site-header"></div>
+
+    <section class="section">
+        <div class="section-header">
+            <h1 data-cms="title" data-i18n="contact.title">Contact Us</h1>
+            <p data-cms="subtitle" data-i18n="contact.subtitle">We'd love to hear from you</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>📬 Contact Information</h3>
+
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <div>
+                        <strong>Address</strong><br>
+                        <span data-cms="address">Lachharsar, Rajasthan, India</span>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">📞</span>
+                    <div>
+                        <strong>Phone</strong><br>
+                        <a href="tel:+918119964445">+91 8119964445</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">✉️</span>
+                    <div>
+                        <strong>General Enquiry</strong><br>
+                        <a href="mailto:info@sve-in.xubi.org">info@sve-in.xubi.org</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">💼</span>
+                    <div>
+                        <strong>Sales</strong><br>
+                        <a href="mailto:sales@sve-in.xubi.org">sales@sve-in.xubi.org</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">🤝</span>
+                    <div>
+                        <strong>B2B / Distribution</strong><br>
+                        <a href="mailto:b2b@sve-in.xubi.org">b2b@sve-in.xubi.org</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">🛠️</span>
+                    <div>
+                        <strong>Support</strong><br>
+                        <a href="mailto:support@sve-in.xubi.org">support@sve-in.xubi.org</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">⚖️</span>
+                    <div>
+                        <strong>Grievance Officer</strong><br>
+                        <a href="mailto:grievance@sve-in.xubi.org">grievance@sve-in.xubi.org</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <span class="icon">🕐</span>
+                    <div>
+                        <strong>Business Hours</strong><br>
+                        Mon–Sat: 9:00 AM – 7:00 PM IST
+                    </div>
+                </div>
+
+                <div class="reply-notice">
+                    ℹ️ <strong>Note:</strong> Reply will be from <strong>sve.raj.in@gmail.com</strong> — please check your spam folder if you don't see our reply within 24–48 hours.
+                </div>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+                <div class="alert" id="formAlert"></div>
+
+                <div class="form-group">
+                    <label data-i18n="form.name">Your Name</label>
+                    <input type="text" id="name" required placeholder="Enter your name">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="form.email">Email</label>
+                    <input type="email" id="email" required placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="form.phone">Phone</label>
+                    <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>Enquiry Type</label>
+                    <select id="enquiryType">
+                        <option value="general">General Enquiry</option>
+                        <option value="sales">Sales</option>
+                        <option value="b2b">B2B / Distribution</option>
+                        <option value="support">Support</option>
+                        <option value="bulk">Bulk Order</option>
+                        <option value="grievance">Grievance</option>
+                        <option value="media">Media / Press</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="form.message">Message</label>
+                    <textarea id="message" required placeholder="Your message..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="btn.send">Send Message</button>
+
+                <p style="font-size:0.8rem;color:var(--text-muted);text-align:center;margin-top:1rem;line-height:1.4;">
+                    ℹ️ Reply will be from <strong>sve.raj.in@gmail.com</strong>
+                </p>
+            </form>
+        </div>
+
+        <div style="margin-top:4rem;">
+            <div class="section-header">
+                <h2>📧 Direct Email Directory</h2>
+                <p>Reach the right department directly</p>
+            </div>
+            <div class="email-grid" id="emailGrid"></div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+    <script>
+        const EMAIL_DIRECTORY = [
+            { key: 'info',        label: 'General Enquiry' },
+            { key: 'contact',     label: 'Contact' },
+            { key: 'sales',       label: 'Sales' },
+            { key: 'support',     label: 'Support' },
+            { key: 'care',        label: 'Customer Care' },
+            { key: 'enquiry',     label: 'Enquiry' },
+            { key: 'orders',      label: 'Orders' },
+            { key: 'billing',     label: 'Billing' },
+            { key: 'accounts',    label: 'Accounts' },
+            { key: 'b2b',         label: 'B2B Portal' },
+            { key: 'distributor', label: 'Become Distributor' },
+            { key: 'partner',     label: 'Partnership' },
+            { key: 'bulk',        label: 'Bulk Orders' },
+            { key: 'marketing',   label: 'Marketing' },
+            { key: 'media',       label: 'Media / Press' },
+            { key: 'feedback',    label: 'Feedback' },
+            { key: 'newsletter',  label: 'Newsletter' },
+            { key: 'legal',       label: 'Legal' },
+            { key: 'privacy',     label: 'Privacy / GDPR' },
+            { key: 'grievance',   label: 'Grievance Officer' },
+            { key: 'webadmin',    label: 'Web Admin' },
+            { key: 'nikolux',     label: 'Nikolux Brand' },
+            { key: 'lifestar',    label: 'Life Star Brand' },
+            { key: 'sanjivni',    label: 'Sanjivni Brand' },
+            { key: 'help',        label: 'Help / Support' }
+        ];
+
+        const grid = document.getElementById('emailGrid');
+        grid.innerHTML = EMAIL_DIRECTORY.map(e => {
+            const email = window.SVI_EMAILS[e.key];
+            if (!email) return '';
+            return `
+                <a href="mailto:${email}" class="email-card">
+                    <div class="label">${e.label}</div>
+                    <div class="email">${email}</div>
+                </a>
+            `;
+        }).join('');
+
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const alert = document.getElementById('formAlert');
+            const btn = e.target.querySelector('button[type=submit]');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            try {
+                const type = document.getElementById('enquiryType').value;
+                await db.collection('enquiries').add({
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    type: type,
+                    assignedEmail: window.SVI_EMAILS[type] || window.SVI_EMAILS.general,
+                    message: document.getElementById('message').value,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    replyFrom: window.SVI_REPLY_FROM,
+                    status: 'new'
+                });
+                alert.className = 'alert success';
+                alert.textContent = '✅ Thank you! We will contact you soon. Reply will be from sve.raj.in@gmail.com';
+                e.target.reset();
+            } catch (err) {
+                alert.className = 'alert error';
+                alert.textContent = '❌ Error: ' + err.message;
+            }
+            btn.disabled = false;
+            btn.textContent = 'Send Message';
+        });
+    </script>
+</body>
+</html>

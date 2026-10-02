@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiries | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-tabs button {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .filter-tabs button:hover { border-color: var(--primary); color: var(--primary); }
+        .filter-tabs button.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>✉️ Enquiries</h1>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 Export CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="loadEnquiries()">🔄 Refresh</button>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="filter-tabs">
+            <button class="active" data-filter="all" onclick="filterEnquiries('all')">All</button>
+            <button data-filter="new" onclick="filterEnquiries('new')">🆕 New</button>
+            <button data-filter="read" onclick="filterEnquiries('read')">📖 Read</button>
+            <button data-filter="replied" onclick="filterEnquiries('replied')">✅ Replied</button>
+            <button data-filter="closed" onclick="filterEnquiries('closed')">🔒 Closed</button>
+        </div>
+
+        <div class="card">
+            <h3 id="listHeading">📬 All Enquiries</h3>
+            <p class="card-desc" id="countDesc">Loading...</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enquiriesTable">
+                        <tr><td colspan="6" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- View Modal -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="viewTitle">Enquiry Details</h3>
+                <button class="modal-close" onclick="closeViewModal()">✕</button>
+            </div>
+            <div id="viewBody"></div>
+            <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="markRead()">📖 Mark as Read</button>
+                <button class="btn btn-success" onclick="markReplied()">✅ Mark as Replied</button>
+                <button class="btn btn-outline" onclick="markClosed()">🔒 Close</button>
+                <button class="btn btn-danger" onclick="deleteEnquiry()">🗑 Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        let allEnquiries = [];
+        let currentFilter = 'all';
+        let currentEnquiryId = null;
+
+        (async () => {
+            renderSidebar('enquiries');
+            initSidebar();
+            await guardAdmin();
+            loadEnquiries();
+        })();
+
+        async function loadEnquiries() {
+            const tbody = document.getElementById('enquiriesTable');
+            try {
+                const snap = await db.collection('enquiries').orderBy('createdAt', 'desc').get();
+                allEnquiries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderEnquiries();
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#ef4444;">Error: ${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function filterEnquiries(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tabs button').forEach(b => {
+                b.classList.toggle('active', b.dataset.filter === filter);
+            });
+            renderEnquiries();
+        }
+
+        function renderEnquiries() {
+            const tbody = document.getElementById('enquiriesTable');
+            const filtered = currentFilter === 'all'
+                ? allEnquiries
+                : allEnquiries.filter(e => (e.status || 'new') === currentFilter);
+
+            document.getElementById('listHeading').textContent =
+                currentFilter === 'all' ? '📬 All Enquiries' : `📬 ${currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1)} Enquiries`;
+            document.getElementById('countDesc').textContent =
+                `${filtered.length} enquir${filtered.length === 1 ? 'y' : 'ies'} shown`;
+
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94a3b8;">No enquiries found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(e => {
+                const status = e.status || 'new';
+                const statusClass = { new: 'new', read: 'warning', replied: 'success', closed: 'gray' }[status] || 'gray';
+                return `<tr>
+                    <td style="white-space:nowrap;font-size:0.78rem;">${e.createdAt ? formatDate(e.createdAt) : '—'}</td>
+                    <td><strong>${esc(e.name || '')}</strong></td>
+                    <td style="font-size:0.78rem;"><a href="mailto:${esc(e.email || '')}" style="color:var(--primary);">${esc(e.email || '')}</a></td>
+                    <td><span class="badge gray">${esc(e.type || 'general')}</span></td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-primary btn-sm" onclick="viewEnquiry('${e.id}')">👁 View</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteEnquiryById('${e.id}')">🗑</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function viewEnquiry(id) {
+            const e = allEnquiries.find(x => x.id === id);
+            if (!e) return;
+            currentEnquiryId = id;
+
+            document.getElementById('viewTitle').textContent = `Enquiry from ${e.name || 'Unknown'}`;
+            document.getElementById('viewBody').innerHTML = `
+                <div style="display:grid;gap:0.85rem;">
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Date</label><div>${e.createdAt ? formatDate(e.createdAt) : '—'}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Name</label><div>${esc(e.name || '—')}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Email</label><div><a href="mailto:${esc(e.email)}" style="color:var(--primary);">${esc(e.email || '—')}</a></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Phone</label><div>${e.phone ? `<a href="tel:${esc(e.phone)}" style="color:var(--primary);">${esc(e.phone)}</a>` : '—'}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Type</label><div><span class="badge gray">${esc(e.type || 'general')}</span></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Assigned Email</label><div><code style="background:#f1f5f9;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.82rem;">${esc(e.assignedEmail || '—')}</code></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Message</label><div style="background:#f8fafc;padding:1rem;border-radius:8px;white-space:pre-wrap;line-height:1.6;">${esc(e.message || '—')}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Reply From</label><div><code style="background:#f1f5f9;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.82rem;">${esc(e.replyFrom || 'sve.raj.in@gmail.com')}</code></div></div>
+                </div>
+            `;
+            document.getElementById('viewModal').classList.add('open');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('open');
+            currentEnquiryId = null;
+        }
+
+        async function updateStatus(status) {
+            if (!currentEnquiryId) return;
+            try {
+                await db.collection('enquiries').doc(currentEnquiryId).update({ status });
+                toast('Status updated to ' + status, 'success');
+                closeViewModal();
+                loadEnquiries();
+            } catch (e) {
+                toast('Update failed: ' + e.message, 'error');
+            }
+        }
+
+        function markRead() { updateStatus('read'); }
+        function markReplied() { updateStatus('replied'); }
+        function markClosed() { updateStatus('closed'); }
+
+        async function deleteEnquiry() {
+            if (!currentEnquiryId) return;
+            if (!confirmAction('Delete this enquiry permanently?')) return;
+            try {
+                await db.collection('enquiries').doc(currentEnquiryId).delete();
+                toast('Enquiry deleted', 'success');
+                closeViewModal();
+                loadEnquiries();
+            } catch (e) {
+                toast('Delete failed: ' + e.message, 'error');
+            }
+        }
+
+        async function deleteEnquiryById(id) {
+            if (!confirmAction('Delete this enquiry permanently?')) return;
+            try {
+                await db.collection('enquiries').doc(id).delete();
+                toast('Enquiry deleted', 'success');
+                loadEnquiries();
+            } catch (e) {
+                toast('Delete failed: ' + e.message, 'error');
+            }
+        }
+
+        function exportCSV() {
+            if (!allEnquiries.length) {
+                toast('No enquiries to export', 'warning');
+                return;
+            }
+            const headers = ['Date', 'Name', 'Email', 'Phone', 'Type', 'Status', 'Message'];
+            const rows = allEnquiries.map(e => [
+                e.createdAt ? formatDate(e.createdAt) : '',
+                e.name || '',
+                e.email || '',
+                e.phone || '',
+                e.type || '',
+                e.status || 'new',
+                (e.message || '').replace(/"/g, '""')
+            ]);
+            const csv = [
+                headers.join(','),
+                ...rows.map(r => r.map(c => `"${c}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `svi-enquiries-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            toast('CSV exported', 'success');
+        }
+    </script>
+</body>
+</html>

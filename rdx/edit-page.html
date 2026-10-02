@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Page | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1 id="pageTitle">✏️ Edit Page</h1>
+            </div>
+            <div class="topbar-actions">
+                <a id="previewLink" href="#" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+                <a href="pages.html" class="btn btn-outline btn-sm">← Back</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>📄 Page Fields</h3>
+            <p class="card-desc">
+                Each field corresponds to a <code style="background:#f1f5f9;padding:0.15rem 0.4rem;border-radius:4px;">data-cms="fieldName"</code> attribute on the public page.
+                Leave empty to keep default content.
+            </p>
+            <div id="fieldsContainer">
+                <div class="empty-state"><div class="icon">⏳</div><p>Loading page fields...</p></div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <button class="btn btn-success" onclick="savePage()">💾 Save Page</button>
+            <button class="btn btn-outline" onclick="loadPage()">🔄 Reset (Reload)</button>
+            <button class="btn btn-outline" onclick="addCustomField()">➕ Add Custom Field</button>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const pageId = params.get('page') || 'home';
+
+        // Predefined fields per page (based on HTML data-cms attributes)
+        const PAGE_FIELDS = {
+            home: [
+                { key: 'heroBadge', label: 'Hero Badge', type: 'text' },
+                { key: 'heroTitle', label: 'Hero Title (HTML allowed)', type: 'textarea' },
+                { key: 'heroText', label: 'Hero Subtitle', type: 'textarea' },
+                { key: 'stat1Num', label: 'Stat 1 — Number', type: 'text' },
+                { key: 'stat1Label', label: 'Stat 1 — Label', type: 'text' },
+                { key: 'stat2Num', label: 'Stat 2 — Number', type: 'text' },
+                { key: 'stat2Label', label: 'Stat 2 — Label', type: 'text' },
+                { key: 'stat3Num', label: 'Stat 3 — Number', type: 'text' },
+                { key: 'stat3Label', label: 'Stat 3 — Label', type: 'text' },
+                { key: 'stat4Num', label: 'Stat 4 — Number', type: 'text' },
+                { key: 'stat4Label', label: 'Stat 4 — Label', type: 'text' }
+            ],
+            about: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'intro', label: 'Introduction Paragraph', type: 'textarea' },
+                { key: 'storyHeading', label: 'Story Heading', type: 'text' },
+                { key: 'story', label: 'Story Content', type: 'textarea' },
+                { key: 'missionHeading', label: 'Mission Heading', type: 'text' },
+                { key: 'mission', label: 'Mission Content', type: 'textarea' },
+                { key: 'visionHeading', label: 'Vision Heading', type: 'text' },
+                { key: 'vision', label: 'Vision Content', type: 'textarea' }
+            ],
+            products: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' }
+            ],
+            gallery: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' }
+            ],
+            contact: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'address', label: 'Address', type: 'text' },
+                { key: 'phone', label: 'Phone', type: 'text' },
+                { key: 'email', label: 'Email', type: 'text' }
+            ],
+            terms: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'lastUpdated', label: 'Last Updated Date', type: 'text' },
+                { key: 'content', label: 'Main Content (HTML)', type: 'textarea', rows: 15 }
+            ],
+            privacy: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'lastUpdated', label: 'Last Updated Date', type: 'text' },
+                { key: 'content', label: 'Main Content (HTML)', type: 'textarea', rows: 15 }
+            ],
+            disclaimer: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'lastUpdated', label: 'Last Updated Date', type: 'text' },
+                { key: 'content', label: 'Main Content (HTML)', type: 'textarea', rows: 15 }
+            ],
+            refund: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'lastUpdated', label: 'Last Updated Date', type: 'text' },
+                { key: 'content', label: 'Main Content (HTML)', type: 'textarea', rows: 15 }
+            ],
+            shipping: [
+                { key: 'title', label: 'Page Title', type: 'text' },
+                { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                { key: 'lastUpdated', label: 'Last Updated Date', type: 'text' },
+                { key: 'content', label: 'Main Content (HTML)', type: 'textarea', rows: 15 }
+            ]
+        };
+
+        let currentFields = [];
+
+        (async () => {
+            renderSidebar('pages');
+            initSidebar();
+            await guardAdmin();
+            loadPage();
+        })();
+
+        async function loadPage() {
+            const pageName = {
+                home: 'Homepage', about: 'About', products: 'Products',
+                gallery: 'Gallery', contact: 'Contact', terms: 'Terms',
+                privacy: 'Privacy', disclaimer: 'Disclaimer',
+                refund: 'Refund', shipping: 'Shipping'
+            }[pageId] || pageId;
+
+            document.getElementById('pageTitle').textContent = `✏️ Edit: ${pageName}`;
+            document.getElementById('previewLink').href = `../${pageId === 'home' ? 'index' : pageId}.html`;
+
+            currentFields = PAGE_FIELDS[pageId] ? [...PAGE_FIELDS[pageId]] : [];
+
+            try {
+                const doc = await db.collection('pages').doc(pageId).get();
+                const data = doc.exists ? doc.data() : {};
+                renderFields(data);
+            } catch (e) {
+                toast('Load failed: ' + e.message, 'error');
+            }
+        }
+
+        function renderFields(data) {
+            const container = document.getElementById('fieldsContainer');
+            if (!currentFields.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📄</div><p>No predefined fields for this page. Click "Add Custom Field" to add one.</p></div>';
+                return;
+            }
+
+            container.innerHTML = currentFields.map((f, i) => {
+                const val = data[f.key] !== undefined ? data[f.key] : '';
+                const input = f.type === 'textarea'
+                    ? `<textarea data-key="${f.key}" rows="${f.rows || 4}" placeholder="${esc(f.placeholder || '')}">${esc(val)}</textarea>`
+                    : `<input data-key="${f.key}" type="text" value="${esc(val)}" placeholder="${esc(f.placeholder || '')}">`;
+                return `<div class="form-group">
+                    <label>${esc(f.label || f.key)} <small>key: ${f.key}</small></label>
+                    ${input}
+                </div>`;
+            }).join('');
+        }
+
+        function addCustomField() {
+            const key = prompt('Field key (should match a data-cms="..." attribute on the page):');
+            if (!key) return;
+            const label = prompt('Display label:', key) || key;
+            const type = confirm('Use textarea (multiline)? Click Cancel for single-line input.') ? 'textarea' : 'text';
+            currentFields.push({ key, label, type });
+            loadPage();
+        }
+
+        async function savePage() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                const data = {};
+                document.querySelectorAll('#fieldsContainer [data-key]').forEach(el => {
+                    const key = el.dataset.key;
+                    const val = el.value;
+                    if (val !== '') data[key] = val;
+                });
+
+                if (Object.keys(data).length === 0) {
+                    toast('No fields filled — nothing to save', 'warning');
+                    btn.disabled = false;
+                    btn.innerHTML = '💾 Save Page';
+                    return;
+                }
+
+                data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+                data.updatedBy = auth.currentUser.email;
+
+                await db.collection('pages').doc(pageId).set(data, { merge: true });
+                showAlert('pageAlert', '✅ Page saved! Refresh the public site to see changes.', 'success');
+                toast('Page saved successfully', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+                showAlert('pageAlert', '❌ ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Page';
+        }
+    </script>
+</body>
+</html>

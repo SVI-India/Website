@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>Products | Siddhi Vinayak Industries</title>
+    <meta name="description" content="Explore our premium detergent brands — Nikolux, Life Star, and Sanjivni.">
+    <link rel="icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Filters */
+        .product-filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .product-filter {
+            padding: 0.5rem 1.1rem;
+            border-radius: 50px;
+            background: var(--bg-soft);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            font-size: clamp(0.78rem, 1.4vw, 0.88rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .product-filter:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .product-filter.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* Enhanced product card */
+        .product-card {
+            position: relative;
+        }
+        .product-card .badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+        }
+        .product-card .badge.new { background: var(--success); box-shadow: 0 4px 12px rgba(16,185,129,0.35); }
+
+        .product-img-wrap {
+            position: relative;
+            overflow: hidden;
+            height: clamp(180px, 25vw, 240px);
+            background: var(--bg-soft);
+        }
+        .product-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .product-card:hover .product-img-wrap img { transform: scale(1.06); }
+
+        .product-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .product-features li {
+            font-size: clamp(0.8rem, 1.4vw, 0.88rem);
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            line-height: 1.5;
+        }
+        .product-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .product-actions .btn { flex: 1; min-width: 120px; }
+
+        .product-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        /* Section for whole category */
+        .category-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: var(--text-muted);
+            font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+            line-height: 1.7;
+        }
+
+        /* Comparison / bulk CTA */
+        .bulk-cta {
+            background: linear-gradient(135deg, var(--primary), #0a0f1e);
+            color: #fff;
+            padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+            border-radius: var(--radius);
+            margin-top: 4rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 2rem;
+            align-items: center;
+        }
+        .bulk-cta h2 {
+            font-size: clamp(1.35rem, 3vw, 1.85rem);
+            color: #fff;
+            margin-bottom: 0.75rem;
+            word-break: break-word;
+        }
+        .bulk-cta p {
+            color: rgba(255,255,255,0.85);
+            font-size: clamp(0.92rem, 1.6vw, 1rem);
+            line-height: 1.6;
+        }
+        .bulk-cta .btn-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .bulk-cta .btn {
+            background: #fff;
+            color: var(--primary);
+            width: 100%;
+        }
+        .bulk-cta .btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .bulk-cta .btn.outline-white {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+        }
+        .bulk-cta .btn.outline-white:hover {
+            background: #fff;
+            color: var(--primary);
+        }
+
+        @media (max-width: 900px) {
+            .bulk-cta { grid-template-columns: 1fr; text-align: center; }
+            .bulk-cta .btn-wrap { max-width: 320px; margin: 0 auto; width: 100%; }
+        }
+    </style>
+</head>
+<body data-page="products">
+
+    <div id="site-header"></div>
+
+    <section class="section">
+        <div class="section-header">
+            <h1 data-cms="title" data-i18n="products.title2">Our Products</h1>
+            <p data-cms="subtitle" data-i18n="products.subtitle2">Premium quality detergents for every need</p>
+        </div>
+
+        <div class="category-intro">
+            <p>Explore our range of high-performance detergents crafted with advanced technology to deliver sparkling clean clothes, every single time.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="product-filters" id="productFilters">
+            <button class="product-filter active" data-filter="all">All Products</button>
+            <button class="product-filter" data-filter="powder">Powder</button>
+            <button class="product-filter" data-filter="liquid">Liquid</button>
+            <button class="product-filter" data-filter="herbal">Herbal</button>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+
+        <!-- Bulk CTA -->
+        <div class="bulk-cta">
+            <div>
+                <h2>Looking for Bulk Orders?</h2>
+                <p>We supply to distributors, retailers, and businesses across India. Get special pricing on bulk orders, private labeling, and custom packaging.</p>
+            </div>
+            <div class="btn-wrap">
+                <a href="mailto:bulk@sve-in.xubi.org" class="btn">Bulk Enquiry</a>
+                <a href="mailto:b2b@sve-in.xubi.org" class="btn outline-white">B2B Portal</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+    <script>
+        // ============================================================
+        // PRODUCTS LOADER + FILTERS
+        // ============================================================
+        let allProducts = [];
+        let filteredProducts = [];
+
+        function makeFallback(name) {
+            return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">' +
+                '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+                '<stop offset="0" stop-color="#1e40af"/><stop offset="1" stop-color="#3b82f6"/>' +
+                '</linearGradient></defs>' +
+                '<rect width="400" height="300" fill="url(#g)"/>' +
+                '<text x="200" y="150" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="28" font-weight="bold">' + name + '</text>' +
+                '<text x="200" y="185" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="13" opacity="0.85">Siddhi Vinayak Industries</text>' +
+                '</svg>'
+            )}`;
+        }
+
+        async function loadProducts() {
+            allProducts = [
+                {
+                    id: 'nikolux',
+                    name: 'Nikolux',
+                    desc: 'Premium detergent powder for sparkling clean clothes with advanced stain removal formula.',
+                    img: 'images/nikolux.jpg',
+                    link: 'products/nikolux.html',
+                    category: 'powder',
+                    badge: 'Bestseller',
+                    features: ['Advanced stain removal', 'Long-lasting freshness', 'Suitable for all fabrics']
+                },
+                {
+                    id: 'life-star',
+                    name: 'Life Star',
+                    desc: 'Economical detergent for everyday use — powerful cleaning at an affordable price.',
+                    img: 'images/life-star.jpg',
+                    link: 'products/life-star.html',
+                    category: 'powder',
+                    badge: '',
+                    features: ['Value for money', 'Quick dissolve formula', 'Gentle on hands']
+                },
+                {
+                    id: 'sanjivni',
+                    name: 'Sanjivni',
+                    desc: 'Herbal-based detergent specially formulated for sensitive fabrics and skin.',
+                    img: 'images/sanjivni.jpg',
+                    link: 'products/sanjivni.html',
+                    category: 'herbal',
+                    badge: 'New',
+                    features: ['Herbal ingredients', 'Skin-friendly', 'Eco-friendly formula']
+                }
+            ];
+
+            try {
+                const snap = await db.collection('products').get();
+                if (!snap.empty) {
+                    allProducts = snap.docs.map(d => {
+                        const x = d.data();
+                        return {
+                            id: d.id,
+                            name: x.name || '',
+                            desc: x.desc || x.description || '',
+                            img: x.img || x.image || '',
+                            link: x.link || ('products/' + d.id + '.html'),
+                            category: (x.category || 'powder').toLowerCase(),
+                            badge: x.badge || '',
+                            features: x.features || []
+                        };
+                    });
+                }
+            } catch (e) {
+                console.warn('Products Firestore load failed, using defaults');
+            }
+
+            applyProductFilter('all');
+        }
+
+        function applyProductFilter(filter) {
+            document.querySelectorAll('.product-filter').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+
+            filteredProducts = filter === 'all'
+                ? allProducts
+                : allProducts.filter(p => (p.category || '').toLowerCase() === filter);
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+
+            if (!filteredProducts.length) {
+                grid.innerHTML = `<div class="product-empty">📦 No products in this category yet.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filteredProducts.map(p => {
+                const fallback = makeFallback(p.name);
+                const img = p.img || fallback;
+                const badge = p.badge ? `<span class="badge ${p.badge.toLowerCase() === 'new' ? 'new' : ''}">${p.badge}</span>` : '';
+                const features = (p.features || []).length
+                    ? `<ul class="product-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>`
+                    : '';
+                return `
+                    <div class="product-card">
+                        ${badge}
+                        <div class="product-img-wrap">
+                            <img src="${img}" alt="${p.name}" loading="lazy"
+                                 onerror="this.onerror=null;this.src='${fallback}'">
+                        </div>
+                        <div class="product-card-body">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                            ${features}
+                            <div class="product-actions">
+                                <a href="${p.link}" class="btn btn-primary" data-i18n="btn.learnMore">Learn More</a>
+                                <a href="mailto:info@sve-in.xubi.org?subject=Enquiry about ${p.name}" class="btn btn-outline">Enquire</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            if (typeof applyTranslations === 'function') applyTranslations();
+        }
+
+        document.querySelectorAll('.product-filter').forEach(btn => {
+            btn.addEventListener('click', () => applyProductFilter(btn.dataset.filter));
+        });
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>📊 Dashboard</h1>
+            </div>
+            <div class="topbar-actions">
+                <a href="../index.html" target="_blank" class="btn btn-outline btn-sm">🌐 View Site</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="num" id="statEnquiries">—</div>
+                <div class="lbl">✉️ New Enquiries</div>
+            </div>
+            <div class="stat-card success">
+                <div class="num" id="statNotices">—</div>
+                <div class="lbl">📢 Active Notices</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="num" id="statProducts">—</div>
+                <div class="lbl">📦 Products</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="num" id="statGallery">—</div>
+                <div class="lbl">🖼️ Gallery Images</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🚀 Quick Actions</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
+                <a href="header.html" class="btn btn-primary">🔝 Edit Header</a>
+                <a href="footer.html" class="btn btn-primary">🔻 Edit Footer</a>
+                <a href="notices.html" class="btn btn-primary">📢 Add Notice</a>
+                <a href="theme.html" class="btn btn-primary">🎨 Custom CSS</a>
+                <a href="pages.html" class="btn btn-primary">📄 Edit Pages</a>
+                <a href="settings.html" class="btn btn-primary">⚙️ Emails</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📋 Recent Enquiries</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentEnquiries">
+                        <tr><td colspan="5" style="text-align:center;padding:2rem;color:#94a3b8;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📧 Email Configuration</h3>
+            <p class="card-desc">
+                Reply from: <strong>sve.raj.in@gmail.com</strong> — <a href="settings.html" style="color:var(--primary);">Change</a>
+            </p>
+            <div id="emailSnapshot" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:0.6rem;font-size:0.82rem;"></div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/emails.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        (async () => {
+            renderSidebar('index');
+            initSidebar();
+            await guardAdmin();
+            loadStats();
+            loadRecentEnquiries();
+            loadEmailSnapshot();
+        })();
+
+        async function loadStats() {
+            try {
+                const [e, n, p, g] = await Promise.all([
+                    db.collection('enquiries').where('status', '==', 'new').get(),
+                    db.collection('notices').where('active', '==', true).get(),
+                    db.collection('products').get(),
+                    db.collection('gallery').get()
+                ]);
+                document.getElementById('statEnquiries').textContent = e.size;
+                document.getElementById('statNotices').textContent = n.size;
+                document.getElementById('statProducts').textContent = p.size;
+                document.getElementById('statGallery').textContent = g.size;
+            } catch (err) {
+                console.warn(err);
+            }
+        }
+
+        async function loadRecentEnquiries() {
+            const tbody = document.getElementById('recentEnquiries');
+            try {
+                const snap = await db.collection('enquiries').orderBy('createdAt', 'desc').limit(5).get();
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#94a3b8;">No enquiries yet</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = snap.docs.map(d => {
+                    const x = d.data();
+                    const date = x.createdAt ? formatDate(x.createdAt) : '—';
+                    const status = x.status || 'new';
+                    return `<tr>
+                        <td style="white-space:nowrap;font-size:0.78rem;">${date}</td>
+                        <td>${esc(x.name || '')}</td>
+                        <td style="font-size:0.78rem;">${esc(x.email || '')}</td>
+                        <td><span class="badge gray">${esc(x.type || 'general')}</span></td>
+                        <td><span class="badge ${status === 'new' ? 'new' : 'success'}">${status}</span></td>
+                    </tr>`;
+                }).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#ef4444;">Error loading</td></tr>';
+            }
+        }
+
+        async function loadEmailSnapshot() {
+            try {
+                const doc = await db.collection('settings').doc('emails').get();
+                const data = doc.exists ? doc.data() : window.SVI_EMAILS;
+                document.getElementById('emailSnapshot').innerHTML =
+                    Object.entries(data).slice(0, 12).map(([k, v]) =>
+                        `<div><strong style="color:#1e40af;">${k}:</strong> ${esc(v)}</div>`
+                    ).join('');
+            } catch (e) {}
+        }
+    </script>
+</body>
+</html>

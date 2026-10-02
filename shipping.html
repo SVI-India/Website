@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>Shipping Policy | Siddhi Vinayak Industries</title>
+    <meta name="description" content="Shipping and delivery policy for Siddhi Vinayak Industries — pan-India delivery of premium detergents.">
+    <link rel="icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .shipping-hero {
+            background: linear-gradient(135deg, var(--primary), #0a0f1e);
+            color: #fff;
+            padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: clamp(2rem, 4vw, 3rem);
+            box-shadow: var(--shadow-lg);
+        }
+        .shipping-hero .icon-large {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+            line-height: 1;
+            display: block;
+        }
+        .shipping-hero h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 0.75rem;
+            color: #fff;
+            font-weight: 800;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .shipping-hero p {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(0.92rem, 1.6vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+            gap: clamp(1rem, 2.5vw, 1.5rem);
+            margin-bottom: clamp(2rem, 4vw, 3rem);
+        }
+        .info-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: clamp(1.25rem, 2.5vw, 1.75rem);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .info-card .icon {
+            font-size: clamp(1.8rem, 3.5vw, 2.25rem);
+            margin-bottom: 0.75rem;
+            line-height: 1;
+        }
+        .info-card h3 {
+            font-size: clamp(1rem, 1.8vw, 1.1rem);
+            color: var(--text);
+            margin-bottom: 0.4rem;
+            word-break: break-word;
+        }
+        .info-card p {
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 1.5vw, 0.92rem);
+            line-height: 1.55;
+        }
+
+        .delivery-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg);
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        .delivery-table {
+            width: 100%;
+            min-width: 500px;
+            border-collapse: collapse;
+        }
+        .delivery-table thead {
+            background: var(--bg-soft);
+        }
+        .delivery-table th {
+            padding: clamp(0.75rem, 1.5vw, 1rem);
+            text-align: left;
+            font-size: clamp(0.8rem, 1.4vw, 0.9rem);
+            color: var(--text);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .delivery-table td {
+            padding: clamp(0.75rem, 1.5vw, 1rem);
+            font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .delivery-table tr:last-child td { border-bottom: none; }
+        .delivery-table tr:hover td { background: var(--bg-soft); }
+        .delivery-table .region { color: var(--text); font-weight: 600; }
+
+        .highlight-box {
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: clamp(1rem, 2vw, 1.25rem) clamp(1.1rem, 2.2vw, 1.5rem);
+            margin: 1.5rem 0;
+            font-size: clamp(0.88rem, 1.5vw, 0.98rem);
+            line-height: 1.65;
+            color: var(--text);
+        }
+        .highlight-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: var(--accent);
+        }
+        .highlight-box.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: var(--success);
+        }
+        .highlight-box strong { color: var(--text); font-weight: 700; }
+
+        .steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            display: grid;
+            gap: 1rem;
+        }
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 1rem 1rem 1rem 3.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: clamp(0.88rem, 1.5vw, 0.98rem);
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+        .steps li strong { color: var(--text); display: block; margin-bottom: 0.25rem; }
+
+        .contact-box {
+            background: linear-gradient(135deg, var(--primary), #0a0f1e);
+            color: #fff;
+            padding: clamp(1.75rem, 3.5vw, 2.5rem) clamp(1.25rem, 3vw, 2rem);
+            border-radius: var(--radius);
+            margin: 2.5rem 0 1rem;
+            text-align: center;
+        }
+        .contact-box h3 {
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+            color: #fff;
+            margin-bottom: 1rem;
+            word-break: break-word;
+        }
+        .contact-box .email-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+        .contact-box .email-list a {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            padding: 0.55rem 1rem;
+            border-radius: 50px;
+            font-size: clamp(0.78rem, 1.4vw, 0.88rem);
+            font-weight: 600;
+            transition: all 0.2s;
+            word-break: break-all;
+        }
+        .contact-box .email-list a:hover { background: #fff; color: var(--primary); }
+
+        .faq-list { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
+        .faq-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 1.6vw, 1rem);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .faq-question:hover { background: var(--bg-soft); }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--primary);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+        .faq-item.open .faq-question::after { transform: rotate(45deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            padding: 0 1.25rem;
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+            line-height: 1.65;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding-bottom: 1.25rem;
+            padding-top: 0.25rem;
+        }
+
+        .reply-notice {
+            margin-top: 2rem;
+            padding: 0.85rem 1rem;
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            font-size: clamp(0.8rem, 1.4vw, 0.88rem);
+            line-height: 1.55;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        @media (max-width: 600px) {
+            .info-cards { grid-template-columns: 1fr 1fr; }
+            .info-card { padding: 1rem; }
+            .info-card .icon { font-size: 1.5rem; }
+        }
+        @media (max-width: 380px) {
+            .info-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-page="shipping">
+
+    <div id="site-header"></div>
+
+    <div class="legal-content">
+
+        <!-- HERO -->
+        <div class="shipping-hero">
+            <span class="icon-large">🚚</span>
+            <h1 data-lang-en="Shipping Policy" data-lang-hi="शिपिंग नीति" data-cms="title">Shipping Policy</h1>
+            <p data-lang-en="Fast, reliable, and safe delivery of your premium detergents — across India."
+               data-lang-hi="आपके प्रीमियम डिटर्जेंट की तेज़, विश्वसनीय और सुरक्षित डिलीवरी — पूरे भारत में।"
+               data-cms="subtitle">Fast, reliable, and safe delivery of your premium detergents — across India.</p>
+        </div>
+
+        <p class="last-updated" style="text-align:center;color:var(--text-muted);font-size:0.88rem;margin-bottom:2rem;">
+            📅 <span data-lang-en="Last Updated" data-lang-hi="अंतिम अपडेट">Last Updated</span>: <span data-cms="lastUpdated">January 1, 2025</span>
+        </p>
+
+        <!-- INFO CARDS -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="icon">🇮🇳</div>
+                <h3 data-lang-en="Pan-India Delivery" data-lang-hi="पूरे भारत में डिलीवरी">Pan-India Delivery</h3>
+                <p data-lang-en="Serving every pincode across all 28 states & 8 UTs" data-lang-hi="सभी 28 राज्यों और 8 केंद्र शासित प्रदेशों के हर पिनकोड पर सेवा">Serving every pincode</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">⚡</div>
+                <h3 data-lang-en="Fast Processing" data-lang-hi="तेज़ प्रोसेसिंग">Fast Processing</h3>
+                <p data-lang-en="Orders dispatched within 2–3 business days" data-lang-hi="ऑर्डर 2–3 कार्य दिवसों के भीतर भेजे जाते हैं">Orders dispatched in 2–3 days</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">📦</div>
+                <h3 data-lang-en="Safe Packaging" data-lang-hi="सुरक्षित पैकेजिंग">Safe Packaging</h3>
+                <p data-lang-en="Triple-layer protection against moisture & damage" data-lang-hi="नमी और क्षति के खिलाफ तीन-स्तरीय सुरक्षा">Triple-layer protection</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">📍</div>
+                <h3 data-lang-en="Live Tracking" data-lang-hi="लाइव ट्रैकिंग">Live Tracking</h3>
+                <p data-lang-en="Real-time updates via SMS, email & WhatsApp" data-lang-hi="SMS, ईमेल और WhatsApp के माध्यम से रीयल-टाइम अपडेट">Real-time updates</p>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div data-cms="content">
+
+            <h2 data-lang-en="1. Shipping Coverage" data-lang-hi="1. शिपिंग कवरेज">1. Shipping Coverage</h2>
+            <p data-lang-en="We deliver our premium detergent products to customers across India. Our trusted network of logistics partners ensures that your order reaches you safely, no matter where you are — from metro cities to remote towns and villages."
+               data-lang-hi="हम अपने प्रीमियम डिटर्जेंट उत्पाद पूरे भारत में ग्राहकों को वितरित करते हैं। हमारे विश्वसनीय लॉजिस्टिक्स भागीदारों का नेटवर्क सुनिश्चित करता है कि आपका ऑर्डर आप तक सुरक्षित पहुँचे, चाहे आप कहीं भी हों — महानगरों से लेकर दूर-दराज के कस्बों और गाँवों तक।">
+                We deliver our premium detergent products to customers across India.
+            </p>
+            <p data-lang-en="<strong>International shipping</strong> is available on request for bulk B2B orders. Please contact our sales team for a custom quote."
+               data-lang-hi="<strong>अंतर्राष्ट्रीय शिपिंग</strong> थोक B2B ऑर्डर के अनुरोध पर उपलब्ध है। कस्टम कोट के लिए कृपया हमारी बिक्री टीम से संपर्क करें।">
+                International shipping available on request for bulk B2B orders.
+            </p>
+
+            <h2 data-lang-en="2. Order Processing Time" data-lang-hi="2. ऑर्डर प्रोसेसिंग समय">2. Order Processing Time</h2>
+            <p data-lang-en="Once your order is confirmed and payment is received, our warehouse team begins processing it. Below is our typical processing timeline:"
+               data-lang-hi="एक बार आपके ऑर्डर की पुष्टि हो जाने और भुगतान प्राप्त हो जाने के बाद, हमारी वेयरहाउस टीम इसे संसाधित करना शुरू कर देती है। नीचे हमारी सामान्य प्रोसेसिंग समयसीमा दी गई है:">
+                Once your order is confirmed, we begin processing.
+            </p>
+
+            <div class="delivery-table-wrap">
+                <table class="delivery-table">
+                    <thead>
+                        <tr>
+                            <th data-lang-en="Order Type" data-lang-hi="ऑर्डर प्रकार">Order Type</th>
+                            <th data-lang-en="Processing Time" data-lang-hi="प्रोसेसिंग समय">Processing Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="region" data-lang-en="Standard Retail Orders" data-lang-hi="मानक खुदरा ऑर्डर">Standard Retail Orders</td>
+                            <td data-lang-en="1–2 business days" data-lang-hi="1–2 कार्य दिवस">1–2 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="Bulk / B2B Orders" data-lang-hi="थोक / B2B ऑर्डर">Bulk / B2B Orders</td>
+                            <td data-lang-en="3–5 business days" data-lang-hi="3–5 कार्य दिवस">3–5 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="Custom / Private Label Orders" data-lang-hi="कस्टम / प्राइवेट लेबल ऑर्डर">Custom / Private Label Orders</td>
+                            <td data-lang-en="7–15 business days (as agreed)" data-lang-hi="7–15 कार्य दिवस (सहमति अनुसार)">7–15 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="Sample Orders" data-lang-hi="नमूना ऑर्डर">Sample Orders</td>
+                            <td data-lang-en="1–2 business days" data-lang-hi="1–2 कार्य दिवस">1–2 business days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                📅 <strong data-lang-en="Note:" data-lang-hi="नोट:">Note:</strong>
+                <span data-lang-en="Processing time does <strong>not</strong> include Sundays, national holidays, or transit time. Orders placed after 4:00 PM IST are processed the next business day."
+                      data-lang-hi="प्रोसेसिंग समय में रविवार, राष्ट्रीय छुट्टियाँ या ट्रांज़िट समय <strong>शामिल नहीं</strong> हैं। शाम 4:00 बजे IST के बाद दिए गए ऑर्डर अगले कार्य दिवस पर संसाधित किए जाते हैं।">
+                    Processing time does not include Sundays/holidays.
+                </span>
+            </div>
+
+            <h2 data-lang-en="3. Estimated Delivery Time" data-lang-hi="3. अनुमानित डिलीवरी समय">3. Estimated Delivery Time</h2>
+            <p data-lang-en="Once dispatched, delivery typically takes 2–10 business days depending on your location:"
+               data-lang-hi="डिस्पैच के बाद, आपके स्थान के आधार पर डिलीवरी में आमतौर पर 2–10 कार्य दिवस लगते हैं:">
+                Delivery takes 2–10 business days.
+            </p>
+
+            <div class="delivery-table-wrap">
+                <table class="delivery-table">
+                    <thead>
+                        <tr>
+                            <th data-lang-en="Region" data-lang-hi="क्षेत्र">Region</th>
+                            <th data-lang-en="Estimated Delivery" data-lang-hi="अनुमानित डिलीवरी">Estimated Delivery</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="region" data-lang-en="Rajasthan (Local)" data-lang-hi="राजस्थान (स्थानीय)">Rajasthan (Local)</td>
+                            <td data-lang-en="2–4 business days" data-lang-hi="2–4 कार्य दिवस">2–4 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="North India (Delhi, Punjab, Haryana, UP, etc.)" data-lang-hi="उत्तर भारत (दिल्ली, पंजाब, हरियाणा, यूपी आदि)">North India</td>
+                            <td data-lang-en="4–6 business days" data-lang-hi="4–6 कार्य दिवस">4–6 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="West India (Gujarat, Maharashtra, Goa)" data-lang-hi="पश्चिम भारत (गुजरात, महाराष्ट्र, गोवा)">West India</td>
+                            <td data-lang-en="5–7 business days" data-lang-hi="5–7 कार्य दिवस">5–7 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="South India (Karnataka, TN, Kerala, AP, Telangana)" data-lang-hi="दक्षिण भारत (कर्नाटक, तमिलनाडु, केरल, आंध्र, तेलंगाना)">South India</td>
+                            <td data-lang-en="5–8 business days" data-lang-hi="5–8 कार्य दिवस">5–8 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="East & North-East India" data-lang-hi="पूर्व और पूर्वोत्तर भारत">East & North-East India</td>
+                            <td data-lang-en="6–10 business days" data-lang-hi="6–10 कार्य दिवस">6–10 business days</td>
+                        </tr>
+                        <tr>
+                            <td class="region" data-lang-en="Remote / Rural Areas" data-lang-hi="दूरस्थ / ग्रामीण क्षेत्र">Remote / Rural Areas</td>
+                            <td data-lang-en="7–12 business days" data-lang-hi="7–12 कार्य दिवस">7–12 business days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box warning">
+                ⚠️ <strong data-lang-en="Please Note:" data-lang-hi="कृपया ध्यान दें:">Please Note:</strong>
+                <span data-lang-en="Delivery timelines are estimates provided by our logistics partners. In rare cases of weather disruptions, strikes, or unforeseen events, delivery may take longer. We will keep you informed via SMS/email."
+                      data-lang-hi="डिलीवरी समयसीमा हमारे लॉजिस्टिक्स भागीदारों द्वारा दिए गए अनुमान हैं। मौसम संबंधी व्यवधान, हड़ताल या अप्रत्याशित घटनाओं के दुर्लभ मामलों में, डिलीवरी में अधिक समय लग सकता है। हम आपको SMS/ईमेल के माध्यम से सूचित रखेंगे।">
+                    Delivery timelines are estimates.
+                </span>
+            </div>
+
+            <h2 data-lang-en="4. Shipping Charges" data-lang-hi="4. शिपिंग शुल्क">4. Shipping Charges</h2>
+            <p data-lang-en="Shipping charges depend on the following factors:" data-lang-hi="शिपिंग शुल्क निम्नलिखित कारकों पर निर्भर करता है:">
+                Shipping charges depend on:
+            </p>
+            <ul>
+                <li data-lang-en="<strong>Order weight</strong> — Total weight of the shipment" data-lang-hi="<strong>ऑर्डर का वजन</strong> — शिपमेंट का कुल वजन"><strong>Order weight</strong></li>
+                <li data-lang-en="<strong>Volume</strong> — Space occupied in the vehicle" data-lang-hi="<strong>मात्रा</strong> — वाहन में घेरी गई जगह"><strong>Volume</strong></li>
+                <li data-lang-en="<strong>Destination</strong> — Distance from our warehouse in Lachharsar, Rajasthan" data-lang-hi="<strong>गंतव्य</strong> — लछारसर, राजस्थान में हमारे गोदाम से दूरी"><strong>Destination</strong></li>
+                <li data-lang-en="<strong>Order type</strong> — Retail, bulk, or B2B" data-lang-hi="<strong>ऑर्डर प्रकार</strong> — खुदरा, थोक या B2B"><strong>Order type</strong></li>
+            </ul>
+            <p data-lang-en="Shipping charges will be <strong>clearly communicated</strong> to you before order confirmation. There are no hidden fees — you will know exactly what you pay."
+               data-lang-hi="शिपिंग शुल्क ऑर्डर की पुष्टि से पहले आपको <strong>स्पष्ट रूप से बताए जाएँगे</strong>। कोई छिपा शुल्क नहीं है — आपको ठीक-ठीक पता होगा कि आप क्या भुगतान कर रहे हैं।">
+                Charges communicated before order confirmation.
+            </p>
+
+            <div class="highlight-box success">
+                🎁 <strong data-lang-en="Free Shipping:" data-lang-hi="निःशुल्क शिपिंग:">Free Shipping:</strong>
+                <span data-lang-en="Enjoy <strong>free shipping</strong> on all prepaid orders above ₹5,000 within Rajasthan. Bulk/B2B orders may also qualify for free shipping on case-by-case basis."
+                      data-lang-hi="राजस्थान के भीतर ₹5,000 से अधिक के सभी प्रीपेड ऑर्डर पर <strong>निःशुल्क शिपिंग</strong> का आनंद लें। थोक/B2B ऑर्डर भी मामला-दर-मामला आधार पर निःशुल्क शिपिंग के लिए पात्र हो सकते हैं।">
+                    Free shipping on orders above ₹5,000 within Rajasthan.
+                </span>
+            </div>
+
+            <h2 data-lang-en="5. Order Tracking" data-lang-hi="5. ऑर्डर ट्रैकिंग">5. Order Tracking</h2>
+            <p data-lang-en="Once your order is dispatched, you will receive:" data-lang-hi="एक बार आपका ऑर्डर डिस्पैच हो जाने के बाद, आपको प्राप्त होंगे:">
+                Once dispatched, you'll receive:
+            </p>
+            <ul>
+                <li data-lang-en="📧 Email with tracking link" data-lang-hi="📧 ट्रैकिंग लिंक के साथ ईमेल">📧 Email with tracking link</li>
+                <li data-lang-en="📱 SMS with tracking number" data-lang-hi="📱 ट्रैकिंग नंबर के साथ SMS">📱 SMS with tracking number</li>
+                <li data-lang-en="💬 WhatsApp update (if opted-in)" data-lang-hi="💬 WhatsApp अपडेट (अगर ऑप्ट-इन किया है)">💬 WhatsApp update</li>
+            </ul>
+            <p data-lang-en="You can also contact us anytime for a status update on your order."
+               data-lang-hi="आप अपने ऑर्डर की स्थिति अपडेट के लिए किसी भी समय हमसे संपर्क कर सकते हैं।">
+                Contact us anytime for status updates.
+            </p>
+
+            <h2 data-lang-en="6. Damaged or Missing Shipments" data-lang-hi="6. क्षतिग्रस्त या गुम शिपमेंट">6. Damaged or Missing Shipments</h2>
+            <p data-lang-en="We take great care in packaging, but in rare cases, products may get damaged during transit. Here's what to do:"
+               data-lang-hi="हम पैकेजिंग में बहुत सावधानी बरतते हैं, लेकिन दुर्लभ मामलों में, ट्रांज़िट के दौरान उत्पाद क्षतिग्रस्त हो सकते हैं। यहाँ क्या करना है:">
+                What to do if products are damaged:
+            </p>
+
+            <ol class="steps">
+                <li>
+                    <strong data-lang-en="Inspect on Delivery" data-lang-hi="डिलीवरी पर निरीक्षण करें">Inspect on Delivery</strong>
+                    <span data-lang-en="Always check the package for visible damage before signing the delivery receipt."
+                          data-lang-hi="डिलीवरी रसीद पर हस्ताक्षर करने से पहले हमेशा पैकेज की दृश्य क्षति के लिए जाँच करें।">
+                        Check package before signing.
+                    </span>
+                </li>
+                <li>
+                    <strong data-lang-en="Report Within 48 Hours" data-lang-hi="48 घंटे के भीतर रिपोर्ट करें">Report Within 48 Hours</strong>
+                    <span data-lang-en="If you find any damage or missing items, report within 48 hours of delivery."
+                          data-lang-hi="यदि आपको कोई क्षति या गुम वस्तुएँ मिलती हैं, तो डिलीवरी के 48 घंटे के भीतर रिपोर्ट करें।">
+                        Report within 48 hours.
+                    </span>
+                </li>
+                <li>
+                    <strong data-lang-en="Send Photos" data-lang-hi="फ़ोटो भेजें">Send Photos</strong>
+                    <span data-lang-en="Take clear photos of the damaged package, inner contents, and shipping label."
+                          data-lang-hi="क्षतिग्रस्त पैकेज, आंतरिक सामग्री और शिपिंग लेबल की स्पष्ट फ़ोटो लें।">
+                        Take clear photos.
+                    </span>
+                </li>
+                <li>
+                    <strong data-lang-en="Email Us" data-lang-hi="हमें ईमेल करें">Email Us</strong>
+                    <span data-lang-en="Send photos to orders@sve-in.xubi.org with your order details."
+                          data-lang-hi="अपने ऑर्डर विवरण के साथ orders@sve-in.xubi.org पर फ़ोटो भेजें।">
+                        Email orders@sve-in.xubi.org
+                    </span>
+                </li>
+                <li>
+                    <strong data-lang-en="Resolution" data-lang-hi="समाधान">Resolution</strong>
+                    <span data-lang-en="We will arrange a replacement or refund within 7–10 business days after verification."
+                          data-lang-hi="सत्यापन के बाद हम 7–10 कार्य दिवसों के भीतर प्रतिस्थापन या धनवापसी की व्यवस्था करेंगे।">
+                        Replacement/refund in 7–10 days.
+                    </span>
+                </li>
+            </ol>
+
+            <h2 data-lang-en="7. Bulk & B2B Shipping" data-lang-hi="7. थोक और B2B शिपिंग">7. Bulk & B2B Shipping</h2>
+            <p data-lang-en="For distributors, wholesalers, and business partners, we offer <strong>specialized logistics planning</strong>:"
+               data-lang-hi="वितरकों, थोक विक्रेताओं और व्यावसायिक भागीदारों के लिए, हम <strong>विशेष लॉजिस्टिक्स योजना</strong> प्रदान करते हैं:">
+                Specialized logistics for bulk orders:
+            </p>
+            <ul>
+                <li data-lang-en="Full truckload (FTL) and part-load (PTL) options" data-lang-hi="फुल ट्रकलोड (FTL) और पार्ट-लोड (PTL) विकल्प">FTL and PTL options</li>
+                <li data-lang-en="Custom packaging for safe bulk transport" data-lang-hi="सुरक्षित थोक परिवहन के लिए कस्टम पैकेजिंग">Custom bulk packaging</li>
+                <li data-lang-en="Dedicated relationship manager for logistics" data-lang-hi="लॉजिस्टिक्स के लिए समर्पित संबंध प्रबंधक">Dedicated manager</li>
+                <li data-lang-en="Priority dispatch for regular partners" data-lang-hi="नियमित भागीदारों के लिए प्राथमिकता डिस्पैच">Priority dispatch</li>
+                <li data-lang-en="Flexible delivery scheduling" data-lang-hi="लचीली डिलीवरी शेड्यूलिंग">Flexible scheduling</li>
+            </ul>
+            <p data-lang-en="Contact our B2B team at b2b@sve-in.xubi.org or bulk@sve-in.xubi.org for a tailored shipping plan."
+               data-lang-hi="अनुकूलित शिपिंग योजना के लिए b2b@sve-in.xubi.org या bulk@sve-in.xubi.org पर हमारी B2B टीम से संपर्क करें।">
+                Contact <a href="mailto:b2b@sve-in.xubi.org">b2b@sve-in.xubi.org</a> or <a href="mailto:bulk@sve-in.xubi.org">bulk@sve-in.xubi.org</a>.
+            </p>
+
+            <h2 data-lang-en="8. Non-Serviceable Areas" data-lang-hi="8. गैर-सेवा योग्य क्षेत्र">8. Non-Serviceable Areas</h2>
+            <p data-lang-en="While we aim to serve every pincode in India, there may be a few remote areas where our logistics partners do not deliver. If your pincode falls in such an area:"
+               data-lang-hi="हालाँकि हमारा लक्ष्य भारत में हर पिनकोड की सेवा करना है, कुछ दूरस्थ क्षेत्र हो सकते हैं जहाँ हमारे लॉजिस्टिक्स भागीदार डिलीवरी नहीं करते। यदि आपका पिनकोड ऐसे क्षेत्र में आता है:">
+                Some remote areas may not be serviceable:
+            </p>
+            <ul>
+                <li data-lang-en="We will notify you within 24 hours of order placement" data-lang-hi="ऑर्डर देने के 24 घंटे के भीतर हम आपको सूचित करेंगे">Notified within 24 hours</li>
+                <li data-lang-en="Alternative delivery arrangements can be discussed" data-lang-hi="वैकल्पिक डिलीवरी व्यवस्थाओं पर चर्चा की जा सकती है">Alternative arrangements</li>
+                <li data-lang-en="Full refund will be issued if no alternative is available" data-lang-hi="यदि कोई विकल्प उपलब्ध न हो तो पूर्ण धनवापसी जारी की जाएगी">Full refund if no alternative</li>
+            </ul>
+
+            <h2 data-lang-en="9. International Shipping (B2B Only)" data-lang-hi="9. अंतर्राष्ट्रीय शिपिंग (केवल B2B)">9. International Shipping (B2B Only)</h2>
+            <p data-lang-en="We currently ship internationally <strong>only for bulk B2B orders</strong>. Requirements:"
+               data-lang-hi="हम वर्तमान में अंतर्राष्ट्रीय स्तर पर <strong>केवल थोक B2B ऑर्डर के लिए</strong> शिप करते हैं। आवश्यकताएँ:">
+                International shipping only for B2B. Requirements:
+            </p>
+            <ul>
+                <li data-lang-en="Minimum order: 500 kg" data-lang-hi="न्यूनतम ऑर्डर: 500 किग्रा">Min order: 500 kg</li>
+                <li data-lang-en="Delivery on FOB / CIF terms (customizable)" data-lang-hi="FOB / CIF शर्तों पर डिलीवरी (अनुकूलन योग्य)">FOB / CIF terms</li>
+                <li data-lang-en="Customer handles customs clearance at destination" data-lang-hi="ग्राहक गंतव्य पर सीमा शुल्क निकासी संभालता है">Customer handles customs</li>
+                <li data-lang-en="Advance payment or LC at sight" data-lang-hi="अग्रिम भुगतान या LC एट साइट">Advance payment or LC</li>
+            </ul>
+            <p data-lang-en="For international enquiries, email us at bulk@sve-in.xubi.org."
+               data-lang-hi="अंतर्राष्ट्रीय पूछताछ के लिए, हमें bulk@sve-in.xubi.org पर ईमेल करें।">
+                Email <a href="mailto:bulk@sve-in.xubi.org">bulk@sve-in.xubi.org</a>.
+            </p>
+
+            <h2 data-lang-en="10. Frequently Asked Questions" data-lang-hi="10. अक्सर पूछे जाने वाले प्रश्न">10. Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="How long does delivery take to my city?" data-lang-hi="मेरे शहर तक डिलीवरी में कितना समय लगता है?">How long does delivery take to my city?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Delivery takes 2–10 business days depending on your location. See the 'Estimated Delivery Time' table above for details."
+                              data-lang-hi="आपके स्थान के आधार पर डिलीवरी में 2–10 कार्य दिवस लगते हैं। विवरण के लिए ऊपर दी गई 'अनुमानित डिलीवरी समय' तालिका देखें।">
+                            Delivery takes 2–10 business days.
+                        </span>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="Do you offer free shipping?" data-lang-hi="क्या आप निःशुल्क शिपिंग प्रदान करते हैं?">Do you offer free shipping?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Yes! Free shipping is available on prepaid orders above ₹5,000 within Rajasthan. Bulk orders may also qualify — contact us for details."
+                              data-lang-hi="हाँ! राजस्थान के भीतर ₹5,000 से अधिक के प्रीपेड ऑर्डर पर निःशुल्क शिपिंग उपलब्ध है। थोक ऑर्डर भी पात्र हो सकते हैं — विवरण के लिए हमसे संपर्क करें।">
+                            Yes, on orders above ₹5,000 within Rajasthan.
+                        </span>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="Can I track my order?" data-lang-hi="क्या मैं अपना ऑर्डर ट्रैक कर सकता हूँ?">Can I track my order?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Absolutely. You'll receive a tracking link via SMS and email once your order is dispatched. You can also contact us directly for updates."
+                              data-lang-hi="बिल्कुल। एक बार आपका ऑर्डर डिस्पैच हो जाने के बाद आपको SMS और ईमेल के माध्यम से ट्रैकिंग लिंक प्राप्त होगा। आप अपडेट के लिए सीधे हमसे भी संपर्क कर सकते हैं।">
+                            Yes, you'll get a tracking link via SMS/email.
+                        </span>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="What if my package arrives damaged?" data-lang-hi="अगर मेरा पैकेज क्षतिग्रस्त पहुँचता है तो क्या होगा?">What if my package arrives damaged?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Inspect on delivery, take photos, and report within 48 hours to orders@sve-in.xubi.org. We'll arrange a replacement or refund."
+                              data-lang-hi="डिलीवरी पर निरीक्षण करें, फ़ोटो लें, और orders@sve-in.xubi.org पर 48 घंटे के भीतर रिपोर्ट करें। हम प्रतिस्थापन या धनवापसी की व्यवस्था करेंगे।">
+                            Inspect, photograph, report within 48 hours.
+                        </span>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="Do you ship internationally?" data-lang-hi="क्या आप अंतर्राष्ट्रीय स्तर पर शिप करते हैं?">Do you ship internationally?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Yes, but only for bulk B2B orders (minimum 500 kg). Contact bulk@sve-in.xubi.org for a quote."
+                              data-lang-hi="हाँ, लेकिन केवल थोक B2B ऑर्डर के लिए (न्यूनतम 500 किग्रा)। कोट के लिए bulk@sve-in.xubi.org पर संपर्क करें।">
+                            Yes, only for bulk B2B (min 500 kg).
+                        </span>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span data-lang-en="Can I change my delivery address after ordering?" data-lang-hi="ऑर्डर करने के बाद क्या मैं डिलीवरी पता बदल सकता हूँ?">Can I change my delivery address after ordering?</span>
+                    </div>
+                    <div class="faq-answer">
+                        <span data-lang-en="Yes, if the order hasn't been dispatched yet. Contact us immediately at support@sve-in.xubi.org with your order number."
+                              data-lang-hi="हाँ, अगर ऑर्डर अभी तक डिस्पैच नहीं हुआ है। अपने ऑर्डर नंबर के साथ तुरंत support@sve-in.xubi.org पर हमसे संपर्क करें।">
+                            Yes, if not yet dispatched.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 data-lang-en="11. Contact Us" data-lang-hi="11. संपर्क करें">11. Contact Us</h2>
+            <p data-lang-en="Have questions about shipping? Our team is here to help."
+               data-lang-hi="शिपिंग के बारे में प्रश्न हैं? हमारी टीम मदद के लिए यहाँ है।">
+                Have questions? We're here to help.
+            </p>
+
+            <div class="contact-box">
+                <h3 data-lang-en="📬 Shipping Support" data-lang-hi="📬 शिपिंग सहायता">📬 Shipping Support</h3>
+                <p style="color:rgba(255,255,255,0.9);"
+                   data-lang-en="Reach out to the right team for faster resolution"
+                   data-lang-hi="तेज़ समाधान के लिए सही टीम से संपर्क करें">
+                    Reach out to the right team
+                </p>
+                <div class="email-list">
+                    <a href="mailto:orders@sve-in.xubi.org">📦 orders@sve-in.xubi.org</a>
+                    <a href="mailto:support@sve-in.xubi.org">🛠️ support@sve-in.xubi.org</a>
+                    <a href="mailto:bulk@sve-in.xubi.org">📊 bulk@sve-in.xubi.org</a>
+                    <a href="mailto:b2b@sve-in.xubi.org">🤝 b2b@sve-in.xubi.org</a>
+                    <a href="mailto:help@sve-in.xubi.org">❓ help@sve-in.xubi.org</a>
+                </div>
+                <p style="margin-top:1.5rem;color:rgba(255,255,255,0.9);">
+                    📞 <a href="tel:+918119964445" style="color:#fff;text-decoration:underline;">+91 8119964445</a>
+                </p>
+            </div>
+
+            <div class="reply-notice">
+                ℹ️ <strong data-lang-en="Note:" data-lang-hi="नोट:">Note:</strong>
+                <span data-lang-en="Reply will be from <strong>sve.raj.in@gmail.com</strong> — please check your spam folder if you don't see our reply within 24–48 hours."
+                      data-lang-hi="उत्तर <strong>sve.raj.in@gmail.com</strong> से होगा — यदि आपको 24–48 घंटों के भीतर हमारा उत्तर नहीं दिखता है तो कृपया अपना स्पैम फ़ोल्डर जांचें।">
+                    Reply will be from <strong>sve.raj.in@gmail.com</strong>
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+
+    <script>
+        // ---------- FAQ Accordion ----------
+        function initFaq() {
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.onclick = () => {
+                    const item = q.parentElement;
+                    const wasOpen = item.classList.contains('open');
+                    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                    if (!wasOpen) item.classList.add('open');
+                };
+            });
+            const firstFaq = document.querySelector('.faq-item');
+            if (firstFaq) firstFaq.classList.add('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', initFaq);
+    </script>
+</body>
+</html>

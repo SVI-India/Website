@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notices | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .notice-preview {
+            margin-top: 0.75rem;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+        }
+        .notice-preview .close-x {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .tab-switch {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0;
+            overflow-x: auto;
+        }
+        .tab-switch button {
+            background: none;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap;
+        }
+        .tab-switch button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>📢 Notices & Popups</h1>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary btn-sm" onclick="openAddModal('bar')">➕ New Notice Bar</button>
+                <button class="btn btn-primary btn-sm" onclick="openAddModal('popup')">➕ New Popup</button>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="tab-switch">
+            <button data-tab="bar" class="active" onclick="switchTab('bar')">📢 Notice Bars</button>
+            <button data-tab="popup" onclick="switchTab('popup')">🪟 Popups</button>
+        </div>
+
+        <div class="card">
+            <h3 id="listHeading">📢 Notice Bars</h3>
+            <p class="card-desc" id="listDesc">Notice bars appear at the top of every page. Only the latest active one shows.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Message</th>
+                            <th>Link</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="noticesTable">
+                        <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Notice</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+
+            <input type="hidden" id="editId">
+            <input type="hidden" id="editType">
+
+            <div class="form-group">
+                <label>Icon / Emoji</label>
+                <input id="editIcon" placeholder="📢" value="📢">
+            </div>
+
+            <div class="form-group">
+                <label>Message <small>(required)</small></label>
+                <textarea id="editMessage" placeholder="Big Sale! 20% off on all products..."></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Link URL <small>(optional)</small></label>
+                    <input id="editLink" placeholder="https://... or contact.html">
+                </div>
+                <div class="form-group">
+                    <label>Link Text</label>
+                    <input id="editLinkText" placeholder="Read more">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Background Color</label>
+                    <input type="color" id="editBgColor" value="#f59e0b">
+                </div>
+                <div class="form-group">
+                    <label>Text Color</label>
+                    <input type="color" id="editTextColor" value="#000000">
+                </div>
+            </div>
+
+            <div class="form-group" id="imageGroup" style="display:none;">
+                <label>Popup Image URL <small>(optional)</small></label>
+                <input id="editImage" placeholder="images/promo.jpg">
+            </div>
+
+            <div class="notice-preview" id="previewBox">
+                <span id="previewIcon">📢</span>
+                <span id="previewMsg">Your notice message</span>
+            </div>
+
+            <div class="form-group" style="margin-top:1rem;">
+                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                    <input type="checkbox" id="editActive" checked> Active (visible on site)
+                </label>
+            </div>
+
+            <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;">
+                <button class="btn btn-success" onclick="saveNotice()">💾 Save</button>
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        let currentTab = 'bar';
+        let allNotices = [];
+
+        (async () => {
+            renderSidebar('notices');
+            initSidebar();
+            await guardAdmin();
+            loadNotices();
+            setupPreviewListeners();
+        })();
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-switch button').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+            document.getElementById('listHeading').textContent = tab === 'bar' ? '📢 Notice Bars' : '🪟 Popups';
+            document.getElementById('listDesc').textContent = tab === 'bar'
+                ? 'Notice bars appear at the top of every page. Only the latest active one shows.'
+                : 'Popups appear once per session (1.5s after page load). Only the latest active one shows.';
+            loadNotices();
+        }
+
+        async function loadNotices() {
+            const tbody = document.getElementById('noticesTable');
+            try {
+                const snap = await db.collection('notices').where('type', '==', currentTab).get();
+                allNotices = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+                if (!allNotices.length) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:#94a3b8;">No ${currentTab === 'bar' ? 'notice bars' : 'popups'} yet. Click "New" above to add.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = allNotices.map(n => `
+                    <tr>
+                        <td style="max-width:320px;">
+                            <div style="font-weight:600;">${n.icon || ''} ${esc((n.message || '').slice(0, 80))}${(n.message || '').length > 80 ? '...' : ''}</div>
+                        </td>
+                        <td>${n.link ? `<a href="${esc(n.link)}" target="_blank" style="color:var(--primary);font-size:0.78rem;">${esc(n.linkText || 'Link')} ↗</a>` : '<span style="color:#94a3b8;">—</span>'}</td>
+                        <td>${n.active ? '<span class="badge success">Active</span>' : '<span class="badge gray">Inactive</span>'}</td>
+                        <td style="font-size:0.78rem;">${n.createdAt ? formatDate(n.createdAt) : '—'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-primary btn-sm" onclick="editNotice('${n.id}')">✏️ Edit</button>
+                                <button class="btn btn-outline btn-sm" onclick="toggleActive('${n.id}', ${!n.active})">${n.active ? '⏸ Disable' : '▶️ Enable'}</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteNotice('${n.id}')">🗑 Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:#ef4444;">Error: ${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function openAddModal(type) {
+            document.getElementById('modalTitle').textContent = `Add New ${type === 'bar' ? 'Notice Bar' : 'Popup'}`;
+            document.getElementById('editId').value = '';
+            document.getElementById('editType').value = type;
+            document.getElementById('editIcon').value = type === 'bar' ? '📢' : '🎉';
+            document.getElementById('editMessage').value = '';
+            document.getElementById('editLink').value = '';
+            document.getElementById('editLinkText').value = '';
+            document.getElementById('editBgColor').value = type === 'bar' ? '#f59e0b' : '#ffffff';
+            document.getElementById('editTextColor').value = type === 'bar' ? '#000000' : '#0f172a';
+            document.getElementById('editImage').value = '';
+            document.getElementById('editActive').checked = true;
+            document.getElementById('imageGroup').style.display = type === 'popup' ? 'block' : 'none';
+            updatePreview();
+            document.getElementById('editModal').classList.add('open');
+        }
+
+        async function editNotice(id) {
+            const doc = await db.collection('notices').doc(id).get();
+            if (!doc.exists) return;
+            const n = doc.data();
+
+            document.getElementById('modalTitle').textContent = `Edit ${n.type === 'bar' ? 'Notice Bar' : 'Popup'}`;
+            document.getElementById('editId').value = id;
+            document.getElementById('editType').value = n.type;
+            document.getElementById('editIcon').value = n.icon || '';
+            document.getElementById('editMessage').value = n.message || '';
+            document.getElementById('editLink').value = n.link || '';
+            document.getElementById('editLinkText').value = n.linkText || '';
+            document.getElementById('editBgColor').value = n.bgColor || '#f59e0b';
+            document.getElementById('editTextColor').value = n.textColor || '#000000';
+            document.getElementById('editImage').value = n.image || '';
+            document.getElementById('editActive').checked = n.active !== false;
+            document.getElementById('imageGroup').style.display = n.type === 'popup' ? 'block' : 'none';
+            updatePreview();
+            document.getElementById('editModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('open');
+        }
+
+        function setupPreviewListeners() {
+            ['editIcon', 'editMessage', 'editBgColor', 'editTextColor'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+            });
+        }
+
+        function updatePreview() {
+            const box = document.getElementById('previewBox');
+            const icon = document.getElementById('editIcon').value;
+            const msg = document.getElementById('editMessage').value;
+            const bg = document.getElementById('editBgColor').value;
+            const color = document.getElementById('editTextColor').value;
+            box.style.background = bg;
+            box.style.color = color;
+            document.getElementById('previewIcon').textContent = icon;
+            document.getElementById('previewMsg').textContent = msg || 'Your notice message';
+        }
+
+        async function saveNotice() {
+            const btn = event.target;
+            const id = document.getElementById('editId').value;
+            const type = document.getElementById('editType').value;
+            const message = document.getElementById('editMessage').value.trim();
+
+            if (!message) {
+                toast('Message is required', 'warning');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                const data = {
+                    type: type,
+                    icon: document.getElementById('editIcon').value.trim(),
+                    message: message,
+                    link: document.getElementById('editLink').value.trim(),
+                    linkText: document.getElementById('editLinkText').value.trim(),
+                    bgColor: document.getElementById('editBgColor').value,
+                    textColor: document.getElementById('editTextColor').value,
+                    image: document.getElementById('editImage').value.trim(),
+                    active: document.getElementById('editActive').checked,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                if (id) {
+                    await db.collection('notices').doc(id).set(data, { merge: true });
+                    toast('Notice updated', 'success');
+                } else {
+                    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('notices').add(data);
+                    toast('Notice created', 'success');
+                }
+
+                closeModal();
+                loadNotices();
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save';
+        }
+
+        async function toggleActive(id, active) {
+            try {
+                await db.collection('notices').doc(id).update({ active });
+                toast(active ? 'Enabled' : 'Disabled', 'success');
+                loadNotices();
+            } catch (e) {
+                toast('Failed: ' + e.message, 'error');
+            }
+        }
+
+        async function deleteNotice(id) {
+            if (!confirmAction('Delete this notice permanently?')) return;
+            try {
+                await db.collection('notices').doc(id).delete();
+                toast('Deleted', 'success');
+                loadNotices();
+            } catch (e) {
+                toast('Delete failed: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

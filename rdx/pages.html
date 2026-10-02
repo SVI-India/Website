@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pages | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>📄 Pages</h1>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary btn-sm" onclick="openEditor('home')">➕ Edit Homepage</button>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>📋 All Pages</h3>
+            <p class="card-desc">Click "Edit" to modify page content. Changes appear live on the public site.</p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Page ID</th>
+                            <th>Display Name</th>
+                            <th>Path</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pagesTable">
+                        <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        const PAGES = [
+            { id: 'home',      name: 'Homepage',        path: 'index.html' },
+            { id: 'about',     name: 'About Us',        path: 'about.html' },
+            { id: 'products',  name: 'Products',        path: 'products.html' },
+            { id: 'gallery',   name: 'Gallery',         path: 'gallery.html' },
+            { id: 'contact',   name: 'Contact',         path: 'contact.html' },
+            { id: 'terms',     name: 'Terms of Use',    path: 'terms.html' },
+            { id: 'privacy',   name: 'Privacy Policy',  path: 'privacy.html' },
+            { id: 'disclaimer',name: 'Disclaimer',      path: 'disclaimer.html' },
+            { id: 'refund',    name: 'Refund Policy',   path: 'refund.html' },
+            { id: 'shipping',  name: 'Shipping Policy', path: 'shipping.html' }
+        ];
+
+        (async () => {
+            renderSidebar('pages');
+            initSidebar();
+            await guardAdmin();
+            loadPages();
+        })();
+
+        async function loadPages() {
+            const tbody = document.getElementById('pagesTable');
+            try {
+                // Fetch all page docs at once
+                const docs = await Promise.all(
+                    PAGES.map(p => db.collection('pages').doc(p.id).get())
+                );
+
+                tbody.innerHTML = PAGES.map((p, i) => {
+                    const doc = docs[i];
+                    const data = doc.exists ? doc.data() : null;
+                    const updated = data?.updatedAt ? formatDate(data.updatedAt) : '<span style="color:#94a3b8;">Never</span>';
+                    const isCustomized = doc.exists ? '<span class="badge success">Customized</span>' : '<span class="badge gray">Default</span>';
+                    return `<tr>
+                        <td><code style="font-size:0.78rem;background:#f1f5f9;padding:0.2rem 0.5rem;border-radius:4px;">${p.id}</code></td>
+                        <td><strong>${p.name}</strong></td>
+                        <td><a href="../${p.path}" target="_blank" style="color:var(--primary);font-size:0.82rem;">${p.path} ↗</a></td>
+                        <td style="font-size:0.78rem;">${updated}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openEditor('${p.id}')">✏️ Edit</button>
+                                ${doc.exists ? `<button class="btn btn-danger btn-sm" onclick="resetPage('${p.id}','${p.name}')">↺ Reset</button>` : ''}
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:#ef4444;">Error: ${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function openEditor(pageId) {
+            location.href = 'edit-page.html?page=' + encodeURIComponent(pageId);
+        }
+
+        async function resetPage(pageId, pageName) {
+            if (!confirmAction(`Reset "${pageName}" to default content? This will delete all customizations for this page.`)) return;
+            try {
+                await db.collection('pages').doc(pageId).delete();
+                toast(`"${pageName}" reset to default`, 'success');
+                loadPages();
+            } catch (e) {
+                toast('Reset failed: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

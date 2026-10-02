@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme & CSS | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>🎨 Theme & CSS</h1>
+            </div>
+            <div class="topbar-actions">
+                <a href="../index.html" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>🎨 Brand Colors</h3>
+            <p class="card-desc">These colors apply site-wide. Changes visible after refresh.</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Primary Color</label>
+                    <input type="color" id="primaryColor" value="#1e40af">
+                </div>
+                <div class="form-group">
+                    <label>Primary Light</label>
+                    <input type="color" id="primaryLight" value="#3b82f6">
+                </div>
+                <div class="form-group">
+                    <label>Accent Color</label>
+                    <input type="color" id="accentColor" value="#f59e0b">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Dark Color</label>
+                    <input type="color" id="darkColor" value="#0f172a">
+                </div>
+                <div class="form-group">
+                    <label>Gray (muted text)</label>
+                    <input type="color" id="grayColor" value="#64748b">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔤 Typography & Layout</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Font Family</label>
+                    <select id="fontFamily">
+                        <option value="'Inter', sans-serif">Inter (default)</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                        <option value="'Lato', sans-serif">Lato</option>
+                        <option value="'Montserrat', sans-serif">Montserrat</option>
+                        <option value="'Nunito', sans-serif">Nunito</option>
+                        <option value="'Raleway', sans-serif">Raleway</option>
+                        <option value="'Mulish', sans-serif">Mulish</option>
+                        <option value="'Rubik', sans-serif">Rubik</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Border Radius</label>
+                    <select id="borderRadius">
+                        <option value="0">Sharp (0px)</option>
+                        <option value="4px">Subtle (4px)</option>
+                        <option value="8px">Small (8px)</option>
+                        <option value="12px" selected>Medium (12px)</option>
+                        <option value="16px">Large (16px)</option>
+                        <option value="20px">Extra Large (20px)</option>
+                        <option value="999px">Pill (999px)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>💻 Custom CSS</h3>
+            <p class="card-desc">
+                Add your own CSS rules. These will be injected into every public page.
+                Use for advanced customization.
+            </p>
+            <textarea id="customCSS" class="code-editor" placeholder="/* Example: */
+.navbar {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.hero h1 {
+    letter-spacing: -1px;
+}"></textarea>
+            <div class="help" style="margin-top:0.5rem;">
+                💡 Tip: Right-click on any public page → Inspect → find class names to customize.
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔍 Live Preview</h3>
+            <p class="card-desc">Colors + font preview (updates as you change above):</p>
+            <div id="livePreview" style="padding:1.25rem;border:1px solid var(--border);border-radius:12px;">
+                <h4 style="margin-bottom:0.75rem;">Sample Heading</h4>
+                <p style="color:var(--text-muted);margin-bottom:1rem;">This is how body text will look with your current settings.</p>
+                <button class="btn btn-primary" id="previewBtn">Sample Button</button>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <button class="btn btn-success" onclick="saveTheme()">💾 Save Theme</button>
+            <button class="btn btn-outline" onclick="loadTheme()">🔄 Reset (Reload)</button>
+            <button class="btn btn-danger" onclick="resetTheme()">⚠️ Reset to Defaults</button>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        const DEFAULTS = {
+            primaryColor: '#1e40af',
+            primaryLight: '#3b82f6',
+            accentColor: '#f59e0b',
+            darkColor: '#0f172a',
+            grayColor: '#64748b',
+            fontFamily: "'Inter', sans-serif",
+            borderRadius: '12px',
+            customCSS: ''
+        };
+
+        (async () => {
+            renderSidebar('theme');
+            initSidebar();
+            await guardAdmin();
+            loadTheme();
+            setupPreview();
+        })();
+
+        async function loadTheme() {
+            try {
+                const doc = await db.collection('settings').doc('theme').get();
+                const d = doc.exists ? { ...DEFAULTS, ...doc.data() } : DEFAULTS;
+                document.getElementById('primaryColor').value = d.primaryColor;
+                document.getElementById('primaryLight').value = d.primaryLight;
+                document.getElementById('accentColor').value = d.accentColor;
+                document.getElementById('darkColor').value = d.darkColor;
+                document.getElementById('grayColor').value = d.grayColor;
+                document.getElementById('fontFamily').value = d.fontFamily;
+                document.getElementById('borderRadius').value = d.borderRadius;
+                document.getElementById('customCSS').value = d.customCSS || '';
+                updatePreview();
+            } catch (e) {
+                toast('Load failed: ' + e.message, 'error');
+            }
+        }
+
+        function setupPreview() {
+            ['primaryColor', 'primaryLight', 'accentColor', 'grayColor', 'fontFamily', 'borderRadius'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+                document.getElementById(id).addEventListener('change', updatePreview);
+            });
+        }
+
+        function updatePreview() {
+            const p = document.getElementById('primaryColor').value;
+            const a = document.getElementById('accentColor').value;
+            const g = document.getElementById('grayColor').value;
+            const f = document.getElementById('fontFamily').value;
+            const r = document.getElementById('borderRadius').value;
+            const box = document.getElementById('livePreview');
+            box.style.fontFamily = f;
+            box.style.borderRadius = r;
+            document.getElementById('previewBtn').style.background = p;
+            document.getElementById('previewBtn').style.borderRadius = r;
+            document.getElementById('previewBtn').style.color = '#fff';
+            document.getElementById('previewBtn').style.padding = '0.6rem 1.2rem';
+            document.getElementById('previewBtn').style.border = 'none';
+            document.getElementById('previewBtn').style.fontWeight = '600';
+            document.getElementById('previewBtn').style.cursor = 'pointer';
+        }
+
+        async function saveTheme() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+            try {
+                const data = {
+                    primaryColor: document.getElementById('primaryColor').value,
+                    primaryLight: document.getElementById('primaryLight').value,
+                    accentColor: document.getElementById('accentColor').value,
+                    darkColor: document.getElementById('darkColor').value,
+                    grayColor: document.getElementById('grayColor').value,
+                    fontFamily: document.getElementById('fontFamily').value,
+                    borderRadius: document.getElementById('borderRadius').value,
+                    customCSS: document.getElementById('customCSS').value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await db.collection('settings').doc('theme').set(data, { merge: true });
+                showAlert('pageAlert', '✅ Theme saved! Refresh the public site to see changes.', 'success');
+                toast('Theme saved successfully', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+                showAlert('pageAlert', '❌ ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Theme';
+        }
+
+        async function resetTheme() {
+            if (!confirmAction('Reset all theme settings to defaults? This cannot be undone.')) return;
+            try {
+                await db.collection('settings').doc('theme').delete();
+                toast('Theme reset to defaults', 'success');
+                loadTheme();
+            } catch (e) {
+                toast('Reset failed: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

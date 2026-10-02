@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>⚙️ Settings & Emails</h1>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>📩 Reply Configuration</h3>
+            <p class="card-desc">Reply notice shown on contact form and legal pages.</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Reply From Email</label>
+                    <input type="email" id="replyFrom" value="sve.raj.in@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Reply Notice Message</label>
+                    <input id="replyNotice" value="Reply will be from sve.raj.in@gmail.com">
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="saveReply()">💾 Save Reply Config</button>
+        </div>
+
+        <div class="card">
+            <h3>📧 Email Aliases</h3>
+            <p class="card-desc">All official emails on <strong>@sve-in.xubi.org</strong>. Shown on contact page directory.</p>
+            <div id="emailEditor" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:1rem;"></div>
+            <button class="btn btn-success" style="margin-top:1.5rem;" onclick="saveEmails()">💾 Save Emails</button>
+        </div>
+
+        <div class="card">
+            <h3>🔐 Admin Info</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Admin Email (locked)</label>
+                    <input value="shidhivinayakindustry.svi@gmail.com" disabled>
+                    <div class="help">Only this Google account can access the admin panel.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/emails.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        const EMAIL_FIELDS = [
+            ['general','General Enquiry'], ['contact','Contact'], ['sales','Sales'], ['support','Support'],
+            ['care','Customer Care'], ['enquiry','Enquiry'], ['orders','Orders'], ['billing','Billing'],
+            ['accounts','Accounts'], ['b2b','B2B'], ['distributor','Distributor'], ['partner','Partner'],
+            ['bulk','Bulk Orders'], ['marketing','Marketing'], ['media','Media'], ['feedback','Feedback'],
+            ['newsletter','Newsletter'], ['legal','Legal'], ['privacy','Privacy'], ['grievance','Grievance'],
+            ['webadmin','Web Admin'], ['nikolux','Nikolux'], ['lifestar','Life Star'], ['sanjivni','Sanjivni'],
+            ['help','Help']
+        ];
+
+        (async () => {
+            renderSidebar('settings');
+            initSidebar();
+            await guardAdmin();
+            loadSettings();
+        })();
+
+        async function loadSettings() {
+            try {
+                const [emails, reply] = await Promise.all([
+                    db.collection('settings').doc('emails').get(),
+                    db.collection('settings').doc('reply').get()
+                ]);
+
+                const ed = emails.exists ? emails.data() : {};
+                document.getElementById('emailEditor').innerHTML = EMAIL_FIELDS.map(([key, label]) => `
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>${label}</label>
+                        <input type="email" data-key="${key}" value="${esc(ed[key] || (key + '@sve-in.xubi.org'))}">
+                    </div>
+                `).join('');
+
+                if (reply.exists) {
+                    document.getElementById('replyFrom').value = reply.data().from || 'sve.raj.in@gmail.com';
+                    document.getElementById('replyNotice').value = reply.data().notice || 'Reply will be from sve.raj.in@gmail.com';
+                }
+            } catch (e) {
+                toast('Load failed: ' + e.message, 'error');
+            }
+        }
+
+        async function saveEmails() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            try {
+                const data = {};
+                document.querySelectorAll('#emailEditor input[data-key]').forEach(inp => {
+                    data[inp.dataset.key] = inp.value.trim();
+                });
+                data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('settings').doc('emails').set(data, { merge: true });
+                showAlert('pageAlert', '✅ Emails saved!', 'success');
+                toast('Emails saved', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Emails';
+        }
+
+        async function saveReply() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            try {
+                await db.collection('settings').doc('reply').set({
+                    from: document.getElementById('replyFrom').value.trim(),
+                    notice: document.getElementById('replyNotice').value.trim(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                showAlert('pageAlert', '✅ Reply config saved!', 'success');
+                toast('Reply config saved', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Reply Config';
+        }
+    </script>
+</body>
+</html>

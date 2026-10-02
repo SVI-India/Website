@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Editor | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>🔝 Header Editor</h1>
+            </div>
+            <div class="topbar-actions">
+                <a href="../index.html" target="_blank" class="btn btn-outline btn-sm">👁 Preview</a>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="card">
+            <h3>🏷️ Logo & Brand</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Logo Text <small>(shown next to logo)</small></label>
+                    <input id="logoText" placeholder="Siddhi Vinayak">
+                </div>
+                <div class="form-group">
+                    <label>Logo Image URL</label>
+                    <input id="logoImage" placeholder="images/logo.png">
+                    <div class="help">Path from site root (public pages)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🧭 Navigation Items</h3>
+            <p class="card-desc">Add, edit, or reorder nav links. Both English and Hindi labels optional.</p>
+            <div id="navItems"></div>
+            <button class="btn btn-outline" onclick="addNavItem()">➕ Add Nav Item</button>
+        </div>
+
+        <div class="card">
+            <h3>🎯 B2B Button</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Button Text (English)</label>
+                    <input id="b2bButtonText" placeholder="B2B Portal">
+                </div>
+                <div class="form-group">
+                    <label>Button Text (Hindi)</label>
+                    <input id="b2bButtonTextHi" placeholder="B2B पोर्टल">
+                </div>
+                <div class="form-group">
+                    <label>Button URL</label>
+                    <input id="b2bButtonUrl" placeholder="https://b2b.example.com">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⚙️ Display Options</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                        <input type="checkbox" id="showLangToggle"> Show Language Toggle (🇮🇳/🇬🇧)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                        <input type="checkbox" id="showModeToggle"> Show Dark/Light Mode Toggle (🌙/☀️)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <button class="btn btn-success" onclick="saveHeader()">💾 Save Header</button>
+            <button class="btn btn-outline" onclick="loadHeader()">🔄 Reset (Reload)</button>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        let navItems = [];
+
+        (async () => {
+            renderSidebar('header');
+            initSidebar();
+            await guardAdmin();
+            loadHeader();
+        })();
+
+        async function loadHeader() {
+            try {
+                const doc = await db.collection('settings').doc('header').get();
+                const d = doc.exists ? doc.data() : {
+                    logoText: 'Siddhi Vinayak',
+                    logoImage: 'images/logo.png',
+                    b2bButtonText: 'B2B Portal',
+                    b2bButtonTextHi: 'B2B पोर्टल',
+                    b2bButtonUrl: '#',
+                    showLangToggle: true,
+                    showModeToggle: true,
+                    navItems: [
+                        { label: 'Home', labelHi: 'होम', url: 'index.html' },
+                        { label: 'About', labelHi: 'हमारे बारे में', url: 'about.html' },
+                        { label: 'Products', labelHi: 'उत्पाद', url: 'products.html' },
+                        { label: 'Gallery', labelHi: 'गैलरी', url: 'gallery.html' },
+                        { label: 'Contact', labelHi: 'संपर्क', url: 'contact.html' }
+                    ]
+                };
+
+                document.getElementById('logoText').value = d.logoText || '';
+                document.getElementById('logoImage').value = d.logoImage || '';
+                document.getElementById('b2bButtonText').value = d.b2bButtonText || '';
+                document.getElementById('b2bButtonTextHi').value = d.b2bButtonTextHi || '';
+                document.getElementById('b2bButtonUrl').value = d.b2bButtonUrl || '';
+                document.getElementById('showLangToggle').checked = d.showLangToggle !== false;
+                document.getElementById('showModeToggle').checked = d.showModeToggle !== false;
+
+                navItems = d.navItems || [];
+                renderNavItems();
+            } catch (e) {
+                toast('Failed to load header: ' + e.message, 'error');
+            }
+        }
+
+        function renderNavItems() {
+            const el = document.getElementById('navItems');
+            if (!navItems.length) {
+                el.innerHTML = '<div class="empty-state"><div class="icon">🧭</div><p>No nav items yet. Click "Add Nav Item" below.</p></div>';
+                return;
+            }
+            el.innerHTML = navItems.map((n, i) => `
+                <div class="list-item">
+                    <div class="form-group" style="margin:0;">
+                        <label>Label (EN)</label>
+                        <input value="${esc(n.label || '')}" oninput="navItems[${i}].label=this.value" placeholder="Home">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>Label (HI)</label>
+                        <input value="${esc(n.labelHi || '')}" oninput="navItems[${i}].labelHi=this.value" placeholder="होम">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>URL</label>
+                        <input value="${esc(n.url || '')}" oninput="navItems[${i}].url=this.value" placeholder="index.html">
+                    </div>
+                    <button class="remove-btn" onclick="removeNav(${i})" title="Remove">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addNavItem() {
+            navItems.push({ label: '', labelHi: '', url: '' });
+            renderNavItems();
+        }
+
+        function removeNav(i) {
+            if (!confirmAction('Remove this nav item?')) return;
+            navItems.splice(i, 1);
+            renderNavItems();
+        }
+
+        async function saveHeader() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            try {
+                const data = {
+                    logoText: document.getElementById('logoText').value.trim(),
+                    logoImage: document.getElementById('logoImage').value.trim(),
+                    b2bButtonText: document.getElementById('b2bButtonText').value.trim(),
+                    b2bButtonTextHi: document.getElementById('b2bButtonTextHi').value.trim(),
+                    b2bButtonUrl: document.getElementById('b2bButtonUrl').value.trim(),
+                    showLangToggle: document.getElementById('showLangToggle').checked,
+                    showModeToggle: document.getElementById('showModeToggle').checked,
+                    navItems: navItems.filter(n => n.label && n.url),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await db.collection('settings').doc('header').set(data, { merge: true });
+                showAlert('pageAlert', '✅ Header saved! Refresh the public site to see changes.', 'success');
+                toast('Header saved successfully', 'success');
+            } catch (e) {
+                toast('Save failed: ' + e.message, 'error');
+                showAlert('pageAlert', '❌ ' + e.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '💾 Save Header';
+        }
+    </script>
+</body>
+</html>
