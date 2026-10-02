@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>404 — Page Not Found | Siddhi Vinayak Industries</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Return to Siddhi Vinayak Industries homepage.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .error-wrap {
+            min-height: calc(100vh - 75px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1.5rem, 4vw, 3rem);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-content {
+            max-width: 640px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 0.7s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: clamp(5rem, 20vw, 11rem);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -4px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .error-code::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            border-radius: 4px;
+        }
+
+        .error-icon {
+            font-size: clamp(3rem, 8vw, 5rem);
+            margin: 1rem 0;
+            display: block;
+            line-height: 1;
+            animation: bounce 2.5s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .error-content h1 {
+            font-size: clamp(1.4rem, 4vw, 2.15rem);
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        .error-content p {
+            color: var(--text-muted);
+            font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .error-actions .btn {
+            min-width: 160px;
+        }
+
+        /* Suggestion links */
+        .suggestions {
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .suggestions h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .suggestion-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+        .suggestion-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.1rem;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: clamp(0.82rem, 1.5vw, 0.9rem);
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .suggestion-links a:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Decorative blobs */
+        .error-wrap::before,
+        .error-wrap::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .error-wrap::before {
+            top: 10%; left: -5%;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+            animation: floatBlob 12s ease-in-out infinite;
+        }
+        .error-wrap::after {
+            bottom: 5%; right: -5%;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+            animation: floatBlob 15s ease-in-out infinite reverse;
+        }
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, -30px) scale(1.1); }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 600px) {
+            .error-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .error-actions .btn {
+                width: 100%;
+            }
+            .error-code { letter-spacing: -2px; }
+        }
+    </style>
+</head>
+<body data-page="404">
+
+    <div id="site-header"></div>
+
+    <section class="error-wrap">
+        <div class="error-content">
+
+            <div class="error-code">404</div>
+            <span class="error-icon">🔍</span>
+
+            <h1 data-lang-en="Oops! Page Not Found"
+                data-lang-hi="ओह! पेज नहीं मिला">
+                Oops! Page Not Found
+            </h1>
+
+            <p data-lang-en="The page you're looking for might have been removed, renamed, or is temporarily unavailable. Let's get you back on track."
+               data-lang-hi="आप जिस पेज की तलाश कर रहे हैं वह हटा दिया गया हो, उसका नाम बदल दिया गया हो, या अस्थायी रूप से अनुपलब्ध हो सकता है। चलिए आपको वापस सही रास्ते पर लाते हैं।">
+                The page you're looking for might have been removed, renamed, or is temporarily unavailable.
+            </p>
+
+            <div class="error-actions">
+                <a href="index.html" class="btn btn-primary">
+                    🏠 <span data-lang-en="Go to Homepage" data-lang-hi="होमपेज पर जाएँ">Go to Homepage</span>
+                </a>
+                <a href="contact.html" class="btn btn-outline">
+                    📞 <span data-lang-en="Contact Us" data-lang-hi="संपर्क करें">Contact Us</span>
+                </a>
+            </div>
+
+            <div class="suggestions">
+                <h3 data-lang-en="Popular Pages" data-lang-hi="लोकप्रिय पेज">Popular Pages</h3>
+                <div class="suggestion-links">
+                    <a href="products.html">
+                        📦 <span data-lang-en="Products" data-lang-hi="उत्पाद">Products</span>
+                    </a>
+                    <a href="about.html">
+                        ℹ️ <span data-lang-en="About Us" data-lang-hi="हमारे बारे में">About Us</span>
+                    </a>
+                    <a href="gallery.html">
+                        🖼️ <span data-lang-en="Gallery" data-lang-hi="गैलरी">Gallery</span>
+                    </a>
+                    <a href="products/nikolux.html">
+                        ⭐ <span data-lang-en="Nikolux" data-lang-hi="निकोलक्स">Nikolux</span>
+                    </a>
+                    <a href="products/life-star.html">
+                        ✨ <span data-lang-en="Life Star" data-lang-hi="लाइफ स्टार">Life Star</span>
+                    </a>
+                    <a href="products/sanjivni.html">
+                        🌿 <span data-lang-en="Sanjivni" data-lang-hi="संजीवनी">Sanjivni</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/emails.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script src="js/particles-bg.js"></script>
+    <script src="js/cms-loader.js"></script>
+
+    <script>
+        // Agar 404 page pe koi URL param hai (jaise ?from=/old-page), to homepage suggestion me use karo
+        // Optional: track 404 hits (analytics)
+        console.log('404 page hit:', window.location.pathname);
+    </script>
+</body>
+</html>
