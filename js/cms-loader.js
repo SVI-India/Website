@@ -52,11 +52,11 @@ async function fetchDoc(collection, docId) {
 
 // ---------- DEFAULTS ----------
 const DEFAULT_HEADER = {
-    logoText: "Siddhi Vinayak",
+    logoText: "Siddhi Vinayak Enterprises",
     logoImage: "images/logo.png",
     b2bButtonText: "B2B Portal",
     b2bButtonTextHi: "B2B पोर्टल",
-    b2bButtonUrl: "#",
+    b2bButtonUrl: "https://sve.tedbuy.com/",
     showLangToggle: true,
     showModeToggle: true,
     navItems: [
@@ -69,7 +69,7 @@ const DEFAULT_HEADER = {
 };
 
 const DEFAULT_FOOTER = {
-    brandName: "Siddhi Vinayak Industries",
+    brandName: "Siddhi Vinayak Enterprises",
     aboutText: "Powerful Clean. Assured Quality. India's trusted detergent manufacturer since 2009.",
     aboutTextHi: "शक्तिशाली सफाई। सुनिश्चित गुणवत्ता। 2009 से भारत का भरोसेमंद डिटर्जेंट निर्माता।",
     quickLinks: [
@@ -108,7 +108,7 @@ const DEFAULT_FOOTER = {
         youtube: "",
         whatsapp: "https://wa.me/918119964445"
     },
-    copyright: "© 2025 Siddhi Vinayak Industries. All rights reserved."
+    copyright: "© 2026 Siddhi Vinayak Enterprises. All rights reserved."
 };
 
 // ---------- HEADER ----------
@@ -132,7 +132,7 @@ async function renderHeader() {
             <div class="nav-container">
                 <a href="index.html" class="nav-logo">
                     ${data.logoImage ? `<img src="${data.logoImage}" alt="Logo" onerror="this.style.display='none'">` : ''}
-                    <span>${data.logoText || 'Siddhi Vinayak'}</span>
+                    <span>${data.logoText || 'Siddhi Vinayak Enterprises'}</span>
                 </a>
                 <ul class="nav-menu" id="navMenu">
                     ${navHtml}
