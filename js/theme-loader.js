@@ -70,7 +70,7 @@ function setFavicon() {
 
 // ---------- DARK MODE ----------
 function getMode() {
-    return localStorage.getItem('mode') || 'light';
+    return localStorage.getItem('mode') || 'darkt';
 }
 
 function setMode(mode) {
