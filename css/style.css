@@ -1,5 +1,5 @@
 /* ============================================================
-   SIDDHI VINAYAK Enterprises — Fully Responsive Styles
+   SIDDHI VINAYAK ENTERPRISES — Fully Responsive Styles
    Perfect at every pixel — 320px to 4K
    ============================================================ */
 
@@ -515,7 +515,7 @@ body.has-notice .navbar { top: 30px; }
 }
 
 /* ============================================================
-   CARDS GRID (Products, Features)
+   CARDS GRID
    ============================================================ */
 .products-grid,
 .features-grid {
@@ -686,6 +686,124 @@ body.has-notice .navbar { top: 30px; }
     white-space: nowrap;
 }
 .footer-legal-links a:hover { color: #ffffff; }
+
+/* ============================================================
+   FOOTER SOCIAL BUTTONS — Real brand logos (SVG)
+   ============================================================ */
+.footer-social {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+    fill: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+    border-color: transparent;
+}
+
+.social-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* Brand-specific colors */
+.social-btn.youtube {
+    color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.3);
+}
+.social-btn.youtube:hover {
+    background: #ff0000;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(255, 0, 0, 0.5);
+}
+
+.social-btn.facebook {
+    color: #1877f2;
+    border-color: rgba(24, 119, 242, 0.3);
+}
+.social-btn.facebook:hover {
+    background: #1877f2;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(24, 119, 242, 0.5);
+}
+
+.social-btn.instagram {
+    color: #e1306c;
+    border-color: rgba(225, 48, 108, 0.3);
+}
+.social-btn.instagram:hover {
+    background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(225, 48, 108, 0.5);
+}
+
+.social-btn.twitter {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.social-btn.twitter:hover {
+    background: #000000;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+}
+
+.social-btn.linkedin {
+    color: #0a66c2;
+    border-color: rgba(10, 102, 194, 0.3);
+}
+.social-btn.linkedin:hover {
+    background: #0a66c2;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(10, 102, 194, 0.5);
+}
+
+.social-btn.whatsapp {
+    color: #25d366;
+    border-color: rgba(37, 211, 102, 0.3);
+}
+.social-btn.whatsapp:hover {
+    background: #25d366;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(37, 211, 102, 0.5);
+}
+
+.social-btn.telegram {
+    color: #0088cc;
+    border-color: rgba(0, 136, 204, 0.3);
+}
+.social-btn.telegram:hover {
+    background: #0088cc;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(0, 136, 204, 0.5);
+}
 
 /* ============================================================
    FORMS
@@ -1008,7 +1126,6 @@ body.has-notice .navbar { top: 30px; }
         display: inline-flex;
     }
 
-    /* Hide lang toggle text on very small screens */
     .icon-btn { padding: 0.45rem 0.6rem; }
 }
 
@@ -1071,6 +1188,16 @@ body.has-notice .navbar { top: 30px; }
 
     .legal-content ul,
     .legal-content ol { margin-left: 1.1rem; }
+
+    /* Social buttons smaller */
+    .social-btn {
+        width: 38px;
+        height: 38px;
+    }
+    .social-btn svg {
+        width: 17px;
+        height: 17px;
+    }
 }
 
 /* ============================================================
@@ -1101,6 +1228,15 @@ body.has-notice .navbar { top: 30px; }
     .stat h3 { font-size: 1.5rem; }
 
     .product-card img { height: 160px; }
+
+    .social-btn {
+        width: 36px;
+        height: 36px;
+    }
+    .social-btn svg {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 /* ============================================================
