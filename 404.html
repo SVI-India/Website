@@ -7,11 +7,124 @@
     <title>404 — Page Not Found | Siddhi Vinayak Enterprises</title>
     <meta name="description" content="The page you're looking for doesn't exist. Return to Siddhi Vinayak Enterprises homepage.">
     <meta name="robots" content="noindex, follow">
-    <link rel="icon" href="images/logo.png">
-    <link rel="apple-touch-icon" href="images/logo.png">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://www.sve.theworkpc.com/images/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.sve.theworkpc.com/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.sve.theworkpc.com/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.sve.theworkpc.com/images/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* ============================================================
+           404 PAGE — Self-contained, no external CSS dependency
+           ============================================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #0a0f1e;
+            --bg-soft: #0f172a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 75px 0 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        img, svg { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; }
+
+        /* ============================================================
+           STATIC NAVBAR
+           ============================================================ */
+        .error-navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 75px;
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .error-nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .error-nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 800;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #3b82f6;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .error-nav-logo img {
+            height: clamp(32px, 5vw, 45px);
+            width: auto;
+            flex-shrink: 0;
+        }
+        .error-nav-logo span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .error-nav-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.2rem;
+            background: #1e40af;
+            color: #ffffff;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .error-nav-home:hover {
+            background: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        /* ============================================================
+           404 CONTENT
+           ============================================================ */
         .error-wrap {
             min-height: calc(100vh - 75px);
             display: flex;
@@ -30,6 +143,7 @@
             z-index: 2;
             animation: fadeInUp 0.7s ease;
         }
+
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -39,10 +153,11 @@
             font-size: clamp(5rem, 20vw, 11rem);
             font-weight: 900;
             line-height: 1;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            color: #3b82f6;
             margin-bottom: 0.5rem;
             letter-spacing: -4px;
             position: relative;
@@ -57,7 +172,7 @@
             transform: translateX(-50%);
             width: 60%;
             height: 4px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
             border-radius: 4px;
         }
 
@@ -68,6 +183,7 @@
             line-height: 1;
             animation: bounce 2.5s ease-in-out infinite;
         }
+
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
@@ -76,14 +192,14 @@
         .error-content h1 {
             font-size: clamp(1.4rem, 4vw, 2.15rem);
             font-weight: 800;
-            color: var(--text);
+            color: #e2e8f0;
             margin-bottom: 1rem;
             line-height: 1.25;
             word-break: break-word;
         }
 
         .error-content p {
-            color: var(--text-muted);
+            color: #94a3b8;
             font-size: clamp(0.95rem, 1.8vw, 1.1rem);
             line-height: 1.7;
             margin-bottom: 2rem;
@@ -100,50 +216,99 @@
             margin-bottom: 3rem;
         }
 
-        .error-actions .btn {
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: clamp(0.85rem, 1.5vw, 1rem);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.25s;
+            text-align: center;
+            line-height: 1.4;
+            text-decoration: none;
+            white-space: nowrap;
             min-width: 160px;
+            font-family: inherit;
         }
 
-        /* Suggestion links */
+        .btn-primary {
+            background: #1e40af;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+        }
+        .btn-primary:hover {
+            background: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        /* ============================================================
+           SUGGESTIONS
+           ============================================================ */
         .suggestions {
             padding-top: 2.5rem;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #1e293b;
         }
+
         .suggestions h3 {
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: #94a3b8;
             font-weight: 700;
             margin-bottom: 1.25rem;
         }
+
         .suggestion-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.6rem;
         }
+
         .suggestion-links a {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
             padding: 0.55rem 1.1rem;
-            background: var(--bg-soft);
-            border: 1px solid var(--border);
+            background: #0f172a;
+            border: 1px solid #1e293b;
             border-radius: 50px;
             font-size: clamp(0.82rem, 1.5vw, 0.9rem);
             font-weight: 600;
-            color: var(--text);
+            color: #e2e8f0;
             transition: all 0.2s;
+            text-decoration: none;
         }
         .suggestion-links a:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
+            background: #1e40af;
+            color: #ffffff;
+            border-color: #1e40af;
             transform: translateY(-2px);
         }
 
-        /* Decorative blobs */
+        /* ============================================================
+           DECORATIVE BLOBS
+           ============================================================ */
         .error-wrap::before,
         .error-wrap::after {
             content: '';
@@ -155,39 +320,96 @@
         .error-wrap::before {
             top: 10%; left: -5%;
             width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
             animation: floatBlob 12s ease-in-out infinite;
         }
         .error-wrap::after {
             bottom: 5%; right: -5%;
             width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
             animation: floatBlob 15s ease-in-out infinite reverse;
         }
+
         @keyframes floatBlob {
             0%, 100% { transform: translate(0, 0) scale(1); }
             50% { transform: translate(40px, -30px) scale(1.1); }
         }
 
         /* ============================================================
+           FOOTER
+           ============================================================ */
+        .error-footer {
+            background: #0a0f1e;
+            color: #94a3b8;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #1e293b;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 2;
+        }
+        .error-footer a {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .error-footer a:hover {
+            color: #f59e0b;
+        }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 600px) {
+            body { padding-top: 68px; }
+            .error-navbar { height: 68px; }
+            .error-nav-container { padding: 0 1rem; }
             .error-actions {
                 flex-direction: column;
                 align-items: stretch;
             }
             .error-actions .btn {
                 width: 100%;
+                min-width: 0;
             }
             .error-code { letter-spacing: -2px; }
+            .error-nav-logo span { display: none; }
+        }
+
+        @media (max-width: 380px) {
+            body { padding-top: 62px; }
+            .error-navbar { height: 62px; }
+            .error-nav-logo img { height: 34px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
-<body data-page="404">
+<body>
 
-    <div id="site-header"></div>
+    <!-- ============================================================
+         STATIC NAVBAR
+         ============================================================ -->
+    <nav class="error-navbar">
+        <div class="error-nav-container">
+            <a href="https://www.sve.theworkpc.com/index.html" class="error-nav-logo">
+                <img src="https://www.sve.theworkpc.com/images/logo.png" alt="Siddhi Vinayak Enterprises" onerror="this.style.display='none'">
+                <span>Siddhi Vinayak Enterprises</span>
+            </a>
+            <a href="https://www.sve.theworkpc.com/index.html" class="error-nav-home">
+                🏠 Home
+            </a>
+        </div>
+    </nav>
 
+    <!-- ============================================================
+         404 CONTENT
+         ============================================================ -->
     <section class="error-wrap">
         <div class="error-content">
 
@@ -205,10 +427,10 @@
             </p>
 
             <div class="error-actions">
-                <a href="index.html" class="btn btn-primary">
+                <a href="https://www.sve.theworkpc.com/index.html" class="btn btn-primary">
                     🏠 <span data-lang-en="Go to Homepage" data-lang-hi="होमपेज पर जाएँ">Go to Homepage</span>
                 </a>
-                <a href="contact.html" class="btn btn-outline">
+                <a href="https://www.sve.theworkpc.com/contact.html" class="btn btn-outline">
                     📞 <span data-lang-en="Contact Us" data-lang-hi="संपर्क करें">Contact Us</span>
                 </a>
             </div>
@@ -216,22 +438,22 @@
             <div class="suggestions">
                 <h3 data-lang-en="Popular Pages" data-lang-hi="लोकप्रिय पेज">Popular Pages</h3>
                 <div class="suggestion-links">
-                    <a href="products.html">
+                    <a href="https://www.sve.theworkpc.com/products.html">
                         📦 <span data-lang-en="Products" data-lang-hi="उत्पाद">Products</span>
                     </a>
-                    <a href="about.html">
+                    <a href="https://www.sve.theworkpc.com/about.html">
                         ℹ️ <span data-lang-en="About Us" data-lang-hi="हमारे बारे में">About Us</span>
                     </a>
-                    <a href="gallery.html">
+                    <a href="https://www.sve.theworkpc.com/gallery.html">
                         🖼️ <span data-lang-en="Gallery" data-lang-hi="गैलरी">Gallery</span>
                     </a>
-                    <a href="products/nikolux.html">
+                    <a href="https://www.sve.theworkpc.com/products/nikolux.html">
                         ⭐ <span data-lang-en="Nikolux" data-lang-hi="निकोलक्स">Nikolux</span>
                     </a>
-                    <a href="products/life-star.html">
+                    <a href="https://www.sve.theworkpc.com/products/life-star.html">
                         ✨ <span data-lang-en="Life Star" data-lang-hi="लाइफ स्टार">Life Star</span>
                     </a>
-                    <a href="products/sanjivni.html">
+                    <a href="https://www.sve.theworkpc.com/products/sanjivni.html">
                         🌿 <span data-lang-en="Sanjivni" data-lang-hi="संजीवनी">Sanjivni</span>
                     </a>
                 </div>
@@ -240,23 +462,63 @@
         </div>
     </section>
 
-    <div id="site-footer"></div>
+    <!-- ============================================================
+         STATIC FOOTER
+         ============================================================ -->
+    <footer class="error-footer">
+        <p>
+            © 2026 Siddhi Vinayak Enterprises. All rights reserved.
+            &nbsp;|&nbsp;
+            <a href="https://www.sve.theworkpc.com/index.html">Home</a>
+            &nbsp;•&nbsp;
+            <a href="https://www.sve.theworkpc.com/contact.html">Contact</a>
+        </p>
+    </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script src="js/emails.js"></script>
-    <script src="js/i18n.js"></script>
-    <script src="js/theme-loader.js"></script>
-    <script src="js/particles-bg.js"></script>
-    <script src="js/cms-loader.js"></script>
-
+    <!-- ============================================================
+         Minimal language toggle (self-contained)
+         ============================================================ -->
     <script>
-        // Agar 404 page pe koi URL param hai (jaise ?from=/old-page), to homepage suggestion me use karo
-        // Optional: track 404 hits (analytics)
-        console.log('404 page hit:', window.location.pathname);
+        (function() {
+            'use strict';
+
+            function getLang() {
+                return localStorage.getItem('lang') || 'en';
+            }
+
+            function setLang(lang) {
+                localStorage.setItem('lang', lang);
+                applyLang();
+            }
+
+            function applyLang() {
+                const lang = getLang();
+                document.querySelectorAll('[data-lang-en][data-lang-hi]').forEach(el => {
+                    el.innerHTML = lang === 'hi' ? el.dataset.langHi : el.dataset.langEn;
+                });
+            }
+
+            applyLang();
+
+            // Add language toggle button
+            const navHome = document.querySelector('.error-nav-home');
+            if (navHome) {
+                const langBtn = document.createElement('button');
+                langBtn.style.cssText = 'display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.2rem;background:transparent;color:#3b82f6;border:1.5px solid #3b82f6;border-radius:8px;font-weight:600;font-size:clamp(0.8rem,1.5vw,0.9rem);margin-left:0.5rem;cursor:pointer;font-family:inherit;transition:all 0.2s;';
+                langBtn.textContent = getLang() === 'en' ? '🇮🇳 हिंदी' : '🇬🇧 English';
+                langBtn.onmouseover = () => { langBtn.style.background = '#3b82f6'; langBtn.style.color = '#fff'; };
+                langBtn.onmouseout = () => { langBtn.style.background = 'transparent'; langBtn.style.color = '#3b82f6'; };
+                langBtn.onclick = () => {
+                    const newLang = getLang() === 'en' ? 'hi' : 'en';
+                    setLang(newLang);
+                    langBtn.textContent = newLang === 'en' ? '🇮🇳 हिंदी' : '🇬🇧 English';
+                };
+                navHome.parentElement.appendChild(langBtn);
+            }
+
+            console.log('✅ 404 loaded — full absolute URLs');
+        })();
     </script>
+
 </body>
 </html>
