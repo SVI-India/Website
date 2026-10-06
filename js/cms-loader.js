@@ -83,7 +83,7 @@ const DEFAULT_HEADER = {
     logoImage: "/images/logo.png",
     b2bButtonText: "B2B Portal",
     b2bButtonTextHi: "B2B पोर्टल",
-    b2bButtonUrl: "#",
+    b2bButtonUrl: "https://sve.tedbuy.com/",
     showLangToggle: true,
     showModeToggle: true,
     navItems: [
@@ -130,12 +130,12 @@ const DEFAULT_FOOTER = {
     ],
     socialLinks: {
         youtube:   "https://www.youtube.com/@SVE_India",
-        facebook:  "",
-        instagram: "",
-        twitter:   "",
-        linkedin:  ""
+        facebook:  "https://www.facebook.com/profile.php?id=61595117367741",
+        instagram: "https://www.instagram.com/sve_india",
+        twitter:   "https://x.com/SVE_India_",
+        linkedin:  "https://www.linkedin.com/in/sve-india"
     },
-    copyright: "© 2025 Siddhi Vinayak Enterprises. All rights reserved."
+    copyright: "© 2026 Siddhi Vinayak Enterprises. All rights reserved."
 };
 
 // ---------- HEADER ----------

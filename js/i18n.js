@@ -57,7 +57,7 @@ const TRANSLATIONS = {
         "form.message": "Message",
 
         // About page
-        "about.title": "About Siddhi Vinayak Industries",
+        "about.title": "About Siddhi Vinayak Enterprises",
         "about.subtitle": "Our journey of excellence in detergent manufacturing",
         "about.storyHeading": "Our Story",
         "about.missionHeading": "Our Mission",
