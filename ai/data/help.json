@@ -1,0 +1,42 @@
+{
+    "howToOrder": {
+        "patterns": ["how to order", "place order", "buy", "purchase", "order kaise", "ऑर्डर कैसे"],
+        "reply": "🛒 How to Place an Order:\n\n1. Visit our website: https://www.sveindia.mywire.org\n2. Browse products: /products.html\n3. Choose your product & quantity\n4. Contact us:\n   📧 orders@sve-in.xubi.org\n   📧 sales@sve-in.xubi.org\n5. Our team will confirm pricing & delivery\n\nFor bulk orders: bulk@sve-in.xubi.org",
+        "replyHi": "🛒 ऑर्डर कैसे करें:\n\n1. हमारी वेबसाइट पर जाएं\n2. उत्पाद ब्राउज़ करें: /products.html\n3. उत्पाद और मात्रा चुनें\n4. संपर्क करें: orders@sve-in.xubi.org\n5. हमारी टीम पुष्टि करेगी\n\nथोक ऑर्डर: bulk@sve-in.xubi.org"
+    },
+    "trackOrder": {
+        "patterns": ["track order", "order status", "where is my order", "tracking", "ट्रैक"],
+        "reply": "📦 To Track Your Order:\n\nYou will receive:\n• 📧 Email with tracking link\n• 📱 SMS with tracking number\n• 💬 WhatsApp update (if opted-in)\n\nOr contact us:\n📧 orders@sve-in.xubi.org\n📧 support@sve-in.xubi.org",
+        "replyHi": "📦 ऑर्डर ट्रैक करने के लिए:\n\nआपको प्राप्त होंगे:\n• 📧 ट्रैकिंग लिंक वाला ईमेल\n• 📱 ट्रैकिंग नंबर वाला SMS\n\nसंपर्क: orders@sve-in.xubi.org"
+    },
+    "payment": {
+        "patterns": ["payment", "pay", "payment method", "upi", "bank", "भुगतान"],
+        "reply": "💳 Payment Methods:\n\nWe accept:\n• Bank Transfer (NEFT/RTGS/IMPS)\n• UPI\n• Cheque (for bulk orders)\n• Cash on Delivery (selected areas)\n\nFor details: accounts@sve-in.xubi.org",
+        "replyHi": "💳 भुगतान विधियाँ:\n\n• बैंक ट्रांसफर (NEFT/RTGS)\n• UPI\n• चेक (थोक ऑर्डर के लिए)\n• कैश ऑन डिलीवरी\n\nविवरण: accounts@sve-in.xubi.org"
+    },
+    "privateLabel": {
+        "patterns": ["private label", "own brand", "custom brand", "white label", "प्राइवेट लेबल"],
+        "reply": "🏷️ Private Label Service:\n\nYes! We offer private labeling:\n• Minimum order: 500 kg\n• Custom fragrance options\n• Custom packaging design\n• Your brand name & logo\n• Flexible MOQ for regular partners\n\nContact: partner@sve-in.xubi.org",
+        "replyHi": "🏷️ प्राइवेट लेबल सेवा:\n\nहाँ! हम प्राइवेट लेबलिंग प्रदान करते हैं:\n• न्यूनतम ऑर्डर: 500 किग्रा\n• कस्टम सुगंध विकल्प\n• कस्टम पैकेजिंग डिज़ाइन\n\nसंपर्क: partner@sve-in.xubi.org"
+    },
+    "becomeDistributor": {
+        "patterns": ["distributor", "become dealer", "partnership", "reseller", "डिस्ट्रीब्यूटर"],
+        "reply": "🤝 Become a Distributor:\n\nRequirements:\n• Registered business\n• GST number\n• Minimum initial order: 1 ton\n• Storage facility\n\nBenefits:\n• Special pricing\n• Priority dispatch\n• Marketing support\n• Dedicated manager\n\nApply: distributor@sve-in.xubi.org",
+        "replyHi": "🤝 वितरक बनें:\n\nआवश्यकताएँ:\n• पंजीकृत व्यवसाय\n• GST नंबर\n• न्यूनतम प्रारंभिक ऑर्डर: 1 टन\n\nलाभ:\n• विशेष मूल्य\n• प्राथमिकता डिस्पैच\n\nआवेदन: distributor@sve-in.xubi.org"
+    },
+    "quality": {
+        "patterns": ["quality", "test", "lab", "iso", "certified", "गुणवत्ता"],
+        "reply": "🔬 Quality Assurance:\n\n• In-house quality lab\n• Every batch tested\n• Strict quality control\n• ISO standards followed\n• Multi-stage inspection\n\nWe test every batch before dispatch.",
+        "replyHi": "🔬 गुणवत्ता आश्वासन:\n\n• इन-हाउस गुणवत्ता लैब\n• हर बैच का परीक्षण\n• कठोर गुणवत्ता नियंत्रण\n• ISO मानकों का पालन"
+    },
+    "warranty": {
+        "patterns": ["warranty", "guarantee", "वारंटी"],
+        "reply": "✅ Product Guarantee:\n\nWe stand by our quality:\n• Fresh stock guaranteed\n• Proper packaging\n• Safe delivery\n• Replacement for damaged products\n\nReport issues within 48 hours of delivery.",
+        "replyHi": "✅ उत्पाद गारंटी:\n\n• ताज़ा स्टॉक\n• उचित पैकेजिंग\n• सुरक्षित डिलीवरी\n• क्षतिग्रस्त उत्पादों के लिए प्रतिस्थापन"
+    },
+    "hours": {
+        "patterns": ["hours", "timing", "open", "closed", "समय"],
+        "reply": "🕐 Business Hours:\n\nMonday to Saturday: 9:00 AM – 7:00 PM IST\nSunday: Closed\n\n24x7 Email Support: info@sve-in.xubi.org",
+        "replyHi": "🕐 व्यावसायिक समय:\n\nसोमवार से शनिवार: सुबह 9:00 – शाम 7:00\nरविवार: बंद\n\n24x7 ईमेल: info@sve-in.xubi.org"
+    }
+}

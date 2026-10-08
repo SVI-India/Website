@@ -1,0 +1,12 @@
+{
+    "product": ["nikolux", "life star", "lifestar", "sanjivni", "detergent", "powder", "product", "उत्पाद", "डिटर्जेंट"],
+    "price": ["price", "pricing", "cost", "rate", "how much", "quote", "कीमत", "दाम", "मूल्य"],
+    "bulk": ["bulk", "wholesale", "distributor", "dealer", "retailer", "मिनिमम", "थोक"],
+    "shipping": ["shipping", "delivery", "deliver", "track", "order status", "शिपिंग", "डिलीवरी"],
+    "refund": ["refund", "return", "cancel", "वापसी", "रिफंड"],
+    "contact": ["contact", "email", "phone", "call", "reach", "संपर्क", "ईमेल"],
+    "about": ["about", "company", "who", "history", "बारे", "कंपनी"],
+    "greeting": ["hi", "hello", "hey", "namaste", "नमस्ते"],
+    "thanks": ["thanks", "thank", "धन्यवाद"],
+    "bye": ["bye", "goodbye", "अलविदा"]
+}

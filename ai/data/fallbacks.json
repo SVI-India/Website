@@ -1,0 +1,12 @@
+{
+    "fallbacks": [
+        {
+            "reply": "Hmm, I didn't quite understand that. 🤔 Could you rephrase? Or try asking about:\n\n• Products (Nikolux, Life Star, Sanjivni)\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact information",
+            "replyHi": "क्षमा करें, मैं समझ नहीं पाया। 🤔 क्या आप दूसरे तरीके से पूछ सकते हैं? या इनके बारे में पूछें:\n\n• उत्पाद\n• मूल्य\n• थोक ऑर्डर\n• शिपिंग\n• वापसी नीति\n• संपर्क"
+        },
+        {
+            "reply": "I'm not sure about that. Let me connect you with our team — you can email us at info@sve-in.xubi.org or visit /contact.html",
+            "replyHi": "मुझे इसके बारे में पक्का पता नहीं है। हमारी टीम से संपर्क करें — info@sve-in.xubi.org या /contact.html पर जाएं"
+        }
+    ]
+}

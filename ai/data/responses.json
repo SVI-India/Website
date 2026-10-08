@@ -1,0 +1,101 @@
+{
+    "greetings": [
+        {
+            "patterns": ["hi", "hello", "hey", "namaste", "नमस्ते", "हेलो"],
+            "reply": "Hello! 👋 Welcome to Siddhi Vinayak Enterprises. How can I help you today?",
+            "replyHi": "नमस्ते! 👋 सिद्धि विनायक एंटरप्राइज़ेज़ में आपका स्वागत है। आज मैं आपकी कैसे सहायता कर सकता हूँ?"
+        },
+        {
+            "patterns": ["good morning", "gm"],
+            "reply": "Good morning! ☀️ How can I help you today?",
+            "replyHi": "सुप्रभात! ☀️ आज मैं आपकी कैसे सहायता कर सकता हूँ?"
+        },
+        {
+            "patterns": ["good evening", "ge"],
+            "reply": "Good evening! 🌙 How can I help you?",
+            "replyHi": "शुभ संध्या! 🌙 मैं आपकी कैसे सहायता कर सकता हूँ?"
+        }
+    ],
+
+    "products": [
+        {
+            "patterns": ["nikolux", "निकोलक्स", "premium detergent", "best detergent"],
+            "reply": "Nikolux is our flagship premium detergent powder ✨\n\n• Advanced stain removal\n• Long-lasting freshness\n• Suitable for all fabrics\n• Available in 500g, 1kg, 2kg, 5kg, 10kg\n\nWould you like to know more or see pricing?",
+            "replyHi": "निकोलक्स हमारा प्रीमियम डिटर्जेंट पाउडर है ✨\n\n• उन्नत दाग हटाने की तकनीक\n• लंबे समय तक ताज़गी\n• सभी कपड़ों के लिए उपयुक्त\n• 500g, 1kg, 2kg, 5kg, 10kg में उपलब्ध\n\nक्या आप और जानना चाहेंगे?"
+        },
+        {
+            "patterns": ["life star", "lifestar", "affordable detergent", "cheap detergent"],
+            "reply": "Life Star is our economical detergent 🌟\n\n• Value for money\n• Quick dissolve formula\n• Gentle on hands\n• Perfect for daily use\n• Available in 500g, 1kg, 2kg, 5kg",
+            "replyHi": "लाइफ स्टार हमारा किफायती डिटर्जेंट है 🌟\n\n• पैसे की पूरी कीमत\n• जल्दी घुलने वाला फॉर्मूला\n• हाथों के लिए कोमल\n• रोज़मर्रा के उपयोग के लिए बेहतरीन"
+        },
+        {
+            "patterns": ["sanjivni", "herbal detergent", "natural detergent", "sensitive skin"],
+            "reply": "Sanjivni is our herbal-based detergent 🌿\n\n• Made with natural ingredients\n• Skin-friendly formula\n• Eco-friendly & biodegradable\n• Gentle on sensitive fabrics\n• Available in 500g, 1kg, 2kg",
+            "replyHi": "संजीवनी हमारा हर्बल डिटर्जेंट है 🌿\n\n• प्राकृतिक सामग्री से बना\n• त्वचा के अनुकूल फॉर्मूला\n• पर्यावरण के अनुकूल\n• संवेदनशील कपड़ों के लिए कोमल"
+        }
+    ],
+
+    "price": [
+        {
+            "patterns": ["price", "pricing", "cost", "rate", "how much", "कीमत", "दाम"],
+            "reply": "For accurate pricing, please share:\n\n1. Which product? (Nikolux / Life Star / Sanjivni)\n2. Quantity needed?\n3. Your city/pincode\n\nOur team will send you the best quote within 24 hours. You can also email us at info@sve-in.xubi.org",
+            "replyHi": "सटीक मूल्य के लिए, कृपया बताएं:\n\n1. कौन सा उत्पाद?\n2. कितनी मात्रा चाहिए?\n3. आपका शहर/पिनकोड\n\nहमारी टीम 24 घंटे में कोट भेजेगी।"
+        }
+    ],
+
+    "bulk_order": [
+        {
+            "patterns": ["bulk", "wholesale", "distributor", "dealer", "retailer", "थोक"],
+            "reply": "Yes! We offer special bulk pricing 🎯\n\n• Minimum order: 500 kg\n• Custom packaging available\n• Private labeling option\n• Pan-India delivery\n\nPlease share your requirement at bulk@sve-in.xubi.org or contact us at /contact.html",
+            "replyHi": "हाँ! हम विशेष थोक मूल्य प्रदान करते हैं 🎯\n\n• न्यूनतम ऑर्डर: 500 किग्रा\n• कस्टम पैकेजिंग उपलब्ध\n• प्राइवेट लेबलिंग विकल्प\n\nकृपया अपनी आवश्यकता bulk@sve-in.xubi.org पर भेजें"
+        }
+    ],
+
+    "shipping": [
+        {
+            "patterns": ["shipping", "delivery", "how long", "when will", "कब तक", "शिपिंग"],
+            "reply": "📦 Shipping Information:\n\n• Pan-India delivery available\n• Processing: 2-3 business days\n• Delivery: 2-10 business days (by region)\n• Live tracking via SMS/email\n• Free shipping on prepaid orders above ₹5,000 within Rajasthan\n\nNeed more info? Visit /shipping.html",
+            "replyHi": "📦 शिपिंग जानकारी:\n\n• पूरे भारत में डिलीवरी\n• प्रोसेसिंग: 2-3 कार्य दिवस\n• डिलीवरी: 2-10 कार्य दिवस\n• लाइव ट्रैकिंग उपलब्ध\n\nअधिक जानकारी: /shipping.html"
+        }
+    ],
+
+    "refund": [
+        {
+            "patterns": ["refund", "return", "cancel", "वापसी", "रिफंड"],
+            "reply": "💰 Refund Policy:\n\nRefunds available if:\n• Product damaged on arrival (report within 48 hours)\n• Wrong product delivered\n• Manufacturing defect\n\nProcess:\n1. Report with photos to orders@sve-in.xubi.org\n2. Verification: 3-5 business days\n3. Refund: 7-10 business days\n\nFull details: /refund.html",
+            "replyHi": "💰 वापसी नीति:\n\nवापसी उपलब्ध है यदि:\n• क्षतिग्रस्त उत्पाद (48 घंटे में रिपोर्ट करें)\n• गलत उत्पाद वितरित\n• निर्माण दोष\n\nप्रक्रिया: orders@sve-in.xubi.org पर फोटो भेजें"
+        }
+    ],
+
+    "contact": [
+        {
+            "patterns": ["contact", "email", "phone", "reach", "call", "संपर्क", "ईमेल"],
+            "reply": "📞 Contact Information:\n\n📧 General: info@sve-in.xubi.org\n📧 Sales: sales@sve-in.xubi.org\n📧 Bulk: bulk@sve-in.xubi.org\n📧 B2B: b2b@sve-in.xubi.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 001\n\n🌐 Website: https://www.sveindia.mywire.org",
+            "replyHi": "📞 संपर्क जानकारी:\n\n📧 सामान्य: info@sve-in.xubi.org\n📧 बिक्री: sales@sve-in.xubi.org\n📧 थोक: bulk@sve-in.xubi.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 001"
+        }
+    ],
+
+    "about": [
+        {
+            "patterns": ["about", "who are you", "company", "founded", "history", "बारे में"],
+            "reply": "🏭 About Siddhi Vinayak Enterprises:\n\nFounded in 2009 in Lachharsar, Rajasthan.\n\nWe manufacture premium quality detergents:\n• Nikolux — Flagship premium\n• Life Star — Economical\n• Sanjivni — Herbal\n\nServing millions of households across India.\n\nLearn more: /about.html",
+            "replyHi": "🏭 सिद्धि विनायक एंटरप्राइज़ेज़ के बारे में:\n\n2009 में लछारसर, राजस्थान में स्थापित।\n\nहम प्रीमियम गुणवत्ता वाले डिटर्जेंट बनाते हैं।\n\nअधिक जानें: /about.html"
+        }
+    ],
+
+    "thanks": [
+        {
+            "patterns": ["thanks", "thank you", "dhanyavad", "धन्यवाद"],
+            "reply": "You're welcome! 😊 Is there anything else I can help you with?",
+            "replyHi": "आपका स्वागत है! 😊 क्या मैं और कुछ मदद कर सकता हूँ?"
+        }
+    ],
+
+    "bye": [
+        {
+            "patterns": ["bye", "goodbye", "see you", "अलविदा"],
+            "reply": "Goodbye! 👋 Feel free to come back anytime. Have a great day!",
+            "replyHi": "अलविदा! 👋 कभी भी वापस आएं। आपका दिन शुभ हो!"
+        }
+    ]
+}

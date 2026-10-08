@@ -1,0 +1,95 @@
+{
+    "nikolux": {
+        "name": "Nikolux",
+        "nameHi": "निकोलक्स",
+        "tagline": "Powerful Cleaning for Sparkling Whites",
+        "taglineHi": "चमकदार सफेदी के लिए शक्तिशाली सफाई",
+        "badge": "Bestseller",
+        "description": "Nikolux is our flagship premium detergent powder, formulated with advanced stain-removal technology and long-lasting freshness.",
+        "descriptionHi": "निकोलक्स हमारा प्रीमियम डिटर्जेंट पाउडर है, उन्नत दाग हटाने की तकनीक और लंबे समय तक ताज़गी के साथ।",
+        "features": [
+            "Advanced stain removal technology",
+            "Long-lasting freshness",
+            "Suitable for all fabrics",
+            "Triple-action cleaning",
+            "Quick dissolve formula",
+            "Pleasant fragrance"
+        ],
+        "featuresHi": [
+            "उन्नत दाग हटाने की तकनीक",
+            "लंबे समय तक ताज़गी",
+            "सभी कपड़ों के लिए उपयुक्त",
+            "ट्रिपल-एक्शन सफाई",
+            "जल्दी घुलने वाला फॉर्मूला",
+            "सुखद सुगंध"
+        ],
+        "sizes": ["500g", "1kg", "2kg", "5kg", "10kg"],
+        "fragrance": "Fresh Lemon",
+        "form": "Powder",
+        "suitableFor": "Top-load & Front-load washing machines, Hand wash",
+        "color": "#1e40af",
+        "page": "/products/nikolux.html"
+    },
+    "life-star": {
+        "name": "Life Star",
+        "nameHi": "लाइफ स्टार",
+        "tagline": "Everyday Cleaning Made Affordable",
+        "taglineHi": "रोज़मर्रा की सफाई, किफायती कीमत पर",
+        "badge": "Value for Money",
+        "description": "Life Star is our economical detergent powder designed for everyday use. Delivers powerful cleaning at a price that fits every budget.",
+        "descriptionHi": "लाइफ स्टार हमारा किफायती डिटर्जेंट पाउडर है, रोज़मर्रा के उपयोग के लिए। हर बजट में शक्तिशाली सफाई।",
+        "features": [
+            "Value for money",
+            "Quick dissolve formula",
+            "Gentle on hands",
+            "Suitable for daily wash",
+            "Pleasant fragrance",
+            "Available in multiple sizes"
+        ],
+        "featuresHi": [
+            "पैसे की पूरी कीमत",
+            "जल्दी घुलने वाला फॉर्मूला",
+            "हाथों के लिए कोमल",
+            "रोज़ के धुलाई के लिए",
+            "सुखद सुगंध",
+            "कई साइज़ में उपलब्ध"
+        ],
+        "sizes": ["500g", "1kg", "2kg", "5kg"],
+        "fragrance": "Fresh Floral",
+        "form": "Powder",
+        "suitableFor": "Hand wash & Machine wash",
+        "color": "#f59e0b",
+        "page": "/products/life-star.html"
+    },
+    "sanjivni": {
+        "name": "Sanjivni",
+        "nameHi": "संजीवनी",
+        "tagline": "Herbal Care for Sensitive Fabrics",
+        "taglineHi": "संवेदनशील कपड़ों के लिए हर्बल देखभाल",
+        "badge": "New",
+        "description": "Sanjivni is our herbal-based detergent, specially formulated for sensitive fabrics and skin. Made with natural ingredients.",
+        "descriptionHi": "संजीवनी हमारा हर्बल डिटर्जेंट है, संवेदनशील कपड़ों और त्वचा के लिए विशेष रूप से तैयार।",
+        "features": [
+            "Herbal ingredients",
+            "Skin-friendly formula",
+            "Eco-friendly",
+            "Gentle on fabrics",
+            "Natural fragrance",
+            "Biodegradable"
+        ],
+        "featuresHi": [
+            "हर्बल सामग्री",
+            "त्वचा के अनुकूल फॉर्मूला",
+            "पर्यावरण के अनुकूल",
+            "कपड़ों के लिए कोमल",
+            "प्राकृतिक सुगंध",
+            "बायोडिग्रेडेबल"
+        ],
+        "sizes": ["500g", "1kg", "2kg"],
+        "fragrance": "Natural Herbal",
+        "form": "Powder",
+        "suitableFor": "Delicate & sensitive fabrics",
+        "color": "#10b981",
+        "page": "/products/sanjivni.html"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "about": {
+        "patterns": ["about", "company", "who are you", "बारे में"],
+        "reply": "🏭 About Siddhi Vinayak Enterprises:\n\nFounded: 2009\nLocation: Lachharsar, Churu, Rajasthan\n\nWe manufacture premium quality detergents:\n• Nikolux — Flagship premium\n• Life Star — Economical\n• Sanjivni — Herbal\n\nServing millions of households across India.\n\n🌐 /about.html",
+        "replyHi": "🏭 सिद्धि विनायक एंटरप्राइज़ेज़ के बारे में:\n\nस्थापना: 2009\nस्थान: लछारसर, चूरू, राजस्थान\n\nहम प्रीमियम गुणवत्ता वाले डिटर्जेंट बनाते हैं।\n\n🌐 /about.html"
+    },
+    "mission": {
+        "patterns": ["mission", "vision", "goal", "मिशन"],
+        "reply": "🎯 Our Mission:\n\nTo provide affordable, high-quality cleaning solutions to every Indian household while maintaining the highest standards of manufacturing excellence.",
+        "replyHi": "🎯 हमारा मिशन:\n\nहर भारतीय घर को किफायती, उच्च गुणवत्ता वाले सफाई समाधान प्रदान करना।"
+    },
+    "milestones": {
+        "patterns": ["milestone", "history", "journey", "उपलब्धि"],
+        "reply": "📅 Our Journey:\n\n2009 — Founded\n2014 — Expanded to North India\n2018 — New brands launched\n2022 — Modern facility\n2025 — Pan-India presence\n\n15+ years of trust!",
+        "replyHi": "📅 हमारी यात्रा:\n\n2009 — स्थापना\n2014 — उत्तर भारत में विस्तार\n2018 — नए ब्रांड\n2022 — आधुनिक सुविधा\n2025 — पूरे भारत में"
+    },
+    "stats": {
+        "patterns": ["stats", "numbers", "how many"],
+        "reply": "📊 Our Numbers:\n\n• 15+ Years of Experience\n• 50+ Distributors\n• 3 Premium Brands\n• 1M+ Happy Customers\n• 6000 Tons/year capacity",
+        "replyHi": "📊 हमारे आंकड़े:\n\n• 15+ वर्षों का अनुभव\n• 50+ वितरक\n• 3 प्रीमियम ब्रांड\n• 1M+ खुश ग्राहक"
+    }
+}

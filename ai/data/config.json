@@ -1,0 +1,27 @@
+{
+    "aiName": "Vinayak AI",
+    "aiNameHi": "विनायक AI",
+    "tagline": "Your 24x7 Detergent Assistant",
+    "taglineHi": "आपका 24x7 डिटर्जेंट सहायक",
+    "welcomeMessage": "Hi! I'm Vinayak AI 👋 How can I help you today?",
+    "welcomeMessageHi": "नमस्ते! मैं विनायक AI हूँ 👋 आज मैं आपकी कैसे मदद कर सकता हूँ?",
+    "siteName": "Siddhi Vinayak Enterprises",
+    "siteUrl": "https://www.sveindia.mywire.org",
+    "avatar": "/images/logo.png",
+    "color": "#1e40af",
+    "darkMode": true,
+    "features": {
+        "quickReplies": true,
+        "typingIndicator": true,
+        "voiceInput": true,
+        "historySave": true,
+        "emojiReactions": true,
+        "copyResponse": true
+    },
+    "widget": {
+        "enabled": true,
+        "position": "bottom-right",
+        "bubbleText": "Chat with Vinayak AI",
+        "bubbleTextHi": "विनायक AI से बात करें"
+    }
+}

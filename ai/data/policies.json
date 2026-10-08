@@ -1,0 +1,32 @@
+{
+    "refundPolicy": {
+        "patterns": ["refund policy", "return policy", "cancellation", "वापसी नीति"],
+        "reply": "💰 Refund Policy:\n\n✅ Eligible for Refund:\n• Damaged products (report within 48 hrs)\n• Wrong products delivered\n• Manufacturing defects\n• Cancelled before dispatch\n\n❌ Not Eligible:\n• Change of mind after delivery\n• Improper storage damage\n• Opened beyond QC\n• Bulk orders after 7 days\n\n📋 Process:\n1. Report with photos: orders@sve-in.xubi.org\n2. Verification: 3-5 business days\n3. Refund: 7-10 business days\n\nFull policy: /refund.html",
+        "replyHi": "💰 वापसी नीति:\n\n✅ पात्र:\n• क्षतिग्रस्त उत्पाद (48 घंटे में रिपोर्ट)\n• गलत उत्पाद\n• निर्माण दोष\n\n❌ अपात्र:\n• डिलीवरी के बाद मन बदलना\n• अनुचित भंडारण\n\n📋 प्रक्रिया:\n1. फोटो के साथ रिपोर्ट करें\n2. सत्यापन: 3-5 दिन\n3. वापसी: 7-10 दिन\n\nपूरी नीति: /refund.html"
+    },
+    "shippingPolicy": {
+        "patterns": ["shipping policy", "delivery policy", "शिपिंग नीति"],
+        "reply": "🚚 Shipping Policy:\n\n📦 Coverage: Pan-India\n\n⏱️ Processing Time:\n• Standard: 1-2 business days\n• Bulk/B2B: 3-5 business days\n• Custom orders: 7-15 business days\n\n🚛 Delivery Time:\n• Rajasthan: 2-4 days\n• North India: 4-6 days\n• West India: 5-7 days\n• South India: 5-8 days\n• East/Northeast: 6-10 days\n• Remote areas: 7-12 days\n\n🎁 Free shipping on prepaid orders above ₹5,000 within Rajasthan\n\nFull policy: /shipping.html",
+        "replyHi": "🚚 शिपिंग नीति:\n\n📦 पूरे भारत में\n\n⏱️ प्रोसेसिंग:\n• सामान्य: 1-2 दिन\n• थोक: 3-5 दिन\n\n🚛 डिलीवरी:\n• राजस्थान: 2-4 दिन\n• उत्तर भारत: 4-6 दिन\n• दक्षिण भारत: 5-8 दिन\n\n🎁 ₹5,000+ पर निःशुल्क शिपिंग (राजस्थान)\n\nपूरी नीति: /shipping.html"
+    },
+    "privacyPolicy": {
+        "patterns": ["privacy", "data protection", "gdpr", "गोपनीयता"],
+        "reply": "🔒 Privacy Policy:\n\nWe collect:\n• Personal: Name, email, phone, address\n• Business: GST, business details (B2B)\n• Technical: IP, browser, cookies\n\nWe use for:\n• Order processing\n• Customer support\n• Service improvement\n\nWe never sell your data.\n\nFull policy: /privacy.html\nContact: privacy@sve-in.xubi.org",
+        "replyHi": "🔒 गोपनीयता नीति:\n\nहम एकत्र करते हैं:\n• व्यक्तिगत जानकारी\n• व्यावसायिक जानकारी (B2B)\n• तकनीकी डेटा\n\nहम आपका डेटा कभी नहीं बेचते।\n\nपूरी नीति: /privacy.html"
+    },
+    "termsPolicy": {
+        "patterns": ["terms", "terms of use", "conditions", "नियम"],
+        "reply": "📜 Terms of Use:\n\nBy using our website:\n• You agree to our terms\n• Content is our property\n• No unauthorized use\n• B2B portal access restricted\n• Subject to Indian law\n\nFull terms: /terms.html\nContact: legal@sve-in.xubi.org",
+        "replyHi": "📜 उपयोग की शर्तें:\n\nहमारी वेबसाइट का उपयोग करके:\n• आप शर्तों से सहमत हैं\n• सामग्री हमारी संपत्ति है\n• अनधिकृत उपयोग निषिद्ध\n\nपूरी शर्तें: /terms.html"
+    },
+    "disclaimerPolicy": {
+        "patterns": ["disclaimer", "अस्वीकरण"],
+        "reply": "⚠️ Disclaimer:\n\n• Info for general purpose only\n• Product images for illustration\n• Not professional advice\n• External links not controlled\n• Subject to change\n\nFull: /disclaimer.html",
+        "replyHi": "⚠️ अस्वीकरण:\n\n• केवल सामान्य जानकारी\n• उत्पाद चित्र केवल चित्रण के लिए\n• पेशेवर सलाह नहीं\n\nपूरा: /disclaimer.html"
+    },
+    "grievancePolicy": {
+        "patterns": ["grievance", "complaint", "शिकायत"],
+        "reply": "⚖️ Grievance Redressal:\n\nFor complaints:\n📧 grievance@sve-in.xubi.org\n📧 legal@sve-in.xubi.org\n\nResponse time: 48 hours\nResolution: 7-15 business days\n\nYour complaint is our priority.",
+        "replyHi": "⚖️ शिकायत निवारण:\n\nशिकायत के लिए:\n📧 grievance@sve-in.xubi.org\n\nप्रतिक्रिया: 48 घंटे\nसमाधान: 7-15 कार्य दिवस"
+    }
+}

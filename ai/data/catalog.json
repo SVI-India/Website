@@ -1,0 +1,7 @@
+{
+    "catalog": {
+        "patterns": ["catalog", "all products", "list products", "what do you sell", "कैटलॉग"],
+        "reply": "📦 Our Complete Catalog:\n\n⭐ Nikolux (Premium)\n• 500g / 1kg / 2kg / 5kg / 10kg\n• Fresh Lemon fragrance\n\n✨ Life Star (Economical)\n• 500g / 1kg / 2kg / 5kg\n• Fresh Floral fragrance\n\n🌿 Sanjivni (Herbal)\n• 500g / 1kg / 2kg\n• Natural Herbal fragrance\n\nWhich product interests you?",
+        "replyHi": "📦 हमारा पूरा कैटलॉग:\n\n⭐ निकोलक्स (प्रीमियम)\n• 500g / 1kg / 2kg / 5kg / 10kg\n\n✨ लाइफ स्टार (किफायती)\n• 500g / 1kg / 2kg / 5kg\n\n🌿 संजीवनी (हर्बल)\n• 500g / 1kg / 2kg\n\nकौन सा उत्पाद चाहिए?"
+    }
+}

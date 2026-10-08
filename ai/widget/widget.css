@@ -1,0 +1,425 @@
+/* ============================================================
+   VINAYAK AI WIDGET — Floating button + mini chat
+   ============================================================ */
+
+/* ---------- FLOATING BUTTON ---------- */
+#vyWidgetBtn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 0 rgba(59, 130, 246, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: vyWidgetPulse 2.5s infinite;
+    font-family: 'Inter', sans-serif;
+}
+#vyWidgetBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(30, 64, 175, 0.7);
+}
+#vyWidgetBtn.open {
+    animation: none;
+    transform: rotate(90deg);
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+@keyframes vyWidgetPulse {
+    0%, 100% { box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    50% { box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 15px rgba(59, 130, 246, 0); }
+}
+
+/* Tooltip bubble */
+#vyWidgetBtn::before {
+    content: 'Chat with Vinayak AI';
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e293b;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    font-family: 'Inter', sans-serif;
+}
+#vyWidgetBtn:hover::before {
+    opacity: 1;
+}
+
+/* ---------- MINI CHAT PANEL ---------- */
+#vyWidgetPanel {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 380px;
+    max-width: calc(100vw - 48px);
+    height: 560px;
+    max-height: calc(100vh - 120px);
+    background: #0f172a;
+    border-radius: 20px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #1e293b;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
+}
+#vyWidgetPanel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Header */
+#vyWidgetPanel .vyw-head {
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-head img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 2px;
+    object-fit: cover;
+}
+#vyWidgetPanel .vyw-head-info { flex: 1; min-width: 0; }
+#vyWidgetPanel .vyw-head-name {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+#vyWidgetPanel .vyw-status {
+    font-size: 11px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+}
+#vyWidgetPanel .vyw-status::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: vywPulse 2s infinite;
+}
+@keyframes vywPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+#vyWidgetPanel .vyw-head-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-head-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Messages */
+#vyWidgetPanel .vyw-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #0a0f1e;
+    scroll-behavior: smooth;
+}
+#vyWidgetPanel .vyw-messages::-webkit-scrollbar { width: 5px; }
+#vyWidgetPanel .vyw-messages::-webkit-scrollbar-track { background: transparent; }
+#vyWidgetPanel .vyw-messages::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+}
+
+.vyw-msg {
+    display: flex;
+    gap: 8px;
+    max-width: 85%;
+    animation: vywFade 0.3s ease;
+}
+@keyframes vywFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.vyw-msg.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+.vyw-msg.bot { align-self: flex-start; }
+
+.vyw-msg-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    overflow: hidden;
+}
+.vyw-msg-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.vyw-msg.user .vyw-msg-avatar {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.vyw-bubble {
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.vyw-msg.bot .vyw-bubble {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-bottom-left-radius: 4px;
+}
+.vyw-msg.user .vyw-bubble {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+.vyw-bubble a {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+.vyw-msg.user .vyw-bubble a { color: #fff; }
+
+/* Typing */
+.vyw-typing .vyw-bubble {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    align-items: center;
+}
+.vyw-typing .dot {
+    width: 6px;
+    height: 6px;
+    background: #60a5fa;
+    border-radius: 50%;
+    animation: vywDot 1.4s infinite;
+}
+.vyw-typing .dot:nth-child(2) { animation-delay: 0.2s; }
+.vyw-typing .dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes vywDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Quick replies */
+#vyWidgetPanel .vyw-quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 14px 10px;
+    background: #0a0f1e;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-chip {
+    padding: 6px 11px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+    border-radius: 50px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+#vyWidgetPanel .vyw-chip:hover {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+}
+
+/* Input */
+#vyWidgetPanel .vyw-input-wrap {
+    padding: 10px 14px 14px;
+    background: #0f172a;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-input {
+    flex: 1;
+    background: #1e293b;
+    border: 1.5px solid #334155;
+    color: #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 22px;
+    font-size: 13.5px;
+    font-family: inherit;
+    resize: none;
+    max-height: 80px;
+    min-height: 40px;
+    line-height: 1.4;
+    transition: border 0.2s;
+}
+#vyWidgetPanel .vyw-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+#vyWidgetPanel .vyw-input::placeholder { color: #64748b; }
+
+#vyWidgetPanel .vyw-send {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-send:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(30,64,175,0.5);
+}
+#vyWidgetPanel .vyw-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Footer with buttons */
+#vyWidgetPanel .vyw-footer {
+    padding: 8px 14px;
+    background: #0a0f1e;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-footer-btn {
+    flex: 1;
+    padding: 7px 10px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+    border-radius: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+#vyWidgetPanel .vyw-footer-btn:hover {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+}
+
+/* Summarize banner */
+#vyWidgetPanel .vyw-summarize {
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(30,64,175,0.15), rgba(59,130,246,0.1));
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #93c5fd;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-summarize button {
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+#vyWidgetPanel .vyw-summarize button:hover {
+    background: #3b82f6;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 480px) {
+    #vyWidgetBtn {
+        bottom: 16px;
+        right: 16px;
+        width: 56px;
+        height: 56px;
+        font-size: 22px;
+    }
+    #vyWidgetBtn::before { display: none; }
+    #vyWidgetPanel {
+        bottom: 84px;
+        right: 8px;
+        left: 8px;
+        width: auto;
+        max-width: none;
+        height: 70vh;
+        max-height: calc(100vh - 110px);
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "general": {
+        "patterns": ["contact", "email", "reach", "संपर्क"],
+        "reply": "📞 Contact Us:\n\n📧 General: info@sve-in.xubi.org\n📧 Sales: sales@sve-in.xubi.org\n📧 Bulk Orders: bulk@sve-in.xubi.org\n📧 B2B: b2b@sve-in.xubi.org\n📧 Support: support@sve-in.xubi.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 001\n\n🌐 https://www.sveindia.mywire.org",
+        "replyHi": "📞 हमसे संपर्क करें:\n\n📧 सामान्य: info@sve-in.xubi.org\n📧 बिक्री: sales@sve-in.xubi.org\n📧 थोक: bulk@sve-in.xubi.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 001"
+    },
+    "address": {
+        "patterns": ["address", "location", "where", "factory", "पता", "कहाँ"],
+        "reply": "📍 Our Location:\n\nSiddhi Vinayak Enterprises\nLachharsar, District Churu\nRajasthan — 331 001, India\n\n📧 info@sve-in.xubi.org\n\n🗺️ View on map: /contact.html",
+        "replyHi": "📍 हमारा स्थान:\n\nसिद्धि विनायक एंटरप्राइज़ेज़\nलछारसर, ज़िला चूरू\nराजस्थान — 331 001, भारत"
+    },
+    "sales": {
+        "patterns": ["sales email", "sales team"],
+        "reply": "💼 Sales Team:\n\n📧 sales@sve-in.xubi.org\n📧 bulk@sve-in.xubi.org\n\nResponse time: 24-48 hours",
+        "replyHi": "💼 बिक्री टीम:\n\n📧 sales@sve-in.xubi.org\n📧 bulk@sve-in.xubi.org\n\nप्रतिक्रिया: 24-48 घंटे"
+    }
+}

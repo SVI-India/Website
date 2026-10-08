@@ -1,0 +1,14 @@
+{
+    "initial": [
+        { "label": "📦 Products", "query": "tell me about products", "labelHi": "📦 उत्पाद" },
+        { "label": "💰 Pricing", "query": "pricing", "labelHi": "💰 मूल्य" },
+        { "label": "🚚 Shipping", "query": "shipping info", "labelHi": "🚚 शिपिंग" },
+        { "label": "📞 Contact", "query": "contact info", "labelHi": "📞 संपर्क" }
+    ],
+    "afterProduct": [
+        { "label": "⭐ Nikolux", "query": "nikolux", "labelHi": "⭐ निकोलक्स" },
+        { "label": "✨ Life Star", "query": "life star", "labelHi": "✨ लाइफ स्टार" },
+        { "label": "🌿 Sanjivni", "query": "sanjivni", "labelHi": "🌿 संजीवनी" },
+        { "label": "💼 Bulk Order", "query": "bulk order", "labelHi": "💼 थोक ऑर्डर" }
+    ]
+}

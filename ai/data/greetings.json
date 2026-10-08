@@ -1,0 +1,34 @@
+{
+    "greetings": [
+        {
+            "patterns": ["hi", "hello", "hey", "hola", "namaste", "नमस्ते", "हेलो"],
+            "reply": "Hello! 👋 I'm Vinayak AI, your 24x7 detergent assistant. How can I help you today?",
+            "replyHi": "नमस्ते! 👋 मैं विनायक AI हूँ, आपका 24x7 डिटर्जेंट सहायक। आज मैं आपकी कैसे सहायता कर सकता हूँ?"
+        },
+        {
+            "patterns": ["good morning", "gm", "सुप्रभात"],
+            "reply": "Good morning! ☀️ Hope you're having a great day. How can I help you?",
+            "replyHi": "सुप्रभात! ☀️ आशा है आपका दिन अच्छा हो रहा है। मैं कैसे मदद कर सकता हूँ?"
+        },
+        {
+            "patterns": ["good afternoon", "ga"],
+            "reply": "Good afternoon! 🌤️ How can I assist you today?",
+            "replyHi": "नमस्कार! 🌤️ आज मैं आपकी कैसे सहायता कर सकता हूँ?"
+        },
+        {
+            "patterns": ["good evening", "ge"],
+            "reply": "Good evening! 🌙 How can I help you?",
+            "replyHi": "शुभ संध्या! 🌙 मैं आपकी कैसे सहायता कर सकता हूँ?"
+        },
+        {
+            "patterns": ["how are you", "kaise ho", "कैसे हो"],
+            "reply": "I'm doing great, thank you for asking! 😊 Ready to help you with anything about Siddhi Vinayak Enterprises.",
+            "replyHi": "मैं बहुत अच्छा हूँ, पूछने के लिए धन्यवाद! 😊 सिद्धि विनायक एंटरप्राइज़ेज़ के बारे में किसी भी चीज़ में मदद के लिए तैयार हूँ।"
+        },
+        {
+            "patterns": ["who are you", "what are you", "your name", "तुम कौन हो"],
+            "reply": "I'm Vinayak AI 🤖 — the official assistant for Siddhi Vinayak Enterprises. I can help you with products, pricing, shipping, bulk orders, and more!",
+            "replyHi": "मैं विनयक AI हूँ 🤖 — सिद्धि विनायक एंटरप्राइज़ेज़ का आधिकारिक सहायक। मैं उत्पाद, मूल्य, शिपिंग, थोक ऑर्डर में मदद कर सकता हूँ!"
+        }
+    ]
+}

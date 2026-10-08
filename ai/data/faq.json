@@ -1,0 +1,29 @@
+{
+    "faqs": [
+        {
+            "q": "What products do you manufacture?",
+            "qHi": "आप कौन से उत्पाद बनाते हैं?",
+            "a": "We manufacture Nikolux (premium), Life Star (economical), and Sanjivni (herbal) detergents."
+        },
+        {
+            "q": "Do you offer bulk discounts?",
+            "qHi": "क्या आप थोक छूट देते हैं?",
+            "a": "Yes! Bulk orders above 500 kg qualify for special pricing. Contact bulk@sve-in.xubi.org"
+        },
+        {
+            "q": "Where is your factory located?",
+            "qHi": "आपकी फ़ैक्ट्री कहाँ है?",
+            "a": "Lachharsar, District Churu, Rajasthan — 331 001, India."
+        },
+        {
+            "q": "Do you ship internationally?",
+            "qHi": "क्या आप अंतर्राष्ट्रीय शिपिंग करते हैं?",
+            "a": "Yes, for bulk B2B orders (minimum 500 kg). Contact bulk@sve-in.xubi.org"
+        },
+        {
+            "q": "What is your refund policy?",
+            "qHi": "आपकी वापसी नीति क्या है?",
+            "a": "Refunds available for damaged/wrong products reported within 48 hours. See /refund.html"
+        }
+    ]
+}

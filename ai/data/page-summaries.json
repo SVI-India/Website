@@ -1,0 +1,64 @@
+{
+    "summaries": {
+        "index": {
+            "title": "Homepage",
+            "summary": "Welcome to Siddhi Vinayak Enterprises — India's trusted detergent manufacturer since 2009. We offer 3 premium brands: Nikolux (flagship), Life Star (economical), and Sanjivni (herbal). Based in Lachharsar, Churu, Rajasthan.",
+            "summaryHi": "सिद्धि विनायक एंटरप्राइज़ेज़ में आपका स्वागत है — 2009 से भारत का भरोसेमंद डिटर्जेंट निर्माता। 3 प्रीमियम ब्रांड: निकोलक्स, लाइफ स्टार, संजीवनी।"
+        },
+        "about": {
+            "title": "About Us",
+            "summary": "Siddhi Vinayak Enterprises was founded in 2009 in Lachharsar, Rajasthan. We manufacture premium quality detergents across 3 flagship brands, serving millions of households across India with 15+ years of manufacturing excellence.",
+            "summaryHi": "सिद्धि विनायक एंटरप्राइज़ेज़ की स्थापना 2009 में लछारसर, राजस्थान में हुई। हम 3 प्रमुख ब्रांडों में प्रीमियम गुणवत्ता वाले डिटर्जेंट बनाते हैं।"
+        },
+        "products": {
+            "title": "Our Products",
+            "summary": "We offer 3 premium detergent brands: Nikolux (best for stain removal), Life Star (value for money), and Sanjivni (herbal, skin-friendly). Available in multiple sizes from 500g to 10kg. Bulk orders available.",
+            "summaryHi": "हम 3 प्रीमियम डिटर्जेंट ब्रांड प्रदान करते हैं: निकोलक्स, लाइफ स्टार और संजीवनी। 500g से 10kg तक कई साइज़ में उपलब्ध।"
+        },
+        "gallery": {
+            "title": "Gallery",
+            "summary": "Explore photos of our manufacturing facility, modern machines, quality lab, packing unit, and premium products — all at Lachharsar, Churu, Rajasthan.",
+            "summaryHi": "हमारी निर्माण सुविधा, आधुनिक मशीनें, गुणवत्ता लैब, पैकिंग यूनिट और प्रीमियम उत्पादों की तस्वीरें देखें।"
+        },
+        "contact": {
+            "title": "Contact Us",
+            "summary": "Reach us at info@sve-in.xubi.org for general queries, sales@sve-in.xubi.org for sales, or bulk@sve-in.xubi.org for bulk orders. Located at Lachharsar, District Churu, Rajasthan — 331 001. Business hours: Mon-Sat, 9 AM to 7 PM IST.",
+            "summaryHi": "सामान्य प्रश्न: info@sve-in.xubi.org। पता: लछारसर, ज़िला चूरू, राजस्थान — 331 001। समय: सोम-शनि, सुबह 9 से शाम 7।"
+        },
+        "nikolux": {
+            "title": "Nikolux Product",
+            "summary": "Nikolux is our flagship premium detergent with advanced stain-removal technology. Available in 500g to 10kg. Best for sparkling whites and tough stains. Ideal for all fabric types.",
+            "summaryHi": "निकोलक्स हमारा प्रीमियम डिटर्जेंट है, उन्नत दाग हटाने की तकनीक के साथ। 500g से 10kg तक।"
+        },
+        "life-star": {
+            "title": "Life Star Product",
+            "summary": "Life Star is our economical detergent for everyday use. Provides powerful cleaning at an affordable price. Available in 500g to 5kg. Perfect for daily wash, gentle on hands.",
+            "summaryHi": "लाइफ स्टार हमारा किफायती डिटर्जेंट है रोज़मर्रा के उपयोग के लिए। 500g से 5kg तक।"
+        },
+        "sanjivni": {
+            "title": "Sanjivni Product",
+            "summary": "Sanjivni is our herbal-based detergent, specially made for sensitive skin and delicate fabrics. Eco-friendly and biodegradable. Available in 500g to 2kg.",
+            "summaryHi": "संजीवनी हमारा हर्बल डिटर्जेंट है, संवेदनशील त्वचा और कपड़ों के लिए। पर्यावरण के अनुकूल।"
+        },
+        "terms": {
+            "title": "Terms of Use",
+            "summary": "Standard terms and conditions for using Siddhi Vinayak Enterprises website and services. Governed by Indian law, Rajasthan jurisdiction.",
+            "summaryHi": "सिद्धि विनायक एंटरप्राइज़ेज़ वेबसाइट और सेवाओं के उपयोग के लिए मानक नियम और शर्तें।"
+        },
+        "privacy": {
+            "title": "Privacy Policy",
+            "summary": "How we collect, use, and protect your personal information. We never sell your data. Uses industry-standard security measures including SSL encryption.",
+            "summaryHi": "हम आपकी व्यक्तिगत जानकारी कैसे एकत्र, उपयोग और सुरक्षित करते हैं। हम कभी डेटा नहीं बेचते।"
+        },
+        "refund": {
+            "title": "Refund Policy",
+            "summary": "Refunds available for damaged products (within 48 hours), wrong items, or manufacturing defects. Process: report with photos → verify 3-5 days → refund 7-10 days.",
+            "summaryHi": "क्षतिग्रस्त उत्पादों (48 घंटे), गलत आइटम या निर्माण दोषों के लिए वापसी उपलब्ध।"
+        },
+        "shipping": {
+            "title": "Shipping Policy",
+            "summary": "Pan-India delivery available. Processing: 2-3 days. Delivery: 2-10 business days by region. Free shipping on prepaid orders above ₹5,000 within Rajasthan.",
+            "summaryHi": "पूरे भारत में डिलीवरी। प्रोसेसिंग: 2-3 दिन। डिलीवरी: 2-10 दिन। ₹5,000+ पर मुफ्त शिपिंग।"
+        }
+    }
+}

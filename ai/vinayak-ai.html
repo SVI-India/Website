@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0f1e">
+    <title>Vinayak AI — 24x7 Detergent Assistant | Siddhi Vinayak Enterprises</title>
+    <meta name="description" content="Chat with Vinayak AI — your 24x7 assistant for Siddhi Vinayak Enterprises. Ask about products, pricing, shipping, bulk orders, and more.">
+    <link rel="icon" href="https://www.sveindia.mywire.org/images/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.sveindia.mywire.org/images/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.sveindia.mywire.org/images/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/ai/vinayak-ai.css">
+</head>
+<body class="vy-ai-page">
+
+    <div class="vy-ai-wrap">
+
+        <!-- Header -->
+        <div class="vy-head">
+            <img id="vyHeadImg" src="/images/logo.png" alt="Vinayak AI" onerror="this.style.display='none'">
+            <div class="vy-head-info">
+                <div class="vy-head-name" id="vyHeadName">Vinayak AI</div>
+                <div class="vy-status" id="vyStatus">Online • 24x7 Support</div>
+            </div>
+            <button class="vy-head-btn" id="vyClear" title="Clear chat">🗑️</button>
+            <a href="https://www.sveindia.mywire.org/index.html" class="vy-head-btn" title="Home" style="text-decoration:none;">🏠</a>
+        </div>
+
+        <!-- Messages -->
+        <div class="vy-messages" id="vyMessages"></div>
+
+        <!-- Quick Replies -->
+        <div class="vy-quick" id="vyQuick"></div>
+
+        <!-- Input -->
+        <div class="vy-input-wrap">
+            <button class="vy-icon-btn" id="vyVoice" title="Voice input">🎤</button>
+            <textarea
+                class="vy-input"
+                id="vyInput"
+                placeholder="Ask me anything..."
+                rows="1"
+                autocomplete="off"></textarea>
+            <button class="vy-send" id="vySend" title="Send">➤</button>
+        </div>
+
+    </div>
+
+    <script src="/ai/vinayak-ai.js"></script>
+</body>
+</html>
