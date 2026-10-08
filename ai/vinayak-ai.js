@@ -1,147 +1,198 @@
 // ============================================================
-// VINAYAK AI — Main Chat Logic
+// VINAYAK AI — Full Page Chat (v2 Universal Matcher)
 // ============================================================
 
 (function() {
     'use strict';
 
-    // ---- CONFIG ----
     const BASE_URL = 'https://www.sveindia.mywire.org';
-    const DATA_PATH = '/ai/data';
+    const DATA_PATH = BASE_URL + '/ai/data';
 
-    // ---- STATE ----
     let CONFIG = null;
-    let RESPONSES = null;
-    let FALLBACKS = null;
-    let QUICK_REPLIES = null;
-    let KEYWORDS = null;
-    let FAQ = null;
+    let DATA_BUNDLE = {};
     let lang = localStorage.getItem('lang') || 'en';
-    let chatHistory = JSON.parse(localStorage.getItem('vy_chat_history') || '[]');
+    let history = JSON.parse(localStorage.getItem('vy_chat_history') || '[]');
+    let dataLoaded = false;
 
     // ---- DOM ----
-    const $ = (sel) => document.querySelector(sel);
-    const messagesEl = $('#vyMessages');
-    const inputEl = $('#vyInput');
-    const sendBtn = $('#vySend');
-    const quickEl = $('#vyQuick');
-    const headName = $('#vyHeadName');
-    const headImg = $('#vyHeadImg');
-    const statusEl = $('#vyStatus');
-    const clearBtn = $('#vyClear');
-    const voiceBtn = $('#vyVoice');
+    const messagesEl = document.getElementById('vyMessages');
+    const inputEl = document.getElementById('vyInput');
+    const sendBtn = document.getElementById('vySend');
+    const quickEl = document.getElementById('vyQuick');
+    const headName = document.getElementById('vyHeadName');
+    const headImg = document.getElementById('vyHeadImg');
+    const clearBtn = document.getElementById('vyClear');
+    const voiceBtn = document.getElementById('vyVoice');
 
-    // ---- LOAD DATA ----
-    async function loadData() {
+    // ---- LOAD ALL DATA ----
+    async function loadAll() {
+        if (dataLoaded) return;
+        const files = [
+            'config', 'responses', 'fallbacks', 'quick-replies', 'keywords',
+            'faq', 'products', 'help', 'policies', 'greetings',
+            'contact', 'company', 'catalog', 'page-summaries'
+        ];
         try {
-            const [cfg, resp, fb, qr, kw, faq] = await Promise.all([
-                fetch(`${DATA_PATH}/config.json`).then(r => r.json()),
-                fetch(`${DATA_PATH}/responses.json`).then(r => r.json()),
-                fetch(`${DATA_PATH}/fallbacks.json`).then(r => r.json()),
-                fetch(`${DATA_PATH}/quick-replies.json`).then(r => r.json()),
-                fetch(`${DATA_PATH}/keywords.json`).then(r => r.json()),
-                fetch(`${DATA_PATH}/faq.json`).then(r => r.json())
-            ]);
-            CONFIG = cfg;
-            RESPONSES = resp;
-            FALLBACKS = fb;
-            QUICK_REPLIES = qr;
-            KEYWORDS = kw;
-            FAQ = faq;
-            applyConfig();
+            const results = await Promise.all(
+                files.map(f => fetch(`${DATA_PATH}/${f}.json?v=${Date.now()}`)
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null))
+            );
+            files.forEach((f, i) => {
+                if (results[i]) DATA_BUNDLE[f] = results[i];
+            });
+            CONFIG = DATA_BUNDLE.config || {
+                aiName: 'Vinayak AI',
+                aiNameHi: 'विनयक AI',
+                welcomeMessage: 'Hi! I am Vinayak AI 👋 How can I help you?',
+                welcomeMessageHi: 'नमस्ते! मैं विनयक AI हूँ 👋 कैसे मदद कर सकता हूँ?'
+            };
+            dataLoaded = true;
+            console.log('✅ Vinayak AI FULL PAGE loaded:', Object.keys(DATA_BUNDLE));
         } catch (e) {
             console.error('Data load failed:', e);
-            addMessage('bot', 'Sorry, I couldn\'t load my data. Please refresh the page.');
+            dataLoaded = true;
         }
     }
 
-    // ---- APPLY CONFIG ----
-    function applyConfig() {
-        if (!CONFIG) return;
-        headName.textContent = lang === 'hi' ? (CONFIG.aiNameHi || CONFIG.aiName) : CONFIG.aiName;
-        if (CONFIG.avatar && headImg) headImg.src = CONFIG.avatar;
-
-        // Welcome message
-        if (chatHistory.length === 0) {
-            const welcome = lang === 'hi' ? CONFIG.welcomeMessageHi : CONFIG.welcomeMessage;
-            addMessage('bot', welcome);
-            chatHistory.push({ from: 'bot', text: welcome, ts: Date.now() });
-            saveHistory();
-            renderQuickReplies('initial');
-        } else {
-            // Restore history
-            chatHistory.forEach(msg => addMessage(msg.from, msg.text, false));
-            renderQuickReplies('initial');
+    // ---- COUNT PATTERNS ----
+    function countPatterns(obj, depth = 0) {
+        if (depth > 8 || !obj) return 0;
+        let count = 0;
+        if (Array.isArray(obj)) {
+            obj.forEach(item => count += countPatterns(item, depth + 1));
+        } else if (typeof obj === 'object') {
+            if (Array.isArray(obj.patterns)) count += obj.patterns.length;
+            Object.values(obj).forEach(v => count += countPatterns(v, depth + 1));
         }
+        return count;
     }
 
-    // ---- MATCH MESSAGE ----
-    function matchMessage(text) {
+    // ---- UNIVERSAL PATTERN WALKER ----
+    function findMatches(obj, text) {
+        const matches = [];
         const t = text.toLowerCase().trim();
 
-        // 1. Check greeting
-        if (RESPONSES.greetings) {
-            for (const g of RESPONSES.greetings) {
-                if (g.patterns.some(p => t === p || t.includes(p))) {
-                    return { reply: lang === 'hi' ? g.replyHi : g.reply };
+        function walk(node, path) {
+            if (!node || typeof node !== 'object') return;
+
+            if (Array.isArray(node.patterns) && (node.reply || node.replyHi)) {
+                for (const p of node.patterns) {
+                    const pattern = String(p).toLowerCase().trim();
+                    if (!pattern) continue;
+
+                    let priority = 0;
+                    if (t === pattern) priority = 3;
+                    else if (new RegExp('\\b' + escapeRegex(pattern) + '\\b').test(t)) priority = 2;
+                    else if (t.includes(pattern)) priority = 1;
+
+                    if (priority > 0) {
+                        matches.push({ path, item: node, pattern: p, priority });
+                        break;
+                    }
                 }
+            }
+
+            if (Array.isArray(node)) {
+                node.forEach((item, i) => walk(item, `${path}[${i}]`));
+            } else {
+                Object.entries(node).forEach(([k, v]) => {
+                    if (['patterns', 'reply', 'replyHi'].includes(k)) return;
+                    walk(v, path ? `${path}.${k}` : k);
+                });
             }
         }
 
-        // 2. Check keywords to find category
-        let matchedCategory = null;
-        if (KEYWORDS) {
-            for (const [cat, words] of Object.entries(KEYWORDS)) {
-                if (words.some(w => t.includes(w.toLowerCase()))) {
-                    matchedCategory = cat;
-                    break;
-                }
-            }
-        }
-
-        // 3. Map category to response
-        const catMap = {
-            'product': 'products',
-            'price': 'price',
-            'bulk': 'bulk_order',
-            'shipping': 'shipping',
-            'refund': 'refund',
-            'contact': 'contact',
-            'about': 'about',
-            'greeting': 'greetings',
-            'thanks': 'thanks',
-            'bye': 'bye'
-        };
-
-        const respKey = catMap[matchedCategory] || matchedCategory;
-        if (respKey && RESPONSES[respKey]) {
-            const items = RESPONSES[respKey];
-            for (const item of items) {
-                if (item.patterns.some(p => t.includes(p))) {
-                    return { reply: lang === 'hi' ? item.replyHi : item.reply };
-                }
-            }
-        }
-
-        // 4. Check all responses as fallback
-        for (const [key, items] of Object.entries(RESPONSES)) {
-            for (const item of items) {
-                if (item.patterns.some(p => t.includes(p))) {
-                    return { reply: lang === 'hi' ? item.replyHi : item.reply };
-                }
-            }
-        }
-
-        // 5. Fallback
-        const fb = FALLBACKS.fallbacks[Math.floor(Math.random() * FALLBACKS.fallbacks.length)];
-        return { reply: lang === 'hi' ? fb.replyHi : fb.reply };
+        walk(obj, '');
+        return matches;
     }
 
-    // ---- RENDER MESSAGE ----
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // ---- MATCH ----
+    function matchAll(text) {
+        const t = text.toLowerCase().trim();
+        if (!t) return { reply: '...' };
+
+        const sources = ['greetings', 'help', 'policies', 'contact', 'company', 'catalog', 'responses', 'faq'];
+        for (const srcKey of sources) {
+            const source = DATA_BUNDLE[srcKey];
+            if (!source) continue;
+            const matches = findMatches(source, t);
+            if (matches.length) {
+                const best = matches.sort((a, b) => b.priority - a.priority)[0];
+                const item = best.item;
+                const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
+                if (reply) {
+                    console.log(`✅ MATCH [${srcKey}] "${best.pattern}"`);
+                    return { reply };
+                }
+            }
+        }
+
+        // Product
+        if (DATA_BUNDLE.products) {
+            for (const [id, p] of Object.entries(DATA_BUNDLE.products)) {
+                if (!p) continue;
+                const nameLower = (p.name || '').toLowerCase();
+                const nameHi = p.nameHi || '';
+                if (t.includes(id.toLowerCase()) || (nameLower && t.includes(nameLower)) || (nameHi && t.includes(nameHi))) {
+                    return { reply: productReply(p) };
+                }
+            }
+        }
+
+        // Keywords
+        if (DATA_BUNDLE.keywords) {
+            for (const [cat, words] of Object.entries(DATA_BUNDLE.keywords)) {
+                if (!Array.isArray(words)) continue;
+                for (const w of words) {
+                    if (t.includes(String(w).toLowerCase())) {
+                        const srcs = ['help', 'responses', 'policies'];
+                        for (const sk of srcs) {
+                            if (!DATA_BUNDLE[sk]) continue;
+                            const m = findMatches(DATA_BUNDLE[sk], w);
+                            if (m.length) {
+                                const item = m[0].item;
+                                const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
+                                if (reply) return { reply };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback
+        const fbList = (DATA_BUNDLE.fallbacks && DATA_BUNDLE.fallbacks.fallbacks) || [];
+        const fb = fbList.length ? fbList[Math.floor(Math.random() * fbList.length)] : null;
+        const reply = fb
+            ? (lang === 'hi' && fb.replyHi ? fb.replyHi : fb.reply)
+            : 'Sorry, I didn\'t understand.\n\nTry asking about:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact';
+        return { reply };
+    }
+
+    function productReply(p) {
+        const name = (lang === 'hi' && p.nameHi) ? p.nameHi : (p.name || '');
+        const tag = (lang === 'hi' && p.taglineHi) ? p.taglineHi : (p.tagline || '');
+        const feats = (lang === 'hi' && p.featuresHi) ? p.featuresHi : (p.features || []);
+        const sizes = (p.sizes || []).join(' / ');
+        const link = p.page ? BASE_URL + p.page : BASE_URL + '/products.html';
+        const desc = (lang === 'hi' && p.descriptionHi) ? p.descriptionHi : (p.description || '');
+        let text = `⭐ ${name}\n\n`;
+        if (tag) text += `${tag}\n\n`;
+        if (desc) text += `${desc}\n\n`;
+        if (feats.length) text += `✅ Features:\n${feats.map(f => '• ' + f).join('\n')}\n\n`;
+        if (sizes) text += `📦 Sizes: ${sizes}\n\n`;
+        text += `🔗 More info: ${link}`;
+        return text;
+    }
+
+    // ---- ADD MESSAGE ----
     function addMessage(from, text, save = true) {
         if (!messagesEl) return;
-
-        // Remove typing indicator
         const typing = messagesEl.querySelector('.vy-typing');
         if (typing) typing.remove();
 
@@ -149,22 +200,21 @@
         div.className = `vy-msg ${from}`;
 
         const avatarHtml = from === 'bot'
-            ? (CONFIG?.avatar ? `<img src="${CONFIG.avatar}" onerror="this.style.display='none'"><span>V</span>` : 'V')
+            ? `<img src="${BASE_URL}/images/logo.png" onerror="this.style.display='none'"><span>V</span>`
             : '<span>You</span>';
 
-        const safeText = String(text)
+        const safe = String(text)
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/\n/g, '<br>')
             .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-            .replace(/(\/[\w\-.]+\.html)/g, `<a href="${BASE_URL}$1">$1</a>`)
             .replace(/([\w.-]+@[\w.-]+\.\w+)/g, '<a href="mailto:$1">$1</a>');
 
         div.innerHTML = `
             <div class="vy-msg-avatar">${avatarHtml}</div>
             <div>
-                <div class="vy-bubble">${safeText}</div>
+                <div class="vy-bubble">${safe}</div>
                 <span class="vy-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span>
             </div>
         `;
@@ -172,19 +222,17 @@
         messagesEl.scrollTop = messagesEl.scrollHeight;
 
         if (save) {
-            chatHistory.push({ from, text, ts: Date.now() });
-            saveHistory();
+            history.push({ from, text, ts: Date.now() });
+            try { localStorage.setItem('vy_chat_history', JSON.stringify(history.slice(-50))); } catch(e) {}
         }
     }
 
-    // ---- TYPING INDICATOR ----
     function showTyping() {
         const div = document.createElement('div');
         div.className = 'vy-msg bot vy-typing';
         div.innerHTML = `
             <div class="vy-msg-avatar">
-                ${CONFIG?.avatar ? `<img src="${CONFIG.avatar}" onerror="this.style.display='none'">` : ''}
-                <span>V</span>
+                <img src="${BASE_URL}/images/logo.png" onerror="this.style.display='none'"><span>V</span>
             </div>
             <div class="vy-bubble">
                 <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -194,41 +242,32 @@
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // ---- SEND MESSAGE ----
     async function sendMessage() {
         const text = inputEl.value.trim();
         if (!text) return;
-
         addMessage('user', text);
         inputEl.value = '';
         inputEl.style.height = 'auto';
         sendBtn.disabled = true;
-
         showTyping();
-
-        // Simulate typing delay
+        await loadAll();
         setTimeout(() => {
-            const match = matchMessage(text);
+            const match = matchAll(text);
             addMessage('bot', match.reply);
             sendBtn.disabled = false;
-
-            // Suggest follow-ups
-            if (text.toLowerCase().match(/product|nikolux|life|sanjivni/i)) {
-                renderQuickReplies('afterProduct');
-            }
-        }, 500 + Math.random() * 800);
+        }, 400 + Math.random() * 400);
     }
 
-    // ---- QUICK REPLIES ----
-    function renderQuickReplies(type) {
-        if (!quickEl || !QUICK_REPLIES || !CONFIG.features.quickReplies) return;
-        const items = QUICK_REPLIES[type] || [];
+    function renderQuick() {
+        if (!quickEl) return;
+        const qr = DATA_BUNDLE['quick-replies'];
+        if (!qr) return;
+        const items = qr.initial || [];
         quickEl.innerHTML = items.map(item => `
             <button class="vy-chip" data-query="${item.query}">
-                ${lang === 'hi' && item.labelHi ? item.labelHi : item.label}
+                ${(lang === 'hi' && item.labelHi) ? item.labelHi : item.label}
             </button>
         `).join('');
-
         quickEl.querySelectorAll('.vy-chip').forEach(btn => {
             btn.onclick = () => {
                 inputEl.value = btn.dataset.query;
@@ -237,65 +276,74 @@
         });
     }
 
-    // ---- SAVE / LOAD HISTORY ----
-    function saveHistory() {
-        try {
-            localStorage.setItem('vy_chat_history', JSON.stringify(chatHistory.slice(-50)));
-        } catch (e) {}
-    }
-
     function clearHistory() {
-        chatHistory = [];
+        history = [];
         localStorage.removeItem('vy_chat_history');
         messagesEl.innerHTML = '';
-        const welcome = lang === 'hi' ? CONFIG.welcomeMessageHi : CONFIG.welcomeMessage;
+        const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi) ? CONFIG.welcomeMessageHi : (CONFIG.welcomeMessage || 'Hi!');
         addMessage('bot', welcome);
-        renderQuickReplies('initial');
+        renderQuick();
     }
 
-    // ---- VOICE INPUT ----
     function initVoice() {
         if (!voiceBtn) return;
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             voiceBtn.style.display = 'none';
             return;
         }
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recog = new SpeechRecognition();
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recog = new SR();
         recog.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';
         recog.interimResults = false;
-
         let listening = false;
-
         voiceBtn.onclick = () => {
-            if (listening) {
-                recog.stop();
-                return;
-            }
+            if (listening) { recog.stop(); return; }
             recog.start();
             listening = true;
             voiceBtn.textContent = '🔴';
         };
-
         recog.onresult = (e) => {
-            const text = e.results[0][0].transcript;
-            inputEl.value = text;
+            inputEl.value = e.results[0][0].transcript;
             sendMessage();
         };
-
-        recog.onend = () => {
-            listening = false;
-            voiceBtn.textContent = '🎤';
-        };
-
-        recog.onerror = () => {
-            listening = false;
-            voiceBtn.textContent = '🎤';
-        };
+        recog.onend = () => { listening = false; voiceBtn.textContent = '🎤'; };
+        recog.onerror = () => { listening = false; voiceBtn.textContent = '🎤'; };
     }
 
-    // ---- EVENT LISTENERS ----
-    function initEvents() {
+    function applyConfig() {
+        if (!CONFIG) return;
+        headName.textContent = (lang === 'hi' && CONFIG.aiNameHi) ? CONFIG.aiNameHi : (CONFIG.aiName || 'Vinayak AI');
+        if (CONFIG.avatar && headImg) headImg.src = CONFIG.avatar;
+    }
+
+    async function init() {
+        await loadAll();
+        applyConfig();
+
+        // Welcome or restore
+        if (history.length > 0) {
+            history.forEach(m => {
+                const div = document.createElement('div');
+                div.className = `vy-msg ${m.from}`;
+                const avatar = m.from === 'bot'
+                    ? `<img src="${BASE_URL}/images/logo.png" onerror="this.style.display='none'"><span>V</span>`
+                    : '<span>You</span>';
+                const safe = String(m.text)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\n/g, '<br>');
+                div.innerHTML = `<div class="vy-msg-avatar">${avatar}</div><div><div class="vy-bubble">${safe}</div></div>`;
+                messagesEl.appendChild(div);
+            });
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        } else {
+            const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi) ? CONFIG.welcomeMessageHi : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
+            addMessage('bot', welcome);
+        }
+        renderQuick();
+
+        // Events
         sendBtn.onclick = sendMessage;
         inputEl.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -307,25 +355,15 @@
             inputEl.style.height = 'auto';
             inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px';
         });
-
         if (clearBtn) clearBtn.onclick = clearHistory;
         initVoice();
-    }
 
-    // ---- INIT ----
-    async function init() {
-        await loadData();
-        initEvents();
-        console.log('✅ Vinayak AI ready');
-    }
+        // Debug
+        window.vyTest = (text) => matchAll(text);
+        window.vyData = () => DATA_BUNDLE;
 
-    // Expose globals
-    window.VinayakAI = {
-        init,
-        send: sendMessage,
-        clear: clearHistory,
-        setLang: (l) => { lang = l; applyConfig(); }
-    };
+        console.log('✅ Vinayak AI Full Page ready');
+    }
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
