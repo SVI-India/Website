@@ -1,5 +1,6 @@
 // ============================================================
-// VINAYAK AI WIDGET — Floating button + mini chat + summarize
+// VINAYAK AI WIDGET — Universal Data Matcher (v2)
+// Handles nested JSON structures - greetings, help, policies, etc.
 // ============================================================
 
 (function() {
@@ -8,132 +9,233 @@
     const BASE_URL = 'https://www.sveindia.mywire.org';
     const DATA_PATH = BASE_URL + '/ai/data';
 
-    // State
+    // ---- STATE ----
     let CONFIG = null;
-    let RESPONSES = null;
-    let FALLBACKS = null;
-    let QUICK_REPLIES = null;
-    let KEYWORDS = null;
-    let FAQ = null;
-    let PRODUCTS = null;
-    let HELP = null;
-    let POLICIES = null;
-    let GREETINGS = null;
-    let CONTACT = null;
-    let COMPANY = null;
-    let CATALOG = null;
-    let SUMMARIES = null;
+    let DATA_BUNDLE = {};
     let lang = localStorage.getItem('lang') || 'en';
     let history = JSON.parse(localStorage.getItem('vyw_history') || '[]');
     let panelOpen = false;
-    let initialized = false;
+    let dataLoaded = false;
+    let messagesRendered = false;
 
-    // ---- DATA LOADER ----
+    // ---- LOAD ALL DATA ----
     async function loadAll() {
-        if (initialized) return;
+        if (dataLoaded) return;
+        const files = [
+            'config', 'responses', 'fallbacks', 'quick-replies', 'keywords',
+            'faq', 'products', 'help', 'policies', 'greetings',
+            'contact', 'company', 'catalog', 'page-summaries'
+        ];
         try {
-            const fetcher = (f) => fetch(`${DATA_PATH}/${f}`).then(r => r.ok ? r.json() : null).catch(() => null);
-            const [
-                cfg, resp, fb, qr, kw, faq, prods, hp, pol, greet, cont, comp, cat, summ
-            ] = await Promise.all([
-                fetcher('config.json'),
-                fetcher('responses.json'),
-                fetcher('fallbacks.json'),
-                fetcher('quick-replies.json'),
-                fetcher('keywords.json'),
-                fetcher('faq.json'),
-                fetcher('products.json'),
-                fetcher('help.json'),
-                fetcher('policies.json'),
-                fetcher('greetings.json'),
-                fetcher('contact.json'),
-                fetcher('company.json'),
-                fetcher('catalog.json'),
-                fetcher('page-summaries.json')
-            ]);
-            CONFIG = cfg || { aiName: 'Vinayak AI' };
-            RESPONSES = resp || {};
-            FALLBACKS = fb || { fallbacks: [{ reply: 'I didn\'t understand. Please try again.' }] };
-            QUICK_REPLIES = qr || { initial: [] };
-            KEYWORDS = kw || {};
-            FAQ = faq || {};
-            PRODUCTS = prods || {};
-            HELP = hp || {};
-            POLICIES = pol || {};
-            GREETINGS = greet || {};
-            CONTACT = cont || {};
-            COMPANY = comp || {};
-            CATALOG = cat || {};
-            SUMMARIES = summ || {};
-            initialized = true;
+            const results = await Promise.all(
+                files.map(f => fetch(`${DATA_PATH}/${f}.json?v=${Date.now()}`)
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null))
+            );
+            files.forEach((f, i) => {
+                if (results[i]) DATA_BUNDLE[f] = results[i];
+            });
+            CONFIG = DATA_BUNDLE.config || {
+                aiName: 'Vinayak AI',
+                aiNameHi: 'विनयक AI',
+                welcomeMessage: 'Hi! I am Vinayak AI 👋 How can I help you?',
+                welcomeMessageHi: 'नमस्ते! मैं विनयक AI हूँ 👋 कैसे मदद कर सकता हूँ?'
+            };
+            dataLoaded = true;
+
+            // DEBUG — Console me dikhega
+            console.log('═══════════════════════════════════════');
+            console.log('✅ VINAYAK AI DATA LOADED');
+            console.log('═══════════════════════════════════════');
+            Object.entries(DATA_BUNDLE).forEach(([k, v]) => {
+                const c = countPatterns(v);
+                if (c > 0) console.log(`  ${k.padEnd(18)}: ${c} patterns`);
+            });
+            console.log('═══════════════════════════════════════');
         } catch (e) {
-            console.warn('Data load failed:', e);
-            initialized = true;
+            console.error('❌ Data load failed:', e);
+            dataLoaded = true;
         }
     }
 
-    // ---- MATCH LOGIC ----
-    function matchAll(text) {
+    // ---- COUNT PATTERNS (for debug) ----
+    function countPatterns(obj, depth = 0) {
+        if (depth > 8 || !obj) return 0;
+        let count = 0;
+        if (Array.isArray(obj)) {
+            obj.forEach(item => count += countPatterns(item, depth + 1));
+        } else if (typeof obj === 'object') {
+            if (Array.isArray(obj.patterns)) count += obj.patterns.length;
+            Object.values(obj).forEach(v => count += countPatterns(v, depth + 1));
+        }
+        return count;
+    }
+
+    // ---- UNIVERSAL PATTERN WALKER ----
+    // Walks ANY JSON structure looking for { patterns: [...], reply: "..." }
+    function findMatches(obj, text) {
+        const matches = [];
         const t = text.toLowerCase().trim();
 
-        // Search all data sources in priority order
+        function walk(node, path) {
+            if (!node || typeof node !== 'object') return;
+
+            // Check if this node has patterns + a reply
+            if (Array.isArray(node.patterns) && (node.reply || node.replyHi)) {
+                for (const p of node.patterns) {
+                    const pattern = String(p).toLowerCase().trim();
+                    if (!pattern) continue;
+
+                    let priority = 0;
+                    // Exact match = highest
+                    if (t === pattern) priority = 3;
+                    // Whole word match = high
+                    else if (new RegExp('\\b' + escapeRegex(pattern) + '\\b').test(t)) priority = 2;
+                    // Contains = lower
+                    else if (t.includes(pattern)) priority = 1;
+
+                    if (priority > 0) {
+                        matches.push({
+                            path: path,
+                            item: node,
+                            pattern: p,
+                            priority: priority
+                        });
+                        break;
+                    }
+                }
+            }
+
+            // Recurse children
+            if (Array.isArray(node)) {
+                node.forEach((item, i) => walk(item, `${path}[${i}]`));
+            } else {
+                Object.entries(node).forEach(([k, v]) => {
+                    if (['patterns', 'reply', 'replyHi'].includes(k)) return;
+                    walk(v, path ? `${path}.${k}` : k);
+                });
+            }
+        }
+
+        walk(obj, '');
+        return matches;
+    }
+
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // ---- MAIN MATCH ----
+    function matchAll(text) {
+        const t = text.toLowerCase().trim();
+        if (!t) return { reply: '...' };
+
+        // Priority order of data sources
         const sources = [
-            GREETINGS.greetings,
-            POLICIES && Object.values(POLICIES),
-            HELP && Object.values(HELP),
-            CONTACT && Object.values(CONTACT),
-            COMPANY && Object.values(COMPANY),
-            CATALOG && Object.values(CATALOG),
-            RESPONSES && Object.values(RESPONSES)
+            'greetings',
+            'help',
+            'policies',
+            'contact',
+            'company',
+            'catalog',
+            'responses',
+            'faq'
         ];
 
-        for (const source of sources) {
+        // 1. Search sources
+        for (const srcKey of sources) {
+            const source = DATA_BUNDLE[srcKey];
             if (!source) continue;
-            for (const item of source) {
-                if (item && item.patterns && Array.isArray(item.patterns)) {
-                    if (item.patterns.some(p => t.includes(String(p).toLowerCase()))) {
-                        return {
-                            reply: lang === 'hi' && item.replyHi ? item.replyHi : item.reply
-                        };
-                    }
+            const matches = findMatches(source, t);
+            if (matches.length) {
+                // Highest priority match
+                const best = matches.sort((a, b) => b.priority - a.priority)[0];
+                const item = best.item;
+                const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
+                if (reply) {
+                    console.log(`✅ MATCH [${srcKey}] "${best.pattern}" → path: ${best.path}`);
+                    return { reply };
                 }
             }
         }
 
-        // Product matching
-        if (PRODUCTS) {
-            for (const [id, p] of Object.entries(PRODUCTS)) {
-                if (t.includes(id) || t.includes(p.name.toLowerCase()) || (p.nameHi && t.includes(p.nameHi))) {
+        // 2. Product search
+        if (DATA_BUNDLE.products) {
+            for (const [id, p] of Object.entries(DATA_BUNDLE.products)) {
+                if (!p) continue;
+                const nameLower = (p.name || '').toLowerCase();
+                const nameHi = p.nameHi || '';
+                if (t.includes(id.toLowerCase()) ||
+                    (nameLower && t.includes(nameLower)) ||
+                    (nameHi && t.includes(nameHi))) {
+                    console.log(`✅ MATCH [products] "${id}"`);
                     return { reply: productReply(p) };
                 }
             }
         }
 
-        // Fallback
-        const fb = FALLBACKS.fallbacks[Math.floor(Math.random() * FALLBACKS.fallbacks.length)];
-        return { reply: lang === 'hi' && fb.replyHi ? fb.replyHi : fb.reply };
+        // 3. Keyword fallback
+        if (DATA_BUNDLE.keywords) {
+            for (const [cat, words] of Object.entries(DATA_BUNDLE.keywords)) {
+                if (!Array.isArray(words)) continue;
+                for (const w of words) {
+                    const wl = String(w).toLowerCase();
+                    if (t.includes(wl)) {
+                        // Try to find in help/responses/policies
+                        const srcs = ['help', 'responses', 'policies'];
+                        for (const sk of srcs) {
+                            if (!DATA_BUNDLE[sk]) continue;
+                            const m = findMatches(DATA_BUNDLE[sk], wl);
+                            if (m.length) {
+                                const item = m[0].item;
+                                const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
+                                if (reply) {
+                                    console.log(`✅ MATCH [keywords→${sk}] "${w}"`);
+                                    return { reply };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. Fallback
+        const fbList = (DATA_BUNDLE.fallbacks && DATA_BUNDLE.fallbacks.fallbacks) || [];
+        const fb = fbList.length ? fbList[Math.floor(Math.random() * fbList.length)] : null;
+        const reply = fb
+            ? (lang === 'hi' && fb.replyHi ? fb.replyHi : fb.reply)
+            : 'Sorry, I didn\'t understand that. 🤔\n\nTry asking about:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact info';
+        return { reply };
     }
 
-    // ---- PRODUCT REPLY BUILDER ----
+    // ---- PRODUCT REPLY ----
     function productReply(p) {
-        const name = lang === 'hi' && p.nameHi ? p.nameHi : p.name;
-        const tag = lang === 'hi' && p.taglineHi ? p.taglineHi : p.tagline;
-        const feats = lang === 'hi' && p.featuresHi ? p.featuresHi : p.features;
+        const name = (lang === 'hi' && p.nameHi) ? p.nameHi : (p.name || '');
+        const tag = (lang === 'hi' && p.taglineHi) ? p.taglineHi : (p.tagline || '');
+        const feats = (lang === 'hi' && p.featuresHi) ? p.featuresHi : (p.features || []);
         const sizes = (p.sizes || []).join(' / ');
-        const link = BASE_URL + p.page;
+        const link = p.page ? BASE_URL + p.page : BASE_URL + '/products.html';
+        const desc = (lang === 'hi' && p.descriptionHi) ? p.descriptionHi : (p.description || '');
 
-        return `⭐ ${name}\n\n${tag}\n\n${p.description}\n\n✅ Features:\n${feats.map(f => '• ' + f).join('\n')}\n\n📦 Sizes: ${sizes}\n\n🔗 More info: ${link}`;
+        let text = `⭐ ${name}\n\n`;
+        if (tag) text += `${tag}\n\n`;
+        if (desc) text += `${desc}\n\n`;
+        if (feats.length) text += `✅ Features:\n${feats.map(f => '• ' + f).join('\n')}\n\n`;
+        if (sizes) text += `📦 Sizes: ${sizes}\n\n`;
+        text += `🔗 More info: ${link}`;
+        return text;
     }
 
     // ---- PAGE SUMMARY ----
     function getCurrentPageSummary() {
-        if (!SUMMARIES || !SUMMARIES.summaries) return null;
-        const path = window.location.pathname;
-        const filename = path.split('/').pop().replace('.html', '') || 'index';
-        return SUMMARIES.summaries[filename] || null;
+        const s = DATA_BUNDLE['page-summaries'];
+        if (!s || !s.summaries) return null;
+        const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
+        return s.summaries[filename] || null;
     }
 
-    // ---- CREATE WIDGET HTML ----
+    // ---- CREATE WIDGET ----
     function createWidget() {
         // Button
         const btn = document.createElement('button');
@@ -177,10 +279,11 @@
     }
 
     // ---- ADD MESSAGE ----
-    function addMessage(from, text) {
+    function addMessage(from, text, save = true) {
         const messages = document.getElementById('vywMessages');
         if (!messages) return;
 
+        // Remove typing indicator
         const typing = messages.querySelector('.vyw-typing');
         if (typing) typing.remove();
 
@@ -206,13 +309,18 @@
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
 
-        history.push({ from, text, ts: Date.now() });
-        try { localStorage.setItem('vyw_history', JSON.stringify(history.slice(-30))); } catch(e) {}
+        if (save) {
+            history.push({ from, text, ts: Date.now() });
+            try {
+                localStorage.setItem('vyw_history', JSON.stringify(history.slice(-30)));
+            } catch (e) {}
+        }
     }
 
-    // ---- TYPING ----
+    // ---- TYPING INDICATOR ----
     function showTyping() {
         const messages = document.getElementById('vywMessages');
+        if (!messages) return;
         const div = document.createElement('div');
         div.className = 'vyw-msg bot vyw-typing';
         div.innerHTML = `
@@ -230,6 +338,7 @@
     // ---- SEND ----
     async function send() {
         const input = document.getElementById('vywInput');
+        if (!input) return;
         const text = input.value.trim();
         if (!text) return;
 
@@ -238,40 +347,83 @@
         input.style.height = 'auto';
 
         showTyping();
-
         await loadAll();
+
         setTimeout(() => {
             const match = matchAll(text);
             addMessage('bot', match.reply);
-        }, 400 + Math.random() * 600);
+        }, 400 + Math.random() * 400);
     }
 
     // ---- QUICK REPLIES ----
     function renderQuick() {
         const el = document.getElementById('vywQuick');
-        if (!el || !QUICK_REPLIES) return;
-        const items = QUICK_REPLIES.initial || [];
+        const qr = DATA_BUNDLE['quick-replies'];
+        if (!el || !qr) return;
+        const items = qr.initial || [];
         el.innerHTML = items.map(i => `
-            <button class="vyw-chip" data-q="${i.query}">
-                ${lang === 'hi' && i.labelHi ? i.labelHi : i.label}
+            <button class="vyw-chip" data-q="${escapeHtml(i.query)}">
+                ${escapeHtml((lang === 'hi' && i.labelHi) ? i.labelHi : i.label)}
             </button>
         `).join('');
         el.querySelectorAll('.vyw-chip').forEach(b => {
             b.onclick = () => {
-                document.getElementById('vywInput').value = b.dataset.q;
+                const inp = document.getElementById('vywInput');
+                if (inp) inp.value = b.dataset.q;
                 send();
             };
         });
     }
 
-    // ---- CLEAR ----
+    function escapeHtml(s) {
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    // ---- CLEAR CHAT ----
     function clearChat() {
         history = [];
         localStorage.removeItem('vyw_history');
         const messages = document.getElementById('vywMessages');
-        messages.innerHTML = '';
-        const welcome = lang === 'hi' && CONFIG.welcomeMessageHi ? CONFIG.welcomeMessageHi : (CONFIG.welcomeMessage || 'Hi! How can I help?');
+        if (messages) messages.innerHTML = '';
+        const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi)
+            ? CONFIG.welcomeMessageHi
+            : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
         addMessage('bot', welcome);
+    }
+
+    // ---- APPLY CONFIG ----
+    function applyConfig() {
+        const nameEl = document.getElementById('vywName');
+        if (nameEl && CONFIG) {
+            nameEl.textContent = (lang === 'hi' && CONFIG.aiNameHi)
+                ? CONFIG.aiNameHi
+                : (CONFIG.aiName || 'Vinayak AI');
+        }
+    }
+
+    // ---- RENDER RESTORED HISTORY ----
+    function renderHistory() {
+        const messages = document.getElementById('vywMessages');
+        if (!messages) return;
+        history.slice(-10).forEach(m => {
+            const div = document.createElement('div');
+            div.className = `vyw-msg ${m.from}`;
+            const avatar = m.from === 'bot'
+                ? `<img src="${BASE_URL}/images/logo.png" onerror="this.style.display='none'"><span>V</span>`
+                : '<span>You</span>';
+            const safe = String(m.text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\n/g, '<br>');
+            div.innerHTML = `<div class="vyw-msg-avatar">${avatar}</div><div class="vyw-bubble">${safe}</div>`;
+            messages.appendChild(div);
+        });
+        messages.scrollTop = messages.scrollHeight;
     }
 
     // ---- INIT ----
@@ -284,49 +436,45 @@
             btn.classList.toggle('open', panelOpen);
             btn.innerHTML = panelOpen ? '✕' : '💬';
 
-            if (panelOpen && !initialized) {
+            if (panelOpen && !messagesRendered) {
                 await loadAll();
                 applyConfig();
-                // Restore or welcome
+
                 if (history.length > 0) {
-                    history.slice(-10).forEach(m => {
-                        // Silent restore (no duplicate save)
-                        const messages = document.getElementById('vywMessages');
-                        const div = document.createElement('div');
-                        div.className = `vyw-msg ${m.from}`;
-                        const avatar = m.from === 'bot'
-                            ? `<img src="${BASE_URL}/images/logo.png" onerror="this.style.display='none'"><span>V</span>`
-                            : '<span>You</span>';
-                        const safe = String(m.text).replace(/\n/g, '<br>');
-                        div.innerHTML = `<div class="vyw-msg-avatar">${avatar}</div><div class="vyw-bubble">${safe}</div>`;
-                        messages.appendChild(div);
-                    });
-                    const messages = document.getElementById('vywMessages');
-                    messages.scrollTop = messages.scrollHeight;
+                    renderHistory();
                 } else {
-                    const welcome = lang === 'hi' && CONFIG.welcomeMessageHi ? CONFIG.welcomeMessageHi : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
+                    const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi)
+                        ? CONFIG.welcomeMessageHi
+                        : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
                     addMessage('bot', welcome);
                 }
                 renderQuick();
-                // Show summarize bar if applicable
+                messagesRendered = true;
+
+                // Summarize bar
                 const summary = getCurrentPageSummary();
                 if (summary) {
                     const bar = document.getElementById('vywSummarizeBar');
                     if (bar) {
                         bar.style.display = 'flex';
                         document.getElementById('vywSummarizeBtn').onclick = () => {
-                            const s = lang === 'hi' && summary.summaryHi ? summary.summaryHi : summary.summary;
-                            addMessage('user', lang === 'hi' ? `इस पेज का सारांश` : `Summarize this page`);
-                            setTimeout(() => addMessage('bot', `📄 **${summary.title}**\n\n${s}`), 400);
+                            const s = (lang === 'hi' && summary.summaryHi) ? summary.summaryHi : summary.summary;
+                            addMessage('user', lang === 'hi' ? 'इस पेज का सारांश' : 'Summarize this page');
+                            setTimeout(() => {
+                                addMessage('bot', `📄 **${summary.title}**\n\n${s}`);
+                            }, 400);
                         };
                     }
                 }
             }
         };
 
-        // Events
+        // Send button
         document.getElementById('vywSend').onclick = send;
+        // Clear button
         document.getElementById('vywClear').onclick = clearChat;
+
+        // Input events
         const input = document.getElementById('vywInput');
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -338,13 +486,11 @@
             input.style.height = 'auto';
             input.style.height = Math.min(input.scrollHeight, 80) + 'px';
         });
-    }
 
-    function applyConfig() {
-        const nameEl = document.getElementById('vywName');
-        if (nameEl && CONFIG) {
-            nameEl.textContent = lang === 'hi' && CONFIG.aiNameHi ? CONFIG.aiNameHi : (CONFIG.aiName || 'Vinayak AI');
-        }
+        // Debug helpers
+        window.vyTest = (text) => matchAll(text);
+        window.vyData = () => DATA_BUNDLE;
+        window.vyReload = () => { dataLoaded = false; return loadAll(); };
     }
 
     // ---- BOOT ----
@@ -353,7 +499,4 @@
     } else {
         init();
     }
-
-    // Expose for manual control
-    window.VinayakWidget = { open: () => document.getElementById('vyWidgetBtn')?.click() };
 })();
