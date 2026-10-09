@@ -1,0 +1,126 @@
+{
+    "flows": {
+        "startup": {
+            "chips": [
+                { "label": "📦 Products", "labelHi": "📦 उत्पाद", "query": "products", "next": "product_menu" },
+                { "label": "💰 Pricing", "labelHi": "💰 मूल्य", "query": "price", "next": "pricing_flow" },
+                { "label": "🛒 Order Now", "labelHi": "🛒 अभी ऑर्डर करें", "query": "i want to buy", "next": "order_flow" },
+                { "label": "📞 Contact", "labelHi": "📞 संपर्क", "query": "contact", "next": "contact_menu" }
+            ]
+        },
+
+        "product_menu": {
+            "chips": [
+                { "label": "⭐ Nikolux", "labelHi": "⭐ निकोलक्स", "query": "nikolux", "next": "product_detail" },
+                { "label": "✨ Life Star", "labelHi": "✨ लाइफ स्टार", "query": "life star", "next": "product_detail" },
+                { "label": "🌿 Sanjivni", "labelHi": "🌿 संजीवनी", "query": "sanjivni", "next": "product_detail" },
+                { "label": "💰 Pricing", "labelHi": "💰 मूल्य", "query": "price", "next": "pricing_flow" }
+            ]
+        },
+
+        "product_detail": {
+            "chips": [
+                { "label": "💰 Price", "labelHi": "💰 मूल्य", "query": "price", "next": "pricing_flow" },
+                { "label": "🛒 Order Now", "labelHi": "🛒 अभी ऑर्डर करें", "query": "i want to buy", "next": "order_flow" },
+                { "label": "📦 Bulk", "labelHi": "📦 थोक", "query": "bulk order", "next": "bulk_flow" },
+                { "label": "ℹ️ Know More", "labelHi": "ℹ️ और जानें", "query": "tell me more", "next": "product_detail" }
+            ]
+        },
+
+        "pricing_flow": {
+            "chips": [
+                { "label": "🛒 Order Now", "labelHi": "🛒 अभी ऑर्डर करें", "query": "i want to buy", "next": "order_flow" },
+                { "label": "📦 Bulk Price", "labelHi": "📦 थोक मूल्य", "query": "bulk order", "next": "bulk_flow" },
+                { "label": "🚚 Delivery Info", "labelHi": "🚚 डिलीवरी जानकारी", "query": "shipping info", "next": "shipping_flow" },
+                { "label": "📞 Contact", "labelHi": "📞 संपर्क", "query": "contact", "next": "contact_menu" }
+            ]
+        },
+
+        "order_flow": {
+            "chips": [
+                { "label": "🚚 Delivery Time", "labelHi": "🚚 डिलीवरी समय", "query": "delivery time", "next": "shipping_flow" },
+                { "label": "💳 Payment", "labelHi": "💳 भुगतान", "query": "payment methods", "next": "payment_flow" },
+                { "label": "📞 Talk to Human", "labelHi": "📞 इंसान से बात करें", "query": "contact", "next": "contact_menu" },
+                { "label": "❌ Cancel", "labelHi": "❌ रद्द करें", "query": "cancel", "next": "startup" }
+            ]
+        },
+
+        "bulk_flow": {
+            "chips": [
+                { "label": "📊 Get Bulk Quote", "labelHi": "📊 थोक कोट", "query": "bulk quote", "next": "quote_flow" },
+                { "label": "🤝 Become Distributor", "labelHi": "🤝 वितरक बनें", "query": "become distributor", "next": "distributor_flow" },
+                { "label": "📞 Contact Sales", "labelHi": "📞 बिक्री संपर्क", "query": "contact", "next": "contact_menu" },
+                { "label": "🔙 Back", "labelHi": "🔙 वापस", "query": "products", "next": "product_menu" }
+            ]
+        },
+
+        "shipping_flow": {
+            "chips": [
+                { "label": "📍 Track Order", "labelHi": "📍 ऑर्डर ट्रैक", "query": "track order", "next": "track_flow" },
+                { "label": "🛒 Order Now", "labelHi": "🛒 अभी ऑर्डर करें", "query": "i want to buy", "next": "order_flow" },
+                { "label": "🔙 Refund Policy", "labelHi": "🔙 वापसी नीति", "query": "refund policy", "next": "refund_flow" },
+                { "label": "📞 Support", "labelHi": "📞 सहायता", "query": "contact", "next": "contact_menu" }
+            ]
+        },
+
+        "payment_flow": {
+            "chips": [
+                { "label": "✅ Confirm Order", "labelHi": "✅ ऑर्डर पुष्टि", "query": "order now", "next": "order_flow" },
+                { "label": "📧 Email Us", "labelHi": "📧 ईमेल करें", "query": "contact", "next": "contact_menu" },
+                { "label": "🔙 Back", "labelHi": "🔙 वापस", "query": "products", "next": "product_menu" }
+            ]
+        },
+
+        "refund_flow": {
+            "chips": [
+                { "label": "📧 Report Issue", "labelHi": "📧 समस्या रिपोर्ट", "query": "report issue", "next": "contact_menu" },
+                { "label": "📞 Contact Support", "labelHi": "📞 सहायता संपर्क", "query": "contact", "next": "contact_menu" },
+                { "label": "📦 Products", "labelHi": "📦 उत्पाद", "query": "products", "next": "product_menu" }
+            ]
+        },
+
+        "contact_menu": {
+            "chips": [
+                { "label": "📧 Email", "labelHi": "📧 ईमेल", "query": "send email", "next": "startup" },
+                { "label": "📞 Call", "labelHi": "📞 कॉल", "query": "call us", "next": "startup" },
+                { "label": "💬 WhatsApp", "labelHi": "💬 WhatsApp", "query": "whatsapp", "next": "startup" },
+                { "label": "🔙 Back", "labelHi": "🔙 वापस", "query": "products", "next": "product_menu" }
+            ]
+        },
+
+        "distributor_flow": {
+            "chips": [
+                { "label": "📊 Requirements", "labelHi": "📊 आवश्यकताएँ", "query": "distributor requirements", "next": "startup" },
+                { "label": "📞 Apply Now", "labelHi": "📞 अभी आवेदन करें", "query": "apply distributor", "next": "contact_menu" },
+                { "label": "💰 Pricing", "labelHi": "💰 मूल्य", "query": "bulk price", "next": "bulk_flow" }
+            ]
+        },
+
+        "track_flow": {
+            "chips": [
+                { "label": "📧 Email Us", "labelHi": "📧 ईमेल करें", "query": "contact", "next": "contact_menu" },
+                { "label": "📞 Call Support", "labelHi": "📞 कॉल सहायता", "query": "call us", "next": "contact_menu" },
+                { "label": "🔄 Other Help", "labelHi": "🔄 अन्य सहायता", "query": "hi", "next": "startup" }
+            ]
+        },
+
+        "quote_flow": {
+            "chips": [
+                { "label": "✅ Share Details", "labelHi": "✅ विवरण साझा करें", "query": "i want to buy", "next": "order_flow" },
+                { "label": "📞 Contact Sales", "labelHi": "📞 बिक्री संपर्क", "query": "contact", "next": "contact_menu" }
+            ]
+        },
+
+        "end": {
+            "chips": [
+                { "label": "🔄 Chat Again", "labelHi": "🔄 फिर बात करें", "query": "hi", "next": "startup" },
+                { "label": "📦 Browse Products", "labelHi": "📦 उत्पाद देखें", "query": "products", "next": "product_menu" }
+            ]
+        }
+    },
+
+    "alwaysSuggest": [
+        { "label": "ℹ️ Know More", "labelHi": "ℹ️ और जानें", "query": "tell me more" },
+        { "label": "📞 Talk to Human", "labelHi": "📞 इंसान से बात करें", "query": "contact" }
+    ]
+}
