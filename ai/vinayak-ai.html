@@ -47,6 +47,19 @@
 
     </div>
 
+    <!-- ============================================================
+         FIREBASE SDK — LOAD ORDER MATTERS!
+         ============================================================ -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+    <!-- FIREBASE CONFIG (auto-loads SVE_LEADS) -->
+    <script src="https://www.sveindia.mywire.org/js/firebase-config.js"></script>
+
+    <!-- VINAYAK AI FULL PAGE LOGIC -->
     <script src="https://www.sveindia.mywire.org/ai/vinayak-ai.js"></script>
+
 </body>
 </html>
