@@ -1,6 +1,5 @@
 // ============================================================
-// VINAYAK AI WIDGET — Universal Data Matcher (v2)
-// Handles nested JSON structures - greetings, help, policies, etc.
+// VINAYAK AI WIDGET — Universal Matcher + Lead Capture
 // ============================================================
 
 (function() {
@@ -9,7 +8,6 @@
     const BASE_URL = 'https://www.sveindia.mywire.org';
     const DATA_PATH = BASE_URL + '/ai/data';
 
-    // ---- STATE ----
     let CONFIG = null;
     let DATA_BUNDLE = {};
     let lang = localStorage.getItem('lang') || 'en';
@@ -24,7 +22,7 @@
         const files = [
             'config', 'responses', 'fallbacks', 'quick-replies', 'keywords',
             'faq', 'products', 'help', 'policies', 'greetings',
-            'contact', 'company', 'catalog', 'page-summaries'
+            'contact', 'company', 'catalog', 'page-summaries', 'leads-config'
         ];
         try {
             const results = await Promise.all(
@@ -43,7 +41,6 @@
             };
             dataLoaded = true;
 
-            // DEBUG — Console me dikhega
             console.log('═══════════════════════════════════════');
             console.log('✅ VINAYAK AI DATA LOADED');
             console.log('═══════════════════════════════════════');
@@ -58,7 +55,6 @@
         }
     }
 
-    // ---- COUNT PATTERNS (for debug) ----
     function countPatterns(obj, depth = 0) {
         if (depth > 8 || !obj) return 0;
         let count = 0;
@@ -72,7 +68,6 @@
     }
 
     // ---- UNIVERSAL PATTERN WALKER ----
-    // Walks ANY JSON structure looking for { patterns: [...], reply: "..." }
     function findMatches(obj, text) {
         const matches = [];
         const t = text.toLowerCase().trim();
@@ -80,33 +75,22 @@
         function walk(node, path) {
             if (!node || typeof node !== 'object') return;
 
-            // Check if this node has patterns + a reply
             if (Array.isArray(node.patterns) && (node.reply || node.replyHi)) {
                 for (const p of node.patterns) {
                     const pattern = String(p).toLowerCase().trim();
                     if (!pattern) continue;
-
                     let priority = 0;
-                    // Exact match = highest
                     if (t === pattern) priority = 3;
-                    // Whole word match = high
                     else if (new RegExp('\\b' + escapeRegex(pattern) + '\\b').test(t)) priority = 2;
-                    // Contains = lower
                     else if (t.includes(pattern)) priority = 1;
 
                     if (priority > 0) {
-                        matches.push({
-                            path: path,
-                            item: node,
-                            pattern: p,
-                            priority: priority
-                        });
+                        matches.push({ path, item: node, pattern: p, priority });
                         break;
                     }
                 }
             }
 
-            // Recurse children
             if (Array.isArray(node)) {
                 node.forEach((item, i) => walk(item, `${path}[${i}]`));
             } else {
@@ -116,7 +100,6 @@
                 });
             }
         }
-
         walk(obj, '');
         return matches;
     }
@@ -125,41 +108,27 @@
         return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    // ---- MAIN MATCH ----
+    // ---- MATCH ----
     function matchAll(text) {
         const t = text.toLowerCase().trim();
         if (!t) return { reply: '...' };
 
-        // Priority order of data sources
-        const sources = [
-            'greetings',
-            'help',
-            'policies',
-            'contact',
-            'company',
-            'catalog',
-            'responses',
-            'faq'
-        ];
-
-        // 1. Search sources
+        const sources = ['greetings', 'help', 'policies', 'contact', 'company', 'catalog', 'responses', 'faq'];
         for (const srcKey of sources) {
             const source = DATA_BUNDLE[srcKey];
             if (!source) continue;
             const matches = findMatches(source, t);
             if (matches.length) {
-                // Highest priority match
                 const best = matches.sort((a, b) => b.priority - a.priority)[0];
                 const item = best.item;
                 const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
                 if (reply) {
-                    console.log(`✅ MATCH [${srcKey}] "${best.pattern}" → path: ${best.path}`);
+                    console.log(`✅ MATCH [${srcKey}] "${best.pattern}"`);
                     return { reply };
                 }
             }
         }
 
-        // 2. Product search
         if (DATA_BUNDLE.products) {
             for (const [id, p] of Object.entries(DATA_BUNDLE.products)) {
                 if (!p) continue;
@@ -168,31 +137,24 @@
                 if (t.includes(id.toLowerCase()) ||
                     (nameLower && t.includes(nameLower)) ||
                     (nameHi && t.includes(nameHi))) {
-                    console.log(`✅ MATCH [products] "${id}"`);
                     return { reply: productReply(p) };
                 }
             }
         }
 
-        // 3. Keyword fallback
         if (DATA_BUNDLE.keywords) {
             for (const [cat, words] of Object.entries(DATA_BUNDLE.keywords)) {
                 if (!Array.isArray(words)) continue;
                 for (const w of words) {
-                    const wl = String(w).toLowerCase();
-                    if (t.includes(wl)) {
-                        // Try to find in help/responses/policies
+                    if (t.includes(String(w).toLowerCase())) {
                         const srcs = ['help', 'responses', 'policies'];
                         for (const sk of srcs) {
                             if (!DATA_BUNDLE[sk]) continue;
-                            const m = findMatches(DATA_BUNDLE[sk], wl);
+                            const m = findMatches(DATA_BUNDLE[sk], w);
                             if (m.length) {
                                 const item = m[0].item;
                                 const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
-                                if (reply) {
-                                    console.log(`✅ MATCH [keywords→${sk}] "${w}"`);
-                                    return { reply };
-                                }
+                                if (reply) return { reply };
                             }
                         }
                     }
@@ -200,16 +162,14 @@
             }
         }
 
-        // 4. Fallback
         const fbList = (DATA_BUNDLE.fallbacks && DATA_BUNDLE.fallbacks.fallbacks) || [];
         const fb = fbList.length ? fbList[Math.floor(Math.random() * fbList.length)] : null;
         const reply = fb
             ? (lang === 'hi' && fb.replyHi ? fb.replyHi : fb.reply)
-            : 'Sorry, I didn\'t understand that. 🤔\n\nTry asking about:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact info';
+            : 'Sorry, I didn\'t understand.\n\nTry asking:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact';
         return { reply };
     }
 
-    // ---- PRODUCT REPLY ----
     function productReply(p) {
         const name = (lang === 'hi' && p.nameHi) ? p.nameHi : (p.name || '');
         const tag = (lang === 'hi' && p.taglineHi) ? p.taglineHi : (p.tagline || '');
@@ -227,7 +187,6 @@
         return text;
     }
 
-    // ---- PAGE SUMMARY ----
     function getCurrentPageSummary() {
         const s = DATA_BUNDLE['page-summaries'];
         if (!s || !s.summaries) return null;
@@ -237,14 +196,12 @@
 
     // ---- CREATE WIDGET ----
     function createWidget() {
-        // Button
         const btn = document.createElement('button');
         btn.id = 'vyWidgetBtn';
         btn.innerHTML = '💬';
         btn.title = 'Chat with Vinayak AI';
         document.body.appendChild(btn);
 
-        // Panel
         const panel = document.createElement('div');
         panel.id = 'vyWidgetPanel';
         panel.innerHTML = `
@@ -274,16 +231,12 @@
             </div>
         `;
         document.body.appendChild(panel);
-
         return { btn, panel };
     }
 
-    // ---- ADD MESSAGE ----
     function addMessage(from, text, save = true) {
         const messages = document.getElementById('vywMessages');
         if (!messages) return;
-
-        // Remove typing indicator
         const typing = messages.querySelector('.vyw-typing');
         if (typing) typing.remove();
 
@@ -300,7 +253,7 @@
             .replace(/>/g, '&gt;')
             .replace(/\n/g, '<br>')
             .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-            .replace(/([\w.-]+@[\w.-]+\.\w+)/g, '<a href="mailto:$1">$1</a>');
+            .replace(/([\w.+-]+@[\w.-]+\.\w+)/g, '<a href="mailto:$1">$1</a>');
 
         div.innerHTML = `
             <div class="vyw-msg-avatar">${avatarHtml}</div>
@@ -311,13 +264,10 @@
 
         if (save) {
             history.push({ from, text, ts: Date.now() });
-            try {
-                localStorage.setItem('vyw_history', JSON.stringify(history.slice(-30)));
-            } catch (e) {}
+            try { localStorage.setItem('vyw_history', JSON.stringify(history.slice(-30))); } catch(e) {}
         }
     }
 
-    // ---- TYPING INDICATOR ----
     function showTyping() {
         const messages = document.getElementById('vywMessages');
         if (!messages) return;
@@ -335,7 +285,7 @@
         messages.scrollTop = messages.scrollHeight;
     }
 
-    // ---- SEND ----
+    // ---- SEND (with lead capture) ----
     async function send() {
         const input = document.getElementById('vywInput');
         if (!input) return;
@@ -349,13 +299,28 @@
         showTyping();
         await loadAll();
 
+        // 🔥 CHECK FOR LEAD CAPTURE
+        if (window.SVE_LEADS) {
+            try {
+                const leadResult = await window.SVE_LEADS.processMessage(text, lang);
+                if (leadResult) {
+                    setTimeout(() => {
+                        addMessage('bot', leadResult.reply);
+                    }, 400 + Math.random() * 400);
+                    return;
+                }
+            } catch (e) {
+                console.warn('Lead process error:', e);
+            }
+        }
+
+        // Normal matching
         setTimeout(() => {
             const match = matchAll(text);
             addMessage('bot', match.reply);
         }, 400 + Math.random() * 400);
     }
 
-    // ---- QUICK REPLIES ----
     function renderQuick() {
         const el = document.getElementById('vywQuick');
         const qr = DATA_BUNDLE['quick-replies'];
@@ -383,10 +348,10 @@
             .replace(/"/g, '&quot;');
     }
 
-    // ---- CLEAR CHAT ----
     function clearChat() {
         history = [];
         localStorage.removeItem('vyw_history');
+        if (window.SVE_LEADS) window.SVE_LEADS.reset();
         const messages = document.getElementById('vywMessages');
         if (messages) messages.innerHTML = '';
         const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi)
@@ -395,7 +360,6 @@
         addMessage('bot', welcome);
     }
 
-    // ---- APPLY CONFIG ----
     function applyConfig() {
         const nameEl = document.getElementById('vywName');
         if (nameEl && CONFIG) {
@@ -405,7 +369,6 @@
         }
     }
 
-    // ---- RENDER RESTORED HISTORY ----
     function renderHistory() {
         const messages = document.getElementById('vywMessages');
         if (!messages) return;
@@ -426,7 +389,6 @@
         messages.scrollTop = messages.scrollHeight;
     }
 
-    // ---- INIT ----
     async function init() {
         const { btn, panel } = createWidget();
 
@@ -451,7 +413,6 @@
                 renderQuick();
                 messagesRendered = true;
 
-                // Summarize bar
                 const summary = getCurrentPageSummary();
                 if (summary) {
                     const bar = document.getElementById('vywSummarizeBar');
@@ -460,21 +421,15 @@
                         document.getElementById('vywSummarizeBtn').onclick = () => {
                             const s = (lang === 'hi' && summary.summaryHi) ? summary.summaryHi : summary.summary;
                             addMessage('user', lang === 'hi' ? 'इस पेज का सारांश' : 'Summarize this page');
-                            setTimeout(() => {
-                                addMessage('bot', `📄 **${summary.title}**\n\n${s}`);
-                            }, 400);
+                            setTimeout(() => addMessage('bot', `📄 **${summary.title}**\n\n${s}`), 400);
                         };
                     }
                 }
             }
         };
 
-        // Send button
         document.getElementById('vywSend').onclick = send;
-        // Clear button
         document.getElementById('vywClear').onclick = clearChat;
-
-        // Input events
         const input = document.getElementById('vywInput');
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -487,13 +442,10 @@
             input.style.height = Math.min(input.scrollHeight, 80) + 'px';
         });
 
-        // Debug helpers
         window.vyTest = (text) => matchAll(text);
         window.vyData = () => DATA_BUNDLE;
-        window.vyReload = () => { dataLoaded = false; return loadAll(); };
     }
 
-    // ---- BOOT ----
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

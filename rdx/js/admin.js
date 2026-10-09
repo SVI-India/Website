@@ -1,5 +1,5 @@
 // ============================================================
-// ADMIN SHARED HELPERS — Complete
+// ADMIN SHARED HELPERS
 // ============================================================
 
 // ---------- AUTH GUARD ----------
@@ -10,7 +10,6 @@ function guardAdmin() {
                 location.href = 'login.html';
                 return;
             }
-            // Fill user info everywhere
             document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = user.email);
             resolve(user);
         });
@@ -58,7 +57,7 @@ function showAlert(id, message, type = 'success') {
     if (type === 'success') setTimeout(() => el.classList.remove('show'), 4000);
 }
 
-// ---------- SIDEBAR TOGGLE (mobile) ----------
+// ---------- SIDEBAR TOGGLE ----------
 function initSidebar() {
     const toggle = document.querySelector('.mobile-toggle');
     const sidebar = document.querySelector('.sidebar');
@@ -82,8 +81,6 @@ function initSidebar() {
 
     toggle.onclick = () => sidebar.classList.contains('open') ? close() : open();
     overlay.onclick = close;
-
-    // Close on nav link click (mobile)
     sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
 }
 
@@ -98,6 +95,7 @@ function renderSidebar(activePage) {
         { id: 'footer',     icon: '🔻', label: 'Footer',          href: 'footer.html' },
         { id: 'pages',      icon: '📄', label: 'Pages',           href: 'pages.html' },
         { id: 'products',   icon: '📦', label: 'Products',        href: 'products.html' },
+        { id: 'ai-leads',   icon: '🤖', label: 'AI Leads',        href: 'ai-leads.html' },
         { id: 'notices',    icon: '📢', label: 'Notices & Popups', href: 'notices.html' },
         { id: 'theme',      icon: '🎨', label: 'Theme & CSS',     href: 'theme.html' },
         { id: 'settings',   icon: '⚙️', label: 'Settings',        href: 'settings.html' },

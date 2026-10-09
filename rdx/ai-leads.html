@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Leads | SVI CMS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar"></aside>
+    <main class="main">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button class="mobile-toggle">☰</button>
+                <h1>🤖 AI Chat Leads</h1>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 Export CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="loadLeads()">🔄 Refresh</button>
+                <button class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="alert" id="pageAlert"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="num" id="statTotal">—</div>
+                <div class="lbl">📊 Total Leads</div>
+            </div>
+            <div class="stat-card success">
+                <div class="num" id="statToday">—</div>
+                <div class="lbl">📅 Today</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="num" id="statWeek">—</div>
+                <div class="lbl">📆 This Week</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="num" id="statBuy">—</div>
+                <div class="lbl">🛒 Buy Intent</div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;" id="filterTabs">
+            <button class="btn btn-primary btn-sm" data-filter="all" onclick="filterLeads('all')">All</button>
+            <button class="btn btn-outline btn-sm" data-filter="buy" onclick="filterLeads('buy')">🛒 Buy</button>
+            <button class="btn btn-outline btn-sm" data-filter="bulk" onclick="filterLeads('bulk')">📦 Bulk</button>
+            <button class="btn btn-outline btn-sm" data-filter="distributor" onclick="filterLeads('distributor')">🤝 Distributor</button>
+            <button class="btn btn-outline btn-sm" data-filter="grievance" onclick="filterLeads('grievance')">⚠️ Grievance</button>
+            <button class="btn btn-outline btn-sm" data-filter="quote" onclick="filterLeads('quote')">💰 Quote</button>
+        </div>
+
+        <div class="card">
+            <h3 id="listHeading">📬 All Leads</h3>
+            <p class="card-desc" id="countDesc">Loading...</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Intent</th>
+                            <th>Page</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTable">
+                        <tr><td colspan="7" style="text-align:center;padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="viewTitle">Lead Details</h3>
+                <button class="modal-close" onclick="closeViewModal()">✕</button>
+            </div>
+            <div id="viewBody"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        let allLeads = [];
+        let currentFilter = 'all';
+        let currentLeadId = null;
+
+        (async () => {
+            renderSidebar('ai-leads');
+            initSidebar();
+            await guardAdmin();
+            loadLeads();
+        })();
+
+        async function loadLeads() {
+            const tbody = document.getElementById('leadsTable');
+            try {
+                const snap = await db.collection('ai_leads').orderBy('createdAt', 'desc').get();
+                allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderLeads();
+                updateStats();
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#ef4444;">Error: ${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function updateStats() {
+            const total = allLeads.length;
+            const now = new Date();
+            const today = allLeads.filter(l => {
+                const d = l.createdAt?.toDate?.() || new Date(l.timestamp);
+                return d.toDateString() === now.toDateString();
+            }).length;
+            const week = allLeads.filter(l => {
+                const d = l.createdAt?.toDate?.() || new Date(l.timestamp);
+                return (now - d) < 7 * 24 * 60 * 60 * 1000;
+            }).length;
+            const buy = allLeads.filter(l => l.intent === 'buy').length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statToday').textContent = today;
+            document.getElementById('statWeek').textContent = week;
+            document.getElementById('statBuy').textContent = buy;
+        }
+
+        function filterLeads(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('[data-filter]').forEach(b => {
+                if (b.dataset.filter === filter) {
+                    b.className = 'btn btn-primary btn-sm';
+                } else {
+                    b.className = 'btn btn-outline btn-sm';
+                }
+            });
+            renderLeads();
+        }
+
+        function renderLeads() {
+            const tbody = document.getElementById('leadsTable');
+            const filtered = currentFilter === 'all'
+                ? allLeads
+                : allLeads.filter(l => l.intent === currentFilter);
+
+            document.getElementById('countDesc').textContent = `${filtered.length} lead${filtered.length === 1 ? '' : 's'} shown`;
+
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#94a3b8;">No leads in this category</td></tr>';
+                return;
+            }
+
+            const icons = { buy: '🛒', bulk: '📦', distributor: '🤝', grievance: '⚠️', quote: '💰' };
+
+            tbody.innerHTML = filtered.map(l => {
+                const date = l.createdAt ? formatDate(l.createdAt) : (l.timestamp ? new Date(l.timestamp).toLocaleString() : '—');
+                const badgeClass = l.intent === 'buy' ? 'success' : l.intent === 'grievance' ? 'danger' : 'warning';
+                return `<tr>
+                    <td style="white-space:nowrap;font-size:0.78rem;">${date}</td>
+                    <td><strong>${esc(l.name || '—')}</strong></td>
+                    <td style="font-size:0.78rem;"><a href="mailto:${esc(l.email || '')}" style="color:var(--primary);">${esc(l.email || '—')}</a></td>
+                    <td style="font-size:0.78rem;">${l.phone ? `<a href="tel:${esc(l.phone)}">${esc(l.phone)}</a>` : '—'}</td>
+                    <td><span class="badge ${badgeClass}">${icons[l.intent] || ''} ${esc(l.intent || 'general')}</span></td>
+                    <td style="font-size:0.78rem;">${esc(l.sourcePage || '—')}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-primary btn-sm" onclick="viewLead('${l.id}')">👁 View</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteLead('${l.id}')">🗑</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function viewLead(id) {
+            const l = allLeads.find(x => x.id === id);
+            if (!l) return;
+            currentLeadId = id;
+
+            document.getElementById('viewTitle').textContent = `Lead: ${l.name || 'Unknown'}`;
+            const cleanPhone = (l.phone || '').replace(/\D/g, '');
+            const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+
+            document.getElementById('viewBody').innerHTML = `
+                <div style="display:grid;gap:0.85rem;">
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Date</label><div>${l.createdAt ? formatDate(l.createdAt) : l.timestamp}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Name</label><div>${esc(l.name || '—')}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Email</label><div><a href="mailto:${esc(l.email)}" style="color:var(--primary);">${esc(l.email || '—')}</a></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Phone</label><div>${l.phone ? `<a href="tel:${esc(l.phone)}">${esc(l.phone)}</a>` : '—'}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Intent</label><div><span class="badge success">${esc(l.intent || 'general')}</span></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Source Page</label><div><code style="background:#f1f5f9;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.82rem;">${esc(l.sourcePage || '—')}</code></div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Message</label><div style="background:#f8fafc;padding:1rem;border-radius:8px;white-space:pre-wrap;line-height:1.6;">${esc(l.message || '—')}</div></div>
+                    <div><label style="font-weight:600;font-size:0.78rem;color:#64748b;text-transform:uppercase;">Language</label><div>${l.lang === 'hi' ? '🇮🇳 Hindi' : '🇬🇧 English'}</div></div>
+                </div>
+                <div style="display:flex;gap:0.6rem;margin-top:1.5rem;flex-wrap:wrap;">
+                    <a href="mailto:${esc(l.email)}" class="btn btn-primary">📧 Email</a>
+                    ${l.phone ? `<a href="tel:${esc(l.phone)}" class="btn btn-success">📞 Call</a>` : ''}
+                    ${waPhone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="btn btn-outline">💬 WhatsApp</a>` : ''}
+                </div>
+            `;
+            document.getElementById('viewModal').classList.add('open');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('open');
+            currentLeadId = null;
+        }
+
+        async function deleteLead(id) {
+            if (!confirmAction('Delete this lead permanently?')) return;
+            try {
+                await db.collection('ai_leads').doc(id).delete();
+                toast('Lead deleted', 'success');
+                loadLeads();
+            } catch (e) {
+                toast('Delete failed: ' + e.message, 'error');
+            }
+        }
+
+        function exportCSV() {
+            if (!allLeads.length) {
+                toast('No leads to export', 'warning');
+                return;
+            }
+            const headers = ['Date', 'Name', 'Email', 'Phone', 'Intent', 'Message', 'Source Page', 'Language'];
+            const rows = allLeads.map(l => [
+                l.createdAt ? formatDate(l.createdAt) : l.timestamp || '',
+                l.name || '',
+                l.email || '',
+                l.phone || '',
+                l.intent || '',
+                (l.message || '').replace(/"/g, '""'),
+                l.sourcePage || '',
+                l.lang || 'en'
+            ]);
+            const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sve-ai-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            toast('CSV exported', 'success');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+    "enabled": true,
+    "googleSheetUrl": "https://script.google.com/macros/s/AKfycbxdWkN_NOgpT_KE7kALyoCP4JjvHaEMlt1X7hyM9ZGhFIPqIjDvp5vUaBFAartawZaASA/exec",
+    "saveToFirestore": true,
+    "saveToGoogleSheet": true,
+    "emailNotifications": true,
+    "notifyOnTypes": ["buy", "bulk", "grievance", "distributor"],
+    "autoCaptureIntent": true,
+    "askForDetailsOn": [
+        {
+            "intent": "buy",
+            "message": "I'd love to help you place an order! 🛒\n\nCould you please share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Product & quantity you need\n\nOur team will contact you within 24 hours.",
+            "messageHi": "मैं आपका ऑर्डर लगाने में मदद करूँगा! 🛒\n\nकृपया बताएं:\n1️⃣ आपका नाम\n2) ईमेल\n3) फ़ोन नंबर\n4) उत्पाद और मात्रा\n\nहमारी टीम 24 घंटे में संपर्क करेगी।"
+        },
+        {
+            "intent": "bulk",
+            "message": "Bulk orders ke liye best pricing denge! 📦\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) Quantity required (min 500 kg)",
+            "messageHi": "थोक ऑर्डर के लिए सर्वोत्तम मूल्य! 📦\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) आवश्यक मात्रा (न्यूनतम 500 किग्रा)"
+        },
+        {
+            "intent": "distributor",
+            "message": "Great! Let's set you up as a distributor 🤝\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) City/Location",
+            "messageHi": "बहुत बढ़िया! आपको वितरक के रूप में जोड़ते हैं 🤝\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) शहर/स्थान"
+        },
+        {
+            "intent": "grievance",
+            "message": "We're sorry to hear that. 🙏\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Order/Issue details\n\nOur team will resolve your concern on priority.",
+            "messageHi": "हमें यह सुनकर खेद है। 🙏\n\nकृपया बताएं:\n1️⃣ नाम\n2) ईमेल\n3) फ़ोन\n4) ऑर्डर/समस्या विवरण\n\nहमारी टीम प्राथमिकता पर हल करेगी।"
+        },
+        {
+            "intent": "quote",
+            "message": "Happy to send you a quote! 💰\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) Products & quantity",
+            "messageHi": "आपको कोट भेजने में खुशी होगी! 💰\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) उत्पाद और मात्रा"
+        }
+    ],
+    "thankYouMessage": "✅ Thank you! Our team will contact you within 24 hours.\n\n📧 Reply will be from sve.raj.in@gmail.com\n\nFor urgent queries: info@sve-in.xubi.org",
+    "thankYouMessageHi": "✅ धन्यवाद! हमारी टीम 24 घंटे में संपर्क करेगी।\n\n📧 उत्तर sve.raj.in@gmail.com से होगा\n\nतत्काल पूछताछ: info@sve-in.xubi.org"
+}
