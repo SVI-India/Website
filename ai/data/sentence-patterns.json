@@ -1,0 +1,166 @@
+{
+    "patterns": [
+        {
+            "id": "how_much_price",
+            "examples": [
+                "how much does it cost",
+                "how much does it cost?",
+                "how much is nikolux",
+                "nikolux kitne ka hai",
+                "nikolux ka price kya hai",
+                "nikolux price",
+                "price of nikolux",
+                "what is the price of nikolux",
+                "nikolux rate kya hai",
+                "kitna price hai nikolux ka"
+            ],
+            "reply": "💰 For Nikolux pricing, please share:\n\n1️⃣ Quantity needed (500g / 1kg / 2kg / 5kg / 10kg)\n2) Your city/pincode\n\nOur team will send you the best quote within 24 hours.\n\n📧 sales@sve-in.xubi.org",
+            "replyHi": "💰 निकोलक्स मूल्य के लिए, कृपया बताएं:\n\n1️⃣ आवश्यक मात्रा\n2) आपका शहर/पिनकोड\n\nहमारी टीम 24 घंटे में कोट भेजेगी।\n\n📧 sales@sve-in.xubi.org"
+        },
+        {
+            "id": "how_to_order",
+            "examples": [
+                "how can i order",
+                "how to place order",
+                "i want to place order",
+                "order kaise karu",
+                "order karna hai",
+                "mujhe order karna hai",
+                "how do i buy",
+                "i want to buy detergent",
+                "i want to purchase",
+                "kharidna hai",
+                "order kaise kare",
+                "how to purchase"
+            ],
+            "reply": "🛒 I'd love to help you order!\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Product & quantity needed\n\nOur team will confirm within 24 hours.",
+            "replyHi": "🛒 मैं आपका ऑर्डर लगाने में मदद करूँगा!\n\nकृपया बताएं:\n1️⃣ आपका नाम\n2) ईमेल\n3) फ़ोन नंबर\n4) उत्पाद और मात्रा"
+        },
+        {
+            "id": "where_are_you",
+            "examples": [
+                "where are you located",
+                "where is your factory",
+                "what is your address",
+                "where are you based",
+                "aap kaha h",
+                "aapka address kya hai",
+                "factory kaha hai",
+                "aapki factory kaha h",
+                "location kya hai",
+                "where do you manufacture"
+            ],
+            "reply": "📍 Our Location:\n\nSiddhi Vinayak Enterprises\nLachharsar, District Churu\nRajasthan — 331 001, India\n\n📧 info@sve-in.xubi.org\n\n🗺️ Get directions: /contact.html",
+            "replyHi": "📍 हमारा स्थान:\n\nसिद्धि विनायक एंटरप्राइज़ेज़\nलछारसर, ज़िला चूरू\nराजस्थान — 331 001, भारत\n\n📧 info@sve-in.xubi.org"
+        },
+        {
+            "id": "best_product",
+            "examples": [
+                "which is your best product",
+                "which detergent is best",
+                "what do you recommend",
+                "kaun sa best hai",
+                "best detergent konsa hai",
+                "which one should i buy",
+                "kya recommend karenge",
+                "sabse acha kaun sa hai",
+                "which is best for stains",
+                "best for white clothes"
+            ],
+            "reply": "⭐ Great question!\n\n🥇 **Nikolux** — Best for tough stains & sparkling whites\n💰 **Life Star** — Best for everyday use & budget-friendly\n🌿 **Sanjivni** — Best for sensitive skin & delicate fabrics\n\nWhich one interests you?",
+            "replyHi": "⭐ बहुत अच्छा सवाल!\n\n🥇 **निकोलक्स** — कठिन दाग और चमकदार सफेदी के लिए\n💰 **लाइफ स्टार** — रोज़मर्रा और बजट के लिए\n🌿 **संजीवनी** — संवेदनशील त्वचा और कपड़ों के लिए"
+        },
+        {
+            "id": "bulk_inquiry",
+            "examples": [
+                "i want to buy in bulk",
+                "bulk me chahiye",
+                "i need large quantity",
+                "wholesale rate kya hai",
+                "minimum order quantity",
+                "bulk order karna hai",
+                "bade order ke liye rate",
+                "i am a distributor",
+                "become a dealer",
+                "distributor banna hai"
+            ],
+            "reply": "📦 Bulk & Distribution!\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) Quantity required (min 500 kg)\n\nOur B2B team will contact you within 24 hours.\n\n📧 bulk@sve-in.xubi.org",
+            "replyHi": "📦 थोक और वितरण!\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) आवश्यक मात्रा (न्यूनतम 500 किग्रा)\n\n📧 bulk@sve-in.xubi.org"
+        },
+        {
+            "id": "delivery_time",
+            "examples": [
+                "how long does delivery take",
+                "when will i get my order",
+                "kitne din me aayega",
+                "delivery kab tak",
+                "how many days for delivery",
+                "delivery time kya hai",
+                "order kab milega",
+                "when will it be delivered",
+                "kitne din lagega"
+            ],
+            "reply": "🚚 Delivery Time:\n\n• Rajasthan: 2–4 business days\n• North India: 4–6 business days\n• West India: 5–7 business days\n• South India: 5–8 business days\n• East/Northeast: 6–10 business days\n• Remote areas: 7–12 business days\n\nFull policy: /shipping.html",
+            "replyHi": "🚚 डिलीवरी समय:\n\n• राजस्थान: 2–4 दिन\n• उत्तर भारत: 4–6 दिन\n• पश्चिम भारत: 5–7 दिन\n• दक्षिण भारत: 5–8 दिन\n\nपूरी नीति: /shipping.html"
+        },
+        {
+            "id": "payment_methods",
+            "examples": [
+                "how can i pay",
+                "what payment methods do you accept",
+                "payment kaise karu",
+                "upi accepted hai",
+                "cod available hai",
+                "cash on delivery hai kya",
+                "how to pay",
+                "paisa kaise bheje",
+                "bank transfer karte ho"
+            ],
+            "reply": "💳 Payment Methods:\n\n• Bank Transfer (NEFT/RTGS/IMPS)\n• UPI\n• Cheque (for bulk orders)\n• Cash on Delivery (selected areas)\n\nBank details will be shared after order confirmation.\n\n📧 accounts@sve-in.xubi.org",
+            "replyHi": "💳 भुगतान विधियाँ:\n\n• बैंक ट्रांसफर (NEFT/RTGS/IMPS)\n• UPI\n• चेक (थोक ऑर्डर के लिए)\n• कैश ऑन डिलीवरी\n\n📧 accounts@sve-in.xubi.org"
+        },
+        {
+            "id": "product_available",
+            "examples": [
+                "is it available",
+                "do you have it in stock",
+                "stock me hai",
+                "available hai kya",
+                "is it in stock",
+                "aapke paas hai kya",
+                "kya stock me available hai",
+                "can i get today"
+            ],
+            "reply": "📦 Yes! We maintain a fresh stock of all products.\n\nAvailable sizes:\n• Nikolux: 500g, 1kg, 2kg, 5kg, 10kg\n• Life Star: 500g, 1kg, 2kg, 5kg\n• Sanjivni: 500g, 1kg, 2kg\n\nWhat quantity do you need?",
+            "replyHi": "📦 हाँ! हमारे सभी उत्पादों का ताज़ा स्टॉक उपलब्ध है।\n\nउपलब्ध साइज़:\n• निकोलक्स: 500g – 10kg\n• लाइफ स्टार: 500g – 5kg\n• संजीवनी: 500g – 2kg"
+        },
+        {
+            "id": "quality_question",
+            "examples": [
+                "is your product safe",
+                "is it good quality",
+                "quality kaisi hai",
+                "kaisa product hai",
+                "is it tested",
+                "quality ke baare me batao",
+                "guna kaise hai",
+                "safe to use hai"
+            ],
+            "reply": "🔬 Quality Guarantee:\n\n✅ In-house quality lab\n✅ Every batch tested\n✅ Strict quality control\n✅ ISO standards followed\n✅ Multi-stage inspection\n✅ Fresh stock always\n\nWe test every batch before dispatch.",
+            "replyHi": "🔬 गुणवत्ता गारंटी:\n\n✅ इन-हाउस लैब\n✅ हर बैच टेस्ट\n✅ कठोर QC\n✅ ISO मानक"
+        },
+        {
+            "id": "different_from_others",
+            "examples": [
+                "what makes you different",
+                "why should i buy from you",
+                "aap dusro se alag kaise",
+                "why choose you",
+                "aapke product acha kyu hai",
+                "why your product"
+            ],
+            "reply": "🎯 Why Choose Us:\n\n🏭 15+ years experience\n🔬 Lab-tested quality\n💰 Competitive pricing\n🚚 Pan-India delivery\n📞 24x7 support\n🌱 Eco-friendly options\n\nTrusted by 1M+ households!",
+            "replyHi": "🎯 हमें क्यों चुनें:\n\n🏭 15+ वर्षों का अनुभव\n🔬 लैब-टेस्टेड गुणवत्ता\n💰 प्रतिस्पर्धी मूल्य\n🚚 पूरे भारत में डिलीवरी\n\n1M+ घरों का भरोसा!"
+        }
+    ]
+}

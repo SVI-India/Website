@@ -1,6 +1,7 @@
 /* ============================================================
-   VINAYAK AI — Chat Styles
+   VINAYAK AI — Full Page Chat (SMART Version)
    ============================================================ */
+
 .vy-ai-page {
     min-height: 100vh;
     background: linear-gradient(135deg, #0a0f1e 0%, #1e293b 50%, #0a0f1e 100%);
@@ -27,7 +28,7 @@
     border: 1px solid #1e293b;
 }
 
-/* Header */
+/* ---------- Header ---------- */
 .vy-head {
     padding: 16px 20px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
@@ -38,7 +39,8 @@
     flex-shrink: 0;
 }
 .vy-head img {
-    width: 44px; height: 44px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: #fff;
     padding: 3px;
@@ -63,7 +65,8 @@
 }
 .vy-status::before {
     content: '';
-    width: 8px; height: 8px;
+    width: 8px;
+    height: 8px;
     background: #10b981;
     border-radius: 50%;
     animation: vyPulse 2s infinite;
@@ -76,7 +79,8 @@
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.25);
     color: #fff;
-    width: 36px; height: 36px;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
     cursor: pointer;
     display: inline-flex;
@@ -84,13 +88,15 @@
     justify-content: center;
     font-size: 16px;
     transition: all 0.2s;
+    text-decoration: none;
+    flex-shrink: 0;
 }
 .vy-head-btn:hover {
     background: rgba(255,255,255,0.3);
     transform: scale(1.05);
 }
 
-/* Messages */
+/* ---------- Messages ---------- */
 .vy-messages {
     flex: 1;
     overflow-y: auto;
@@ -118,7 +124,6 @@
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
 .vy-msg.user {
     align-self: flex-end;
     flex-direction: row-reverse;
@@ -126,7 +131,8 @@
 .vy-msg.bot { align-self: flex-start; }
 
 .vy-msg-avatar {
-    width: 36px; height: 36px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     flex-shrink: 0;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
@@ -153,7 +159,6 @@
     line-height: 1.6;
     word-break: break-word;
     white-space: pre-wrap;
-    position: relative;
 }
 .vy-msg.bot .vy-bubble {
     background: #1e293b;
@@ -170,6 +175,8 @@
     text-decoration: underline;
 }
 .vy-msg.user .vy-bubble a { color: #fff; }
+.vy-bubble strong { color: #fff; font-weight: 700; }
+.vy-bubble em { color: #93c5fd; font-style: italic; }
 
 .vy-time {
     font-size: 10px;
@@ -178,7 +185,7 @@
     display: block;
 }
 
-/* Typing indicator */
+/* ---------- Typing indicator ---------- */
 .vy-typing .vy-bubble {
     display: flex;
     gap: 4px;
@@ -186,7 +193,8 @@
     align-items: center;
 }
 .vy-typing .dot {
-    width: 8px; height: 8px;
+    width: 8px;
+    height: 8px;
     background: #60a5fa;
     border-radius: 50%;
     animation: vyDot 1.4s infinite;
@@ -198,7 +206,7 @@
     30% { transform: translateY(-6px); opacity: 1; }
 }
 
-/* Quick replies */
+/* ---------- Quick replies (chips) ---------- */
 .vy-quick {
     display: flex;
     flex-wrap: wrap;
@@ -218,6 +226,7 @@
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
+    animation: vyChipIn 0.3s ease;
 }
 .vy-chip:hover {
     background: #1e40af;
@@ -225,8 +234,12 @@
     border-color: #1e40af;
     transform: translateY(-2px);
 }
+@keyframes vyChipIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-/* Input */
+/* ---------- Input ---------- */
 .vy-input-wrap {
     padding: 14px 20px 18px;
     background: #0f172a;
@@ -258,7 +271,8 @@
 .vy-input::placeholder { color: #64748b; }
 
 .vy-send {
-    width: 44px; height: 44px;
+    width: 44px;
+    height: 44px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
     border: none;
     border-radius: 50%;
@@ -283,7 +297,8 @@
 }
 
 .vy-icon-btn {
-    width: 44px; height: 44px;
+    width: 44px;
+    height: 44px;
     background: #1e293b;
     border: 1.5px solid #334155;
     border-radius: 50%;
@@ -302,7 +317,81 @@
     border-color: #1e40af;
 }
 
-/* Mobile */
+/* ============================================================
+   SMART INLINE BUTTONS (Inside chat bubbles)
+   ============================================================ */
+.vy-inline-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.vy-inline-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    font-family: inherit;
+    border: 1.5px solid transparent;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+.vy-inline-btn.primary {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
+}
+.vy-inline-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30,64,175,0.4);
+}
+.vy-inline-btn.outline {
+    background: #1e293b;
+    color: #60a5fa;
+    border-color: #3b82f6;
+}
+.vy-inline-btn.outline:hover {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+    transform: translateY(-2px);
+}
+.vy-inline-btn.success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+.vy-inline-btn.success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.4);
+}
+.vy-inline-btn.warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+}
+.vy-inline-btn.warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245,158,11,0.4);
+}
+.vy-inline-btn.info {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #60a5fa;
+    border-color: #334155;
+}
+.vy-inline-btn.info:hover {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+}
+
+/* ---------- Mobile ---------- */
 @media (max-width: 600px) {
     .vy-ai-page { padding: 0; }
     .vy-ai-wrap {
@@ -311,5 +400,27 @@
         border-radius: 0;
     }
     .vy-msg { max-width: 92%; }
-    .vy-bubble { font-size: 14px; }
+    .vy-bubble { font-size: 14px; padding: 10px 14px; }
+    .vy-inline-btn { padding: 0.45rem 0.75rem; font-size: 0.78rem; }
+    .vy-head { padding: 14px 16px; }
+    .vy-head img { width: 38px; height: 38px; }
+    .vy-head-name { font-size: 15px; }
+}
+
+@media (max-width: 380px) {
+    .vy-messages { padding: 14px; gap: 10px; }
+    .vy-msg-avatar { width: 32px; height: 32px; font-size: 12px; }
+    .vy-bubble { font-size: 13px; }
+    .vy-inline-btn { padding: 0.4rem 0.65rem; font-size: 0.74rem; }
+    .vy-chip { padding: 6px 11px; font-size: 12px; }
+    .vy-input { font-size: 14px; }
+}
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .vy-msg, .vy-chip, .vy-inline-btn, .vy-typing .dot {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

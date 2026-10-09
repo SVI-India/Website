@@ -1,0 +1,79 @@
+{
+    "timeGreetings": {
+        "morning": { "from": 5, "to": 12, "en": "Good Morning", "hi": "सुप्रभात", "emoji": "🌅", "chip": "GM" },
+        "afternoon": { "from": 12, "to": 17, "en": "Good Afternoon", "hi": "नमस्कार", "emoji": "☀️", "chip": "GA" },
+        "evening": { "from": 17, "to": 21, "en": "Good Evening", "hi": "शुभ संध्या", "emoji": "🌆", "chip": "GE" },
+        "night": { "from": 21, "to": 24, "en": "Good Night", "hi": "शुभ रात्रि", "emoji": "🌙", "chip": "GN" },
+        "lateNight": { "from": 0, "to": 5, "en": "Hello", "hi": "नमस्ते", "emoji": "🌌", "chip": "Hello" }
+    },
+    "dynamicChips": {
+        "startup": [
+            { "label": "👋 Hi", "query": "hi", "labelHi": "👋 नमस्ते" },
+            { "label": "📦 Products", "query": "products", "labelHi": "📦 उत्पाद" },
+            { "label": "💰 Pricing", "query": "price", "labelHi": "💰 मूल्य" },
+            { "label": "📞 Contact", "query": "contact", "labelHi": "📞 संपर्क" }
+        ],
+        "afterProduct": [
+            { "label": "⭐ Nikolux", "query": "nikolux", "labelHi": "⭐ निकोलक्स" },
+            { "label": "✨ Life Star", "query": "life star", "labelHi": "✨ लाइफ स्टार" },
+            { "label": "🌿 Sanjivni", "query": "sanjivni", "labelHi": "🌿 संजीवनी" },
+            { "label": "💰 Price", "query": "price", "labelHi": "💰 मूल्य" }
+        ],
+        "afterPrice": [
+            { "label": "🛒 Order Now", "query": "i want to buy", "labelHi": "🛒 ऑर्डर करें" },
+            { "label": "📦 Bulk Order", "query": "bulk order", "labelHi": "📦 थोक ऑर्डर" },
+            { "label": "🚚 Delivery", "query": "shipping", "labelHi": "🚚 डिलीवरी" }
+        ],
+        "afterShipping": [
+            { "label": "📍 Track Order", "query": "track order", "labelHi": "📍 ऑर्डर ट्रैक" },
+            { "label": "🛒 Order Now", "query": "order", "labelHi": "🛒 ऑर्डर" },
+            { "label": "📞 Support", "query": "contact", "labelHi": "📞 सहायता" }
+        ],
+        "afterContact": [
+            { "label": "📦 Products", "query": "products", "labelHi": "📦 उत्पाद" },
+            { "label": "💰 Pricing", "query": "price", "labelHi": "💰 मूल्य" },
+            { "label": "🤝 Become Distributor", "query": "distributor", "labelHi": "🤝 वितरक बनें" }
+        ],
+        "afterBulk": [
+            { "label": "🛒 Order Now", "query": "order", "labelHi": "🛒 ऑर्डर" },
+            { "label": "📞 Contact Sales", "query": "contact", "labelHi": "📞 बिक्री संपर्क" }
+        ],
+        "afterRefund": [
+            { "label": "📞 Contact Support", "query": "contact", "labelHi": "📞 सहायता संपर्क" },
+            { "label": "📦 Products", "query": "products", "labelHi": "📦 उत्पाद" }
+        ]
+    },
+    "autoSuggestAfter": {
+        "product": "afterProduct",
+        "products": "afterProduct",
+        "nikolux": "afterProduct",
+        "life-star": "afterProduct",
+        "sanjivni": "afterProduct",
+        "price": "afterPrice",
+        "shipping": "afterShipping",
+        "delivery": "afterShipping",
+        "contact": "afterContact",
+        "bulk": "afterBulk",
+        "refund": "afterRefund"
+    },
+    "smartLinks": {
+        "contact": { "label": "Contact Us", "labelHi": "संपर्क करें", "icon": "📞", "url": "/contact.html", "type": "primary" },
+        "products": { "label": "View Products", "labelHi": "उत्पाद देखें", "icon": "📦", "url": "/products.html", "type": "primary" },
+        "nikolux": { "label": "Nikolux", "labelHi": "निकोलक्स", "icon": "⭐", "url": "/products/nikolux.html", "type": "outline" },
+        "life-star": { "label": "Life Star", "labelHi": "लाइफ स्टार", "icon": "✨", "url": "/products/life-star.html", "type": "outline" },
+        "sanjivni": { "label": "Sanjivni", "labelHi": "संजीवनी", "icon": "🌿", "url": "/products/sanjivni.html", "type": "outline" },
+        "shipping": { "label": "Shipping Policy", "labelHi": "शिपिंग नीति", "icon": "🚚", "url": "/shipping.html", "type": "outline" },
+        "refund": { "label": "Refund Policy", "labelHi": "वापसी नीति", "icon": "💰", "url": "/refund.html", "type": "outline" },
+        "terms": { "label": "Terms", "labelHi": "नियम", "icon": "📜", "url": "/terms.html", "type": "outline" },
+        "privacy": { "label": "Privacy", "labelHi": "गोपनीयता", "icon": "🔒", "url": "/privacy.html", "type": "outline" }
+    },
+    "emailLinks": {
+        "info": "info@sve-in.xubi.org",
+        "sales": "sales@sve-in.xubi.org",
+        "bulk": "bulk@sve-in.xubi.org",
+        "b2b": "b2b@sve-in.xubi.org",
+        "support": "support@sve-in.xubi.org",
+        "orders": "orders@sve-in.xubi.org"
+    },
+    "phoneLink": "+918119964445"
+}

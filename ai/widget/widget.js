@@ -1,5 +1,6 @@
 // ============================================================
-// VINAYAK AI WIDGET — Universal Matcher + Lead Capture
+// VINAYAK AI WIDGET — Full Smart Version
+// Universal Matcher + Sentence Patterns + Combos + Fuzzy + Leads
 // ============================================================
 
 (function() {
@@ -9,18 +10,21 @@
     const DATA_PATH = BASE_URL + '/ai/data';
 
     let CONFIG = null;
+    let SMART = null;
     let DATA_BUNDLE = {};
     let lang = localStorage.getItem('lang') || 'en';
     let history = JSON.parse(localStorage.getItem('vyw_history') || '[]');
     let panelOpen = false;
     let dataLoaded = false;
     let messagesRendered = false;
+    let sessionContext = { viewedProducts: [], lastIntent: null };
 
     // ---- LOAD ALL DATA ----
     async function loadAll() {
         if (dataLoaded) return;
         const files = [
-            'config', 'responses', 'fallbacks', 'quick-replies', 'keywords',
+            'config', 'smart-config', 'responses', 'fallbacks', 'quick-replies',
+            'keywords', 'sentence-patterns',
             'faq', 'products', 'help', 'policies', 'greetings',
             'contact', 'company', 'catalog', 'page-summaries', 'leads-config'
         ];
@@ -39,14 +43,15 @@
                 welcomeMessage: 'Hi! I am Vinayak AI 👋 How can I help you?',
                 welcomeMessageHi: 'नमस्ते! मैं विनयक AI हूँ 👋 कैसे मदद कर सकता हूँ?'
             };
+            SMART = DATA_BUNDLE['smart-config'] || {};
             dataLoaded = true;
 
             console.log('═══════════════════════════════════════');
-            console.log('✅ VINAYAK AI DATA LOADED');
+            console.log('✅ VINAYAK AI WIDGET LOADED');
             console.log('═══════════════════════════════════════');
             Object.entries(DATA_BUNDLE).forEach(([k, v]) => {
                 const c = countPatterns(v);
-                if (c > 0) console.log(`  ${k.padEnd(18)}: ${c} patterns`);
+                if (c > 0) console.log(`  ${k.padEnd(20)}: ${c} patterns`);
             });
             console.log('═══════════════════════════════════════');
         } catch (e) {
@@ -62,9 +67,27 @@
             obj.forEach(item => count += countPatterns(item, depth + 1));
         } else if (typeof obj === 'object') {
             if (Array.isArray(obj.patterns)) count += obj.patterns.length;
+            if (Array.isArray(obj.examples)) count += obj.examples.length;
             Object.values(obj).forEach(v => count += countPatterns(v, depth + 1));
         }
         return count;
+    }
+
+    // ---- TIME GREETING ----
+    function getTimeGreeting() {
+        const h = new Date().getHours();
+        const tg = SMART.timeGreetings || {};
+        for (const [key, val] of Object.entries(tg)) {
+            if (h >= val.from && h < val.to) {
+                return {
+                    greeting: lang === 'hi' ? val.hi : val.en,
+                    emoji: val.emoji,
+                    chip: val.chip,
+                    key: key
+                };
+            }
+        }
+        return { greeting: 'Hello', emoji: '👋', chip: 'Hi', key: 'default' };
     }
 
     // ---- UNIVERSAL PATTERN WALKER ----
@@ -74,7 +97,6 @@
 
         function walk(node, path) {
             if (!node || typeof node !== 'object') return;
-
             if (Array.isArray(node.patterns) && (node.reply || node.replyHi)) {
                 for (const p of node.patterns) {
                     const pattern = String(p).toLowerCase().trim();
@@ -83,19 +105,17 @@
                     if (t === pattern) priority = 3;
                     else if (new RegExp('\\b' + escapeRegex(pattern) + '\\b').test(t)) priority = 2;
                     else if (t.includes(pattern)) priority = 1;
-
                     if (priority > 0) {
                         matches.push({ path, item: node, pattern: p, priority });
                         break;
                     }
                 }
             }
-
             if (Array.isArray(node)) {
                 node.forEach((item, i) => walk(item, `${path}[${i}]`));
             } else {
                 Object.entries(node).forEach(([k, v]) => {
-                    if (['patterns', 'reply', 'replyHi'].includes(k)) return;
+                    if (['patterns', 'reply', 'replyHi', 'examples'].includes(k)) return;
                     walk(v, path ? `${path}.${k}` : k);
                 });
             }
@@ -108,45 +128,150 @@
         return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    // ---- MATCH ----
+    // ---- SENTENCE PATTERN MATCHER ----
+    function findBestSentencePattern(text, patterns) {
+        let best = null;
+        let bestScore = 0;
+
+        for (const p of patterns) {
+            if (!p.examples) continue;
+            for (const example of p.examples) {
+                const score = computeSimilarity(text, example.toLowerCase());
+                if (score > bestScore && score >= 0.65) {
+                    bestScore = score;
+                    best = { ...p, score };
+                }
+            }
+        }
+        return best;
+    }
+
+    function computeSimilarity(a, b) {
+        const wordsA = a.split(/\s+/).filter(Boolean);
+        const wordsB = b.split(/\s+/).filter(Boolean);
+        if (!wordsA.length || !wordsB.length) return 0;
+
+        const setB = new Set(wordsB);
+        let matches = 0;
+        for (const w of wordsA) {
+            if (setB.has(w)) matches++;
+            else {
+                for (const bw of wordsB) {
+                    if (w.length > 3 && bw.length > 3 &&
+                        (w.startsWith(bw.substring(0, 4)) || bw.startsWith(w.substring(0, 4)))) {
+                        matches += 0.5;
+                        break;
+                    }
+                }
+            }
+        }
+        const baseScore = matches / Math.max(wordsA.length, wordsB.length);
+        const lenRatio = Math.min(wordsA.length, wordsB.length) / Math.max(wordsA.length, wordsB.length);
+        return baseScore * 0.75 + lenRatio * 0.25;
+    }
+
+    function detectAllKeywords(text, keywordsData) {
+        const found = new Set();
+        if (!keywordsData.keywords) return [];
+        for (const [cat, words] of Object.entries(keywordsData.keywords)) {
+            if (!Array.isArray(words)) continue;
+            for (const w of words) {
+                if (text.includes(String(w).toLowerCase())) found.add(cat);
+            }
+        }
+        return Array.from(found);
+    }
+
+    function normalizeWithFuzzy(text) {
+        const keywordsData = DATA_BUNDLE.keywords;
+        if (!keywordsData || !keywordsData.fuzzy) return text;
+        let normalized = text;
+        for (const [correct, misspellings] of Object.entries(keywordsData.fuzzy)) {
+            for (const wrong of misspellings) {
+                const regex = new RegExp('\\b' + escapeRegex(wrong) + '\\b', 'gi');
+                normalized = normalized.replace(regex, correct);
+            }
+        }
+        return normalized;
+    }
+
+    // ---- MAIN MATCH ----
     function matchAll(text) {
         const t = text.toLowerCase().trim();
-        if (!t) return { reply: '...' };
+        if (!t) return { reply: '...', matchType: null };
 
+        // LAYER 1: Sentence patterns
+        const sentenceData = DATA_BUNDLE['sentence-patterns'];
+        if (sentenceData && sentenceData.patterns) {
+            const bestPattern = findBestSentencePattern(t, sentenceData.patterns);
+            if (bestPattern) {
+                console.log(`✅ SENTENCE MATCH: ${bestPattern.id} (score: ${bestPattern.score.toFixed(2)})`);
+                return {
+                    reply: (lang === 'hi' && bestPattern.replyHi) ? bestPattern.replyHi : bestPattern.reply,
+                    matchType: 'sentence',
+                    matchPath: bestPattern.id
+                };
+            }
+        }
+
+        // LAYER 2: Fuzzy normalization
+        const normalizedT = normalizeWithFuzzy(t);
+
+        // LAYER 3: Combo matching
+        const keywordsData = DATA_BUNDLE.keywords;
+        if (keywordsData && keywordsData.combos) {
+            const detectedKeywords = detectAllKeywords(normalizedT, keywordsData);
+            for (const combo of keywordsData.combos) {
+                if (combo.must_have.every(k => detectedKeywords.includes(k))) {
+                    console.log(`✅ COMBO MATCH: ${combo.id}`);
+                    return {
+                        reply: (lang === 'hi' && combo.replyHi) ? combo.replyHi : combo.reply,
+                        matchType: 'combo',
+                        matchPath: combo.id
+                    };
+                }
+            }
+        }
+
+        // LAYER 4: Structured sources
         const sources = ['greetings', 'help', 'policies', 'contact', 'company', 'catalog', 'responses', 'faq'];
         for (const srcKey of sources) {
             const source = DATA_BUNDLE[srcKey];
             if (!source) continue;
-            const matches = findMatches(source, t);
+            const matches = findMatches(source, normalizedT);
             if (matches.length) {
                 const best = matches.sort((a, b) => b.priority - a.priority)[0];
                 const item = best.item;
                 const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
                 if (reply) {
-                    console.log(`✅ MATCH [${srcKey}] "${best.pattern}"`);
-                    return { reply };
+                    console.log(`✅ MATCH [${srcKey}]`);
+                    return { reply, matchType: srcKey, matchPath: best.path };
                 }
             }
         }
 
+        // LAYER 5: Product
         if (DATA_BUNDLE.products) {
             for (const [id, p] of Object.entries(DATA_BUNDLE.products)) {
                 if (!p) continue;
                 const nameLower = (p.name || '').toLowerCase();
                 const nameHi = p.nameHi || '';
-                if (t.includes(id.toLowerCase()) ||
-                    (nameLower && t.includes(nameLower)) ||
-                    (nameHi && t.includes(nameHi))) {
-                    return { reply: productReply(p) };
+                if (normalizedT.includes(id.toLowerCase()) ||
+                    (nameLower && normalizedT.includes(nameLower)) ||
+                    (nameHi && normalizedT.includes(nameHi))) {
+                    sessionContext.viewedProducts.push(id);
+                    sessionContext.lastIntent = 'product';
+                    return { reply: productReply(p), matchType: 'product', productId: id };
                 }
             }
         }
 
-        if (DATA_BUNDLE.keywords) {
-            for (const [cat, words] of Object.entries(DATA_BUNDLE.keywords)) {
+        // LAYER 6: Single keyword fallback
+        if (keywordsData && keywordsData.keywords) {
+            for (const [cat, words] of Object.entries(keywordsData.keywords)) {
                 if (!Array.isArray(words)) continue;
                 for (const w of words) {
-                    if (t.includes(String(w).toLowerCase())) {
+                    if (normalizedT.includes(String(w).toLowerCase())) {
                         const srcs = ['help', 'responses', 'policies'];
                         for (const sk of srcs) {
                             if (!DATA_BUNDLE[sk]) continue;
@@ -154,7 +279,10 @@
                             if (m.length) {
                                 const item = m[0].item;
                                 const reply = (lang === 'hi' && item.replyHi) ? item.replyHi : item.reply;
-                                if (reply) return { reply };
+                                if (reply) {
+                                    sessionContext.lastIntent = cat;
+                                    return { reply, matchType: cat };
+                                }
                             }
                         }
                     }
@@ -162,12 +290,13 @@
             }
         }
 
+        // FALLBACK
         const fbList = (DATA_BUNDLE.fallbacks && DATA_BUNDLE.fallbacks.fallbacks) || [];
         const fb = fbList.length ? fbList[Math.floor(Math.random() * fbList.length)] : null;
         const reply = fb
             ? (lang === 'hi' && fb.replyHi ? fb.replyHi : fb.reply)
-            : 'Sorry, I didn\'t understand.\n\nTry asking:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Refund policy\n• Contact';
-        return { reply };
+            : 'Sorry, I didn\'t understand.\n\nTry:\n• Products\n• Pricing\n• Bulk orders\n• Shipping\n• Contact';
+        return { reply, matchType: 'fallback' };
     }
 
     function productReply(p) {
@@ -175,23 +304,98 @@
         const tag = (lang === 'hi' && p.taglineHi) ? p.taglineHi : (p.tagline || '');
         const feats = (lang === 'hi' && p.featuresHi) ? p.featuresHi : (p.features || []);
         const sizes = (p.sizes || []).join(' / ');
-        const link = p.page ? BASE_URL + p.page : BASE_URL + '/products.html';
         const desc = (lang === 'hi' && p.descriptionHi) ? p.descriptionHi : (p.description || '');
 
-        let text = `⭐ ${name}\n\n`;
-        if (tag) text += `${tag}\n\n`;
+        let text = `⭐ **${name}**\n\n`;
+        if (tag) text += `_${tag}_\n\n`;
         if (desc) text += `${desc}\n\n`;
-        if (feats.length) text += `✅ Features:\n${feats.map(f => '• ' + f).join('\n')}\n\n`;
-        if (sizes) text += `📦 Sizes: ${sizes}\n\n`;
-        text += `🔗 More info: ${link}`;
+        if (feats.length) text += `✅ **Features:**\n${feats.map(f => '• ' + f).join('\n')}\n\n`;
+        if (sizes) text += `📦 **Sizes:** ${sizes}`;
         return text;
     }
 
-    function getCurrentPageSummary() {
-        const s = DATA_BUNDLE['page-summaries'];
-        if (!s || !s.summaries) return null;
-        const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
-        return s.summaries[filename] || null;
+    // ---- BUILD INLINE BUTTONS ----
+    function buildInlineButtons(replyText, matchType, matchPath) {
+        const buttons = [];
+        if (!SMART.smartLinks) return buttons;
+
+        const t = (replyText || '').toLowerCase();
+        const path = (matchPath || '').toLowerCase();
+        const links = SMART.smartLinks;
+
+        if (t.includes('contact') || t.includes('email') || t.includes('phone') || path.includes('contact')) {
+            if (links.contact) buttons.push({ ...links.contact, type: 'primary' });
+            if (SMART.emailLinks && SMART.emailLinks.info) {
+                buttons.push({ label: 'Send Email', labelHi: 'ईमेल भेजें', icon: '📧', url: `mailto:${SMART.emailLinks.info}`, type: 'warning' });
+            }
+        }
+        if (t.includes('nikolux') || path.includes('nikolux')) {
+            if (links.nikolux) buttons.push({ ...links.nikolux, type: 'primary' });
+        }
+        if (t.includes('life star') || t.includes('lifestar') || path.includes('life')) {
+            if (links['life-star']) buttons.push({ ...links['life-star'], type: 'primary' });
+        }
+        if (t.includes('sanjivni') || path.includes('sanjivni')) {
+            if (links.sanjivni) buttons.push({ ...links.sanjivni, type: 'primary' });
+        }
+        if (t.includes('bulk') || t.includes('distributor') || path.includes('bulk') || path.includes('distributor')) {
+            if (SMART.emailLinks && SMART.emailLinks.bulk) {
+                buttons.push({ label: 'Bulk Enquiry', labelHi: 'थोक पूछताछ', icon: '📦', url: `mailto:${SMART.emailLinks.bulk}`, type: 'warning' });
+            }
+            if (links.contact) buttons.push({ ...links.contact, type: 'outline' });
+        }
+        if (t.includes('shipping') || t.includes('delivery') || path.includes('shipping') || path.includes('delivery')) {
+            if (links.shipping) buttons.push({ ...links.shipping, type: 'outline' });
+            if (SMART.emailLinks && SMART.emailLinks.orders) {
+                buttons.push({ label: 'Track Order', labelHi: 'ऑर्डर ट्रैक', icon: '📍', url: `mailto:${SMART.emailLinks.orders}`, type: 'info' });
+            }
+        }
+        if (t.includes('refund') || t.includes('return') || path.includes('refund')) {
+            if (links.refund) buttons.push({ ...links.refund, type: 'outline' });
+            if (SMART.emailLinks && SMART.emailLinks.orders) {
+                buttons.push({ label: 'Report Issue', labelHi: 'समस्या रिपोर्ट', icon: '📧', url: `mailto:${SMART.emailLinks.orders}`, type: 'warning' });
+            }
+        }
+        if (t.includes('price') || t.includes('pricing') || path.includes('price')) {
+            if (SMART.emailLinks && SMART.emailLinks.sales) {
+                buttons.push({ label: 'Get Quote', labelHi: 'कोट प्राप्त करें', icon: '💰', url: `mailto:${SMART.emailLinks.sales}`, type: 'warning' });
+            }
+        }
+        if (t.includes('order') || path.includes('buy')) {
+            if (SMART.emailLinks && SMART.emailLinks.orders) {
+                buttons.push({ label: 'Order Now', labelHi: 'अभी ऑर्डर करें', icon: '🛒', url: `mailto:${SMART.emailLinks.orders}`, type: 'warning' });
+            }
+        }
+        if (t.includes('product') && !buttons.length && links.products) {
+            buttons.push({ ...links.products, type: 'primary' });
+        }
+        if (matchType === 'fallback') {
+            if (links.contact) buttons.push({ ...links.contact, type: 'primary' });
+            if (SMART.emailLinks && SMART.emailLinks.info) {
+                buttons.push({ label: 'Email Us', labelHi: 'ईमेल करें', icon: '📧', url: `mailto:${SMART.emailLinks.info}`, type: 'warning' });
+            }
+        }
+
+        const seen = new Set();
+        return buttons.filter(b => {
+            if (seen.has(b.url)) return false;
+            seen.add(b.url);
+            return true;
+        }).slice(0, 3);
+    }
+
+    function renderInlineButtons(buttons) {
+        if (!buttons.length) return '';
+        return `
+            <div class="vyw-inline-buttons">
+                ${buttons.map(b => {
+                    const label = (lang === 'hi' && b.labelHi) ? b.labelHi : b.label;
+                    return `<a href="${BASE_URL}${b.url}" class="vyw-inline-btn ${b.type || 'outline'}" target="_blank" rel="noopener">
+                        ${b.icon || ''} ${label}
+                    </a>`;
+                }).join('')}
+            </div>
+        `;
     }
 
     // ---- CREATE WIDGET ----
@@ -234,7 +438,7 @@
         return { btn, panel };
     }
 
-    function addMessage(from, text, save = true) {
+    function addMessage(from, text, save = true, buttons = []) {
         const messages = document.getElementById('vywMessages');
         if (!messages) return;
         const typing = messages.querySelector('.vyw-typing');
@@ -251,13 +455,17 @@
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/_(.+?)_/g, '<em>$1</em>')
             .replace(/\n/g, '<br>')
             .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
             .replace(/([\w.+-]+@[\w.-]+\.\w+)/g, '<a href="mailto:$1">$1</a>');
 
+        const buttonsHtml = from === 'bot' ? renderInlineButtons(buttons) : '';
+
         div.innerHTML = `
             <div class="vyw-msg-avatar">${avatarHtml}</div>
-            <div class="vyw-bubble">${safe}</div>
+            <div class="vyw-bubble">${safe}${buttonsHtml}</div>
         `;
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
@@ -285,7 +493,7 @@
         messages.scrollTop = messages.scrollHeight;
     }
 
-    // ---- SEND (with lead capture) ----
+    // ---- SEND ----
     async function send() {
         const input = document.getElementById('vywInput');
         if (!input) return;
@@ -299,33 +507,47 @@
         showTyping();
         await loadAll();
 
-        // 🔥 CHECK FOR LEAD CAPTURE
+        // Lead capture
         if (window.SVE_LEADS) {
             try {
                 const leadResult = await window.SVE_LEADS.processMessage(text, lang);
                 if (leadResult) {
                     setTimeout(() => {
                         addMessage('bot', leadResult.reply);
+                        renderQuick('startup');
                     }, 400 + Math.random() * 400);
                     return;
                 }
-            } catch (e) {
-                console.warn('Lead process error:', e);
-            }
+            } catch (e) {}
         }
 
-        // Normal matching
+        // Normal match
         setTimeout(() => {
             const match = matchAll(text);
-            addMessage('bot', match.reply);
+            const buttons = buildInlineButtons(match.reply, match.matchType, match.matchPath);
+            addMessage('bot', match.reply, true, buttons);
+            const chipType = (SMART.autoSuggestAfter || {})[match.matchType] || 'startup';
+            renderQuick(chipType);
         }, 400 + Math.random() * 400);
     }
 
-    function renderQuick() {
+    function renderQuick(type = 'startup') {
         const el = document.getElementById('vywQuick');
-        const qr = DATA_BUNDLE['quick-replies'];
-        if (!el || !qr) return;
-        const items = qr.initial || [];
+        if (!el) return;
+        const dynChips = SMART.dynamicChips || {};
+        let items = dynChips[type] || [];
+        if (!items.length && DATA_BUNDLE['quick-replies']) {
+            items = DATA_BUNDLE['quick-replies'][type] || DATA_BUNDLE['quick-replies'].initial || [];
+        }
+        if (!items.length && type === 'startup') {
+            const tg = getTimeGreeting();
+            items = [
+                { label: `👋 ${tg.chip}`, query: tg.chip.toLowerCase() },
+                { label: '📦 Products', query: 'products' },
+                { label: '💰 Pricing', query: 'price' },
+                { label: '📞 Contact', query: 'contact' }
+            ];
+        }
         el.innerHTML = items.map(i => `
             <button class="vyw-chip" data-q="${escapeHtml(i.query)}">
                 ${escapeHtml((lang === 'hi' && i.labelHi) ? i.labelHi : i.label)}
@@ -354,10 +576,18 @@
         if (window.SVE_LEADS) window.SVE_LEADS.reset();
         const messages = document.getElementById('vywMessages');
         if (messages) messages.innerHTML = '';
+        showWelcome();
+        renderQuick('startup');
+    }
+
+    function showWelcome() {
+        const tg = getTimeGreeting();
         const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi)
             ? CONFIG.welcomeMessageHi
             : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
-        addMessage('bot', welcome);
+        const greeting = `${tg.emoji} **${tg.greeting}!**\n\n${welcome}`;
+        const buttons = buildInlineButtons('', 'welcome', '');
+        addMessage('bot', greeting, true, buttons);
     }
 
     function applyConfig() {
@@ -382,11 +612,19 @@
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
             div.innerHTML = `<div class="vyw-msg-avatar">${avatar}</div><div class="vyw-bubble">${safe}</div>`;
             messages.appendChild(div);
         });
         messages.scrollTop = messages.scrollHeight;
+    }
+
+    function getCurrentPageSummary() {
+        const s = DATA_BUNDLE['page-summaries'];
+        if (!s || !s.summaries) return null;
+        const filename = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
+        return s.summaries[filename] || null;
     }
 
     async function init() {
@@ -401,16 +639,12 @@
             if (panelOpen && !messagesRendered) {
                 await loadAll();
                 applyConfig();
-
                 if (history.length > 0) {
                     renderHistory();
                 } else {
-                    const welcome = (lang === 'hi' && CONFIG.welcomeMessageHi)
-                        ? CONFIG.welcomeMessageHi
-                        : (CONFIG.welcomeMessage || 'Hi! I am Vinayak AI.');
-                    addMessage('bot', welcome);
+                    showWelcome();
                 }
-                renderQuick();
+                renderQuick('startup');
                 messagesRendered = true;
 
                 const summary = getCurrentPageSummary();
@@ -444,6 +678,7 @@
 
         window.vyTest = (text) => matchAll(text);
         window.vyData = () => DATA_BUNDLE;
+        window.vyGreet = getTimeGreeting;
     }
 
     if (document.readyState === 'loading') {

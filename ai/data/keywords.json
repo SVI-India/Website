@@ -1,12 +1,78 @@
 {
-    "product": ["nikolux", "life star", "lifestar", "sanjivni", "detergent", "powder", "product", "उत्पाद", "डिटर्जेंट"],
-    "price": ["price", "pricing", "cost", "rate", "how much", "quote", "कीमत", "दाम", "मूल्य"],
-    "bulk": ["bulk", "wholesale", "distributor", "dealer", "retailer", "मिनिमम", "थोक"],
-    "shipping": ["shipping", "delivery", "deliver", "track", "order status", "शिपिंग", "डिलीवरी"],
-    "refund": ["refund", "return", "cancel", "वापसी", "रिफंड"],
-    "contact": ["contact", "email", "phone", "call", "reach", "संपर्क", "ईमेल"],
-    "about": ["about", "company", "who", "history", "बारे", "कंपनी"],
-    "greeting": ["hi", "hello", "hey", "namaste", "नमस्ते"],
-    "thanks": ["thanks", "thank", "धन्यवाद"],
-    "bye": ["bye", "goodbye", "अलविदा"]
+    "keywords": {
+        "nikolux": ["nikolux", "nikolaks", "nikollux", "nikolx", "निकोलक्स", "premium detergent", "white detergent"],
+        "life-star": ["life star", "lifestar", "life-star", "लाइफ स्टार", "economical", "budget", "affordable", "sasta"],
+        "sanjivni": ["sanjivni", "sanjeevni", "संजीवनी", "herbal", "natural", "organic", "skin friendly"],
+        "product": ["product", "products", "item", "range", "brand", "उत्पाद", "detergent", "powder"],
+        "price": ["price", "pricing", "cost", "rate", "how much", "kitna", "कीमत", "दाम", "मूल्य"],
+        "buy": ["buy", "purchase", "order", "kharidna", "ऑर्डर", "खरीदना", "chahiye", "want"],
+        "bulk": ["bulk", "wholesale", "dealer", "distributor", "थोक", "large quantity"],
+        "pay": ["pay", "payment", "upi", "bank", "भुगतान", "पेमेंट"],
+        "shipping": ["shipping", "delivery", "deliver", "track", "शिपिंग", "डिलीवरी"],
+        "refund": ["refund", "return", "cancel", "वापसी"],
+        "contact": ["contact", "email", "phone", "address", "संपर्क"],
+        "about": ["about", "company", "बारे", "कंपनी"],
+        "quality": ["quality", "test", "guarantee", "गुणवत्ता"],
+        "hours": ["hours", "timing", "open", "समय"],
+        "greeting": ["hi", "hello", "hey", "gm", "ga", "ge", "gn", "namaste", "नमस्ते"]
+    },
+
+    "combos": [
+        {
+            "id": "buy_nikolux",
+            "must_have": ["buy", "nikolux"],
+            "reply": "🛒 Nikolux order!\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Quantity (500g / 1kg / 2kg / 5kg / 10kg)\n\nWe'll confirm within 24 hours.",
+            "replyHi": "🛒 निकोलक्स ऑर्डर!\n\nकृपया बताएं:\n1️⃣ नाम\n2) ईमेल\n3) फ़ोन\n4) मात्रा\n\n24 घंटे में पुष्टि करेंगे।"
+        },
+        {
+            "id": "buy_life_star",
+            "must_have": ["buy", "life-star"],
+            "reply": "🛒 Life Star order!\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Quantity (500g / 1kg / 2kg / 5kg)\n\nWe'll confirm within 24 hours.",
+            "replyHi": "🛒 लाइफ स्टार ऑर्डर!\n\nकृपया बताएं:\n1️⃣ नाम\n2) ईमेल\n3) फ़ोन\n4) मात्रा"
+        },
+        {
+            "id": "buy_sanjivni",
+            "must_have": ["buy", "sanjivni"],
+            "reply": "🛒 Sanjivni order!\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Quantity (500g / 1kg / 2kg)\n\nWe'll confirm within 24 hours.",
+            "replyHi": "🛒 संजीवनी ऑर्डर!\n\nकृपया बताएं:\n1️⃣ नाम\n2) ईमेल\n3) फ़ोन\n4) मात्रा"
+        },
+        {
+            "id": "price_nikolux",
+            "must_have": ["price", "nikolux"],
+            "reply": "💰 Nikolux Pricing:\n\n• 500g — Best for trial\n• 1kg — Regular use\n• 2kg — Family pack\n• 5kg — Value pack\n• 10kg — Bulk pack\n\nPlease share quantity & city for exact quote.\n📧 sales@sve-in.xubi.org",
+            "replyHi": "💰 निकोलक्स मूल्य:\n\n• 500g — ट्रायल के लिए\n• 1kg — नियमित उपयोग\n• 2kg — फैमिली पैक\n• 5kg — वैल्यू पैक\n• 10kg — थोक पैक\n\nमात्रा और शहर बताएं।"
+        },
+        {
+            "id": "price_life_star",
+            "must_have": ["price", "life-star"],
+            "reply": "💰 Life Star Pricing:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\n*Contact for exact price: sales@sve-in.xubi.org",
+            "replyHi": "💰 लाइफ स्टार मूल्य:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\nसटीक मूल्य: sales@sve-in.xubi.org"
+        },
+        {
+            "id": "delivery_rajasthan",
+            "must_have": ["delivery", "rajasthan"],
+            "reply": "🚚 Rajasthan delivery: 2-4 business days.\n\nFree shipping on orders above ₹5,000 within Rajasthan!",
+            "replyHi": "🚚 राजस्थान डिलीवरी: 2-4 दिन।\n\n₹5,000+ पर निःशुल्क शिपिंग!"
+        },
+        {
+            "id": "bulk_nikolux",
+            "must_have": ["bulk", "nikolux"],
+            "reply": "📦 Nikolux Bulk Order:\n\n• Minimum: 500 kg\n• Custom packaging\n• Special pricing\n• Priority dispatch\n\n📧 bulk@sve-in.xubi.org",
+            "replyHi": "📦 निकोलक्स थोक ऑर्डर:\n\n• न्यूनतम: 500 किग्रा\n• कस्टम पैकेजिंग\n• विशेष मूल्य\n\n📧 bulk@sve-in.xubi.org"
+        },
+        {
+            "id": "quality_herbal",
+            "must_have": ["quality", "sanjivni"],
+            "reply": "🔬 Sanjivni Quality:\n\n✅ 100% Herbal ingredients\n✅ Skin-friendly formula\n✅ Eco-friendly & biodegradable\n✅ Lab-tested for purity\n✅ Safe for sensitive skin",
+            "replyHi": "🔬 संजीवनी गुणवत्ता:\n\n✅ 100% हर्बल सामग्री\n✅ त्वचा के अनुकूल\n✅ पर्यावरण के अनुकूल\n✅ लैब-टेस्टेड"
+        }
+    ],
+
+    "fuzzy": {
+        "nikolux": ["nikolaks", "nikollux", "nikolx", "nikolux", "nicolux"],
+        "sanjivni": ["sanjeevni", "sanjivani", "sanjeevani", "sanjivani"],
+        "lifestar": ["life star", "lifestar", "life-star", "lifstar"],
+        "detergent": ["detergent", "detrgent", "detergant", "diterjent"],
+        "price": ["price", "prise", "prices", "prce"]
+    }
 }
