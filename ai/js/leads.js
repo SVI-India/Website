@@ -1,15 +1,14 @@
 // ============================================================
-// SVE LEADS — AI Chat Lead Capture System
+// SVE LEADS — Step-by-Step Lead Capture with Validation
 // ============================================================
 
 window.SVE_LEADS = (function() {
     'use strict';
 
     const BASE_URL = 'https://www.sveindia.mywire.org';
+
     let CONFIG = null;
-    let inConversation = false;
-    let currentIntent = null;
-    let conversationData = {};
+    let flowState = null;
 
     // ---- LOAD CONFIG ----
     async function loadConfig() {
@@ -28,64 +27,194 @@ window.SVE_LEADS = (function() {
     function detectIntent(text) {
         const t = text.toLowerCase();
         const intents = {
-            buy:          ['buy', 'order', 'purchase', 'want to buy', 'i want', 'place order', 'book order', 'kharidna', 'order karna', 'ऑर्डर', 'खरीदना', 'buy now', 'order now', 'i want to order'],
-            bulk:         ['bulk', 'wholesale', 'large quantity', 'minimum', 'bulk order', 'thok', 'थोक', 'bulk order karna'],
-            distributor:  ['distributor', 'dealer', 'reseller', 'partnership', 'डिस्ट्रीब्यूटर', 'वितरक', 'become dealer', 'become distributor'],
-            grievance:    ['complaint', 'grievance', 'issue', 'problem', 'शिकायत', 'समस्या', 'i have a complaint'],
-            quote:        ['quote', 'quotation', 'price list', 'कोट', 'quotation chahiye', 'get a quote']
+            buy: ['buy', 'order', 'purchase', 'want to buy', 'i want to', 'place order', 'book order',
+                  'kharidna', 'order karna', 'ऑर्डर', 'खरीदना', 'buy now', 'order now',
+                  'i want to order', 'i want to buy', 'i need', 'chahiye', 'mujhe chahiye'],
+            bulk: ['bulk', 'wholesale', 'large quantity', 'minimum order', 'bulk order', 'thok', 'थोक',
+                   'bulk karna', 'bulk me', 'wholesale rate'],
+            distributor: ['distributor', 'dealer', 'reseller', 'partnership', 'डिस्ट्रीब्यूटर',
+                          'वितरक', 'become dealer', 'become distributor', 'distributor banna'],
+            grievance: ['complaint', 'complain', 'grievance', 'issue with', 'problem with',
+                        'शिकायत', 'समस्या', 'i have a complaint', 'complaint karna'],
+            quote: ['quote', 'quotation', 'price list', 'कोट', 'quotation chahiye', 'get a quote',
+                    'quote chahiye', 'best price']
         };
-
         for (const [intent, keywords] of Object.entries(intents)) {
-            if (keywords.some(k => t.includes(k))) {
-                return intent;
-            }
+            if (keywords.some(k => t.includes(k))) return intent;
         }
         return null;
     }
 
-    // ---- START CONVERSATION ----
+    // ---- VALIDATORS ----
+    function validateName(text) {
+        const cleaned = String(text).trim();
+        if (cleaned.length < 2 || cleaned.length > 50) return null;
+        // Must be letters (allow spaces, dots, hyphens for names)
+        if (!/^[a-zA-Z\u0900-\u097F\s.\-']+$/.test(cleaned)) return null;
+        // No numbers
+        if (/\d/.test(cleaned)) return null;
+        // Title case for English names
+        if (/^[a-zA-Z]/.test(cleaned)) {
+            return cleaned.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        }
+        return cleaned;
+    }
+
+    function validateEmail(text) {
+        const cleaned = String(text).trim();
+        const m = cleaned.match(/^[\w.+-]+@[\w-]+\.[\w.-]+$/);
+        if (!m) return null;
+        return cleaned.toLowerCase();
+    }
+
+    function validatePhone(text) {
+        const cleaned = String(text).replace(/[\s\-\(\)]/g, '');
+        // Indian mobile: starts with 6-9, 10 digits
+        const m = cleaned.match(/(?:\+?91)?([6-9]\d{9})/);
+        if (!m) return null;
+        return '+91' + m[1];
+    }
+
+    function validateQuery(text) {
+        const cleaned = String(text).trim();
+        if (cleaned.length < 3 || cleaned.length > 500) return null;
+        return cleaned;
+    }
+
+    // ---- START FLOW ----
     async function startIntent(intent, lang = 'en') {
+        const cfg = await loadConfig();
+        if (!cfg.enabled || !cfg.stepByStep || !cfg.stepByStep.enabled) return null;
+
+        flowState = {
+            intent: intent,
+            lang: lang,
+            startedAt: Date.now(),
+            currentStep: 0,
+            data: {},
+            awaitingConfirmation: false,
+            awaitingEdit: false
+        };
+
+        // Return first step's prompt
+        return getStepPrompt(cfg, 0, lang);
+    }
+
+    // ---- GET STEP PROMPT ----
+    function getStepPrompt(cfg, stepIndex, lang) {
+        const steps = cfg.stepByStep.steps;
+        if (stepIndex >= steps.length) return null;
+
+        const step = steps[stepIndex];
+        let prompt = lang === 'hi' ? step.promptHi : step.prompt;
+        // Replace {{name}} placeholder
+        prompt = prompt.replace(/\{\{name\}\}/g, flowState.data.name || '');
+        return prompt;
+    }
+
+    // ---- PROCESS MESSAGE (MAIN) ----
+    async function processMessage(userText, lang = 'en') {
         const cfg = await loadConfig();
         if (!cfg.enabled) return null;
 
-        const askConfig = (cfg.askForDetailsOn || []).find(a => a.intent === intent);
-        if (!askConfig) return null;
-
-        inConversation = true;
-        currentIntent = intent;
-        conversationData = {
-            intent: intent,
-            startedAt: Date.now(),
-            lang: lang
-        };
-
-        return lang === 'hi' && askConfig.messageHi ? askConfig.messageHi : askConfig.message;
-    }
-
-    // ---- EXTRACT DETAILS FROM TEXT ----
-    function extractDetails(text) {
-        const details = {};
-
-        // Email regex
-        const emailMatch = text.match(/[\w.+-]+@[\w.-]+\.\w+/);
-        if (emailMatch) details.email = emailMatch[0];
-
-        // Phone regex (Indian format) - 10 digits starting with 6-9
-        const phoneMatch = text.match(/(?:\+?91[\s-]?)?[6-9]\d{9}/);
-        if (phoneMatch) details.phone = phoneMatch[0].replace(/\s|-/g, '');
-
-        // Name — if it's a short text without email/phone
-        if (!details.email && !details.phone) {
-            const words = text.trim().split(/\s+/);
-            if (words.length >= 1 && words.length <= 5 && !/^\d+$/.test(words[0])) {
-                // Only set if name isn't already set
-                if (!conversationData.name) {
-                    details.name = text.trim();
-                }
-            }
+        // If in flow, continue step-by-step
+        if (flowState) {
+            return await handleFlowStep(userText, cfg, lang);
         }
 
-        return details;
+        // Not in flow → check for new intent
+        const intent = detectIntent(userText);
+        if (intent) {
+            const reply = await startIntent(intent, lang);
+            if (reply) return { type: 'ask_step', reply };
+        }
+
+        return null;
+    }
+
+    // ---- HANDLE FLOW STEP ----
+    async function handleFlowStep(userText, cfg, lang) {
+        const t = userText.trim().toLowerCase();
+
+        // Check for CANCEL
+        if (['cancel', 'stop', 'exit', 'quit', 'रद्द', 'बंद'].includes(t)) {
+            const reply = lang === 'hi' ? cfg.cancelledMessageHi : cfg.cancelledMessage;
+            flowState = null;
+            return { type: 'cancelled', reply };
+        }
+
+        // Check for EDIT (during confirmation)
+        if (flowState.awaitingConfirmation) {
+            if (['yes', 'y', 'confirm', 'ok', 'submit', 'हाँ', 'हां', 'ठीक'].includes(t)) {
+                await saveLead(flowState.data);
+                const reply = (lang === 'hi' ? cfg.thankYouMessageHi : cfg.thankYouMessage)
+                    .replace(/\{\{name\}\}/g, flowState.data.name || '')
+                    .replace(/\{\{email\}\}/g, flowState.data.email || '')
+                    .replace(/\{\{phone\}\}/g, flowState.data.phone || '');
+                flowState = null;
+                return { type: 'submitted', reply };
+            }
+            if (['edit', 'change', 'no', 'n', 'बदलें', 'नहीं'].includes(t)) {
+                const reply = lang === 'hi' ? cfg.editMessageHi : cfg.editMessage;
+                flowState.currentStep = 0;
+                flowState.data = {};
+                flowState.awaitingConfirmation = false;
+                const prompt = getStepPrompt(cfg, 0, lang);
+                return { type: 'ask_step', reply: reply + '\n\n' + prompt };
+            }
+            // Any other input → re-ask
+            const reply = lang === 'hi' ? cfg.confirmation.messageHi : cfg.confirmation.message;
+            return { type: 'confirm', reply: fillTemplate(reply, flowState.data) };
+        }
+
+        // Get current step
+        const steps = cfg.stepByStep.steps;
+        const stepIndex = flowState.currentStep;
+        if (stepIndex >= steps.length) {
+            flowState = null;
+            return null;
+        }
+
+        const step = steps[stepIndex];
+        let validated = null;
+
+        // Validate based on field type
+        switch (step.field) {
+            case 'name': validated = validateName(userText); break;
+            case 'email': validated = validateEmail(userText); break;
+            case 'phone': validated = validatePhone(userText); break;
+            case 'query': validated = validateQuery(userText); break;
+        }
+
+        // If invalid, re-ask
+        if (!validated) {
+            const retry = lang === 'hi' ? step.retryHi : step.retry;
+            return { type: 'retry', reply: retry };
+        }
+
+        // Save value
+        flowState.data[step.field] = validated;
+        flowState.currentStep++;
+
+        // If all steps done, ask for confirmation
+        if (flowState.currentStep >= steps.length) {
+            flowState.awaitingConfirmation = true;
+            const confirmMsg = lang === 'hi' ? cfg.confirmation.messageHi : cfg.confirmation.message;
+            return { type: 'confirm', reply: fillTemplate(confirmMsg, flowState.data) };
+        }
+
+        // Ask next step
+        const nextPrompt = getStepPrompt(cfg, flowState.currentStep, lang);
+        return { type: 'ask_step', reply: nextPrompt };
+    }
+
+    // ---- FILL TEMPLATE ----
+    function fillTemplate(template, data) {
+        return String(template)
+            .replace(/\{\{name\}\}/g, data.name || '—')
+            .replace(/\{\{email\}\}/g, data.email || '—')
+            .replace(/\{\{phone\}\}/g, data.phone || '—')
+            .replace(/\{\{query\}\}/g, data.query || '—');
     }
 
     // ---- SAVE LEAD ----
@@ -95,15 +224,15 @@ window.SVE_LEADS = (function() {
             name: data.name || '',
             email: data.email || '',
             phone: data.phone || '',
-            intent: data.intent || currentIntent || '',
-            message: (data.message || '').substring(0, 2000),
+            intent: flowState ? flowState.intent : 'unknown',
+            message: data.query || '',
             sourcePage: window.location.pathname,
-            lang: data.lang || 'en',
+            lang: flowState ? flowState.lang : 'en',
             userAgent: navigator.userAgent.substring(0, 200),
             timestamp: new Date().toISOString()
         };
 
-        // 1. Save to Firestore
+        // 1. Firestore
         if (cfg.saveToFirestore && window.db) {
             try {
                 await window.db.collection('ai_leads').add({
@@ -116,7 +245,7 @@ window.SVE_LEADS = (function() {
             }
         }
 
-        // 2. Save to Google Sheets
+        // 2. Google Sheets
         if (cfg.saveToGoogleSheet && cfg.googleSheetUrl) {
             try {
                 await fetch(cfg.googleSheetUrl, {
@@ -138,72 +267,18 @@ window.SVE_LEADS = (function() {
                 console.warn('Sheet save failed:', e);
             }
         }
-
         return true;
     }
 
-    // ---- PROCESS MESSAGE ----
-    async function processMessage(userText, lang = 'en') {
-        const cfg = await loadConfig();
-        if (!cfg.enabled) return null;
-
-        // If we're already in a conversation, try to extract details
-        if (inConversation) {
-            const extracted = extractDetails(userText);
-            Object.assign(conversationData, extracted);
-
-            // Append to message history
-            if (!conversationData.message) conversationData.message = '';
-            conversationData.message += (conversationData.message ? '\n' : '') + userText;
-
-            // Check if we have enough info
-            const hasEmail = conversationData.email;
-            const hasPhone = conversationData.phone;
-            const hasName = conversationData.name;
-
-            // Need at least email OR phone + name
-            if ((hasEmail || hasPhone) && hasName) {
-                await saveLead(conversationData);
-                inConversation = false;
-                const thankYou = lang === 'hi' ? cfg.thankYouMessageHi : cfg.thankYouMessage;
-                conversationData = {};
-                currentIntent = null;
-                return { type: 'thank_you', reply: thankYou };
-            }
-
-            // Still need more info — ask specifically
-            let missing = [];
-            if (!hasName) missing.push(lang === 'hi' ? 'नाम' : 'name');
-            if (!hasEmail && !hasPhone) missing.push(lang === 'hi' ? 'ईमेल या फ़ोन' : 'email or phone');
-
-            const askMore = lang === 'hi'
-                ? `🙏 कृपया ${missing.join(' और ')} साझा करें ताकि हम संपर्क कर सकें।`
-                : `🙏 Please share your ${missing.join(' and ')} so we can contact you.`;
-
-            return { type: 'need_more', reply: askMore };
-        }
-
-        // Detect new intent
-        const intent = detectIntent(userText);
-        if (intent) {
-            const reply = await startIntent(intent, lang);
-            if (reply) {
-                conversationData.message = userText;
-                return { type: 'ask_details', reply };
-            }
-        }
-
-        return null;
-    }
-
-    // ---- PUBLIC ----
+    // ---- PUBLIC API ----
     return {
         loadConfig,
         detectIntent,
         startIntent,
-        saveLead,
         processMessage,
-        isInConversation: () => inConversation,
-        reset: () => { inConversation = false; currentIntent = null; conversationData = {}; }
+        saveLead,
+        isInConversation: () => flowState !== null,
+        getCurrentState: () => flowState,
+        reset: () => { flowState = null; }
     };
 })();

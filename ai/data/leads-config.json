@@ -4,35 +4,54 @@
     "saveToFirestore": true,
     "saveToGoogleSheet": true,
     "emailNotifications": true,
-    "notifyOnTypes": ["buy", "bulk", "grievance", "distributor"],
+    "notifyOnTypes": ["buy", "bulk", "grievance", "distributor", "quote"],
     "autoCaptureIntent": true,
-    "askForDetailsOn": [
-        {
-            "intent": "buy",
-            "message": "I'd love to help you place an order! 🛒\n\nCould you please share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Product & quantity you need\n\nOur team will contact you within 24 hours.",
-            "messageHi": "मैं आपका ऑर्डर लगाने में मदद करूँगा! 🛒\n\nकृपया बताएं:\n1️⃣ आपका नाम\n2) ईमेल\n3) फ़ोन नंबर\n4) उत्पाद और मात्रा\n\nहमारी टीम 24 घंटे में संपर्क करेगी।"
-        },
-        {
-            "intent": "bulk",
-            "message": "Bulk orders ke liye best pricing denge! 📦\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) Quantity required (min 500 kg)",
-            "messageHi": "थोक ऑर्डर के लिए सर्वोत्तम मूल्य! 📦\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) आवश्यक मात्रा (न्यूनतम 500 किग्रा)"
-        },
-        {
-            "intent": "distributor",
-            "message": "Great! Let's set you up as a distributor 🤝\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) City/Location",
-            "messageHi": "बहुत बढ़िया! आपको वितरक के रूप में जोड़ते हैं 🤝\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) शहर/स्थान"
-        },
-        {
-            "intent": "grievance",
-            "message": "We're sorry to hear that. 🙏\n\nPlease share:\n1️⃣ Your name\n2) Email\n3) Phone number\n4) Order/Issue details\n\nOur team will resolve your concern on priority.",
-            "messageHi": "हमें यह सुनकर खेद है। 🙏\n\nकृपया बताएं:\n1️⃣ नाम\n2) ईमेल\n3) फ़ोन\n4) ऑर्डर/समस्या विवरण\n\nहमारी टीम प्राथमिकता पर हल करेगी।"
-        },
-        {
-            "intent": "quote",
-            "message": "Happy to send you a quote! 💰\n\nPlease share:\n1️⃣ Your name\n2) Business name\n3) Email\n4) Phone number\n5) Products & quantity",
-            "messageHi": "आपको कोट भेजने में खुशी होगी! 💰\n\nकृपया बताएं:\n1️⃣ नाम\n2) व्यवसाय का नाम\n3) ईमेल\n4) फ़ोन\n5) उत्पाद और मात्रा"
-        }
-    ],
-    "thankYouMessage": "✅ Thank you! Our team will contact you within 24 hours.\n\n📧 Reply will be from sve.raj.in@gmail.com\n\nFor urgent queries: info@sve-in.xubi.org",
-    "thankYouMessageHi": "✅ धन्यवाद! हमारी टीम 24 घंटे में संपर्क करेगी।\n\n📧 उत्तर sve.raj.in@gmail.com से होगा\n\nतत्काल पूछताछ: info@sve-in.xubi.org"
+    "stepByStep": {
+        "enabled": true,
+        "steps": [
+            {
+                "field": "name",
+                "required": true,
+                "prompt": "👤 First, what's your **good name**?\n\n_Example: Ramesh Kumar_",
+                "promptHi": "👤 सबसे पहले, आपका **शुभ नाम** क्या है?\n\n_उदाहरण: रमेश कुमार_",
+                "retry": "🙏 Please share a valid name (2-50 characters, letters only)\n\n_Example: Ramesh Kumar_",
+                "retryHi": "🙏 कृपया सही नाम बताएं (2-50 अक्षर, केवल अक्षर)\n\n_उदाहरण: रमेश कुमार_"
+            },
+            {
+                "field": "email",
+                "required": true,
+                "prompt": "📧 Thanks, **{{name}}**!\n\nNow, please share your **email address**:\n\n_Example: yourname@gmail.com_",
+                "promptHi": "📧 धन्यवाद, **{{name}}**!\n\nअब कृपया अपना **ईमेल पता** साझा करें:\n\n_उदाहरण: yourname@gmail.com_",
+                "retry": "🙏 That doesn't look like a valid email.\n\n_Example: yourname@gmail.com_",
+                "retryHi": "🙏 यह सही ईमेल नहीं लग रहा।\n\n_उदाहरण: yourname@gmail.com_"
+            },
+            {
+                "field": "phone",
+                "required": true,
+                "prompt": "📱 Great, **{{name}}**!\n\nNow please share your **phone number** (10 digits):\n\n_Example: 9876543210_",
+                "promptHi": "📱 बहुत बढ़िया, **{{name}}**!\n\nअब कृपया अपना **फ़ोन नंबर** साझा करें (10 अंक):\n\n_उदाहरण: 9876543210_",
+                "retry": "🙏 Please share a valid 10-digit Indian mobile number.\n\n_Example: 9876543210 or +91 9876543210_",
+                "retryHi": "🙏 कृपया सही 10 अंकों का भारतीय मोबाइल नंबर साझा करें।\n\n_उदाहरण: 9876543210 या +91 9876543210_"
+            },
+            {
+                "field": "query",
+                "required": true,
+                "prompt": "✍️ Last one, **{{name}}**!\n\nPlease tell us **what you're looking for**:\n\n_Example: I need Nikolux 5kg for my shop in Jaipur_",
+                "promptHi": "✍️ आखिरी बात, **{{name}}**!\n\nकृपया बताएं **आपको क्या चाहिए**:\n\n_उदाहरण: मुझे जयपुर में मेरी दुकान के लिए निकोलक्स 5kg चाहिए_",
+                "retry": "🙏 Please describe your requirement in a few words.",
+                "retryHi": "🙏 कृपया कुछ शब्दों में अपनी आवश्यकता बताएं।"
+            }
+        ]
+    },
+    "confirmation": {
+        "enabled": true,
+        "message": "📋 **Please confirm your details:**\n\n👤 **Name:** {{name}}\n📧 **Email:** {{email}}\n📱 **Phone:** {{phone}}\n✍️ **Query:** {{query}}\n\n✅ Reply **YES** to submit\n✏️ Reply **EDIT** to change\n❌ Reply **CANCEL** to stop",
+        "messageHi": "📋 **कृपया अपना विवरण जांचें:**\n\n👤 **नाम:** {{name}}\n📧 **ईमेल:** {{email}}\n📱 **फ़ोन:** {{phone}}\n✍️ **प्रश्न:** {{query}}\n\n✅ **YES** लिखें सबमिट करने के लिए\n✏️ **EDIT** लिखें बदलने के लिए\n❌ **CANCEL** लिखें रोकने के लिए"
+    },
+    "thankYouMessage": "✅ **Thank you, {{name}}!**\n\nYour query has been received. Our team will contact you **within 24 hours** at **{{email}}** or **{{phone}}**.\n\n📧 Reply will be from **sve.raj.in@gmail.com** — please check spam folder.\n\n⚡ For urgent queries:\n📞 +91 81199 64445\n📧 info@sve-in.xubi.org",
+    "thankYouMessageHi": "✅ **धन्यवाद, {{name}}!**\n\nआपकी पूछताछ प्राप्त हो गई है। हमारी टीम **24 घंटे के भीतर** **{{email}}** या **{{phone}}** पर संपर्क करेगी।\n\n📧 उत्तर **sve.raj.in@gmail.com** से होगा — कृपया spam फ़ोल्डर जांचें।\n\n⚡ तत्काल पूछताछ:\n📞 +91 81199 64445\n📧 info@sve-in.xubi.org",
+    "cancelledMessage": "❌ No problem! Your details were not saved.\n\nFeel free to ask me anything else. 😊",
+    "cancelledMessageHi": "❌ कोई बात नहीं! आपका विवरण सहेजा नहीं गया।\n\nमुझसे कुछ और पूछने के लिए स्वतंत्र महसूस करें। 😊",
+    "editMessage": "✏️ No problem! Let's start over.\n\nWhat would you like to change?",
+    "editMessageHi": "✏️ कोई बात नहीं! चलिए फिर से शुरू करते हैं।\n\nआप क्या बदलना चाहेंगे?"
 }
