@@ -44,14 +44,14 @@
     "sentiment": {
         "enabled": true,
         "keywords": {
-            "negative": ["bakwas", "bad", "worst", "faltu", "ganda", "खराब", "बेकार", "खराब", "निराशा", "angry", "झूठ", "fraud", "चोर", "धोखा", "problem", "issue", "complaint", "not good", "disappointed"],
+            "negative": ["bakwas", "bad", "worst", "faltu", "ganda", "खराब", "बेकार", "निराशा", "angry", "झूठ", "fraud", "चोर", "धोखा", "problem", "issue", "complaint", "not good", "disappointed"],
             "positive": ["good", "best", "nice", "great", "excellent", "achha", "badhiya", "शानदार", "बहुत अच्छा", "love", "awesome", "perfect", "satisfied", "khush", "thanks", "धन्यवाद"],
             "urgent": ["urgent", "jaldi", "तुरंत", "emergency", "fast", "asap", "जल्दी"]
         },
         "negativeReply": "🙏 I'm sorry to hear about your experience. Let me connect you with our support team immediately.\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
         "negativeReplyHi": "🙏 मुझे आपकी समस्या के बारे में सुनकर खेद है। मैं आपको तुरंत हमारी सपोर्ट टीम से जोड़ता हूँ।\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
-        "positiveReply": "😊 Thank you so much! We're glad you liked it. Anything else I can help you with?",
-        "positiveReplyHi": "😊 बहुत-बहुत धन्यवाद! हमें खुशी है कि आपको पसंद आया। और कुछ मदद कर सकता हूँ?"
+        "positiveReply": "😊 Thank you so much! We're glad you liked it.",
+        "positiveReplyHi": "😊 बहुत-बहुत धन्यवाद! हमें खुशी है कि आपको पसंद आया।"
     },
     "bulkCalculator": {
         "enabled": true,
@@ -111,13 +111,13 @@
         "autoAdd": true
     },
     "timeThemes": {
-        "enabled": true,
+        "enabled": false,
         "themes": {
             "morning": { "from": 5, "to": 12, "bg": "linear-gradient(135deg, #fef3c7, #fde68a)", "accent": "#f59e0b" },
             "afternoon": { "from": 12, "to": 17, "bg": "linear-gradient(135deg, #dbeafe, #bfdbfe)", "accent": "#3b82f6" },
-            "evening": { "from": 17, "to": 21, "bg": "linear-gradient(135deg, #fce7f3, #fbcfe8)", "accent": "#ec4899" },
-            "night": { "from": 21, "to": 24, "bg": "linear-gradient(135deg, #1e1b4b, #312e81)", "accent": "#8b5cf6" },
-            "lateNight": { "from": 0, "to": 5, "bg": "linear-gradient(135deg, #0f172a, #1e293b)", "accent": "#6366f1" }
+            "evening": { "from": 17, "to": 21, "bg": "linear-gradient(135deg, #1e40af, #3b82f6)", "accent": "#3b82f6" },
+            "night": { "from": 21, "to": 24, "bg": "linear-gradient(135deg, #0a0f1e, #1e293b)", "accent": "#6366f1" },
+            "lateNight": { "from": 0, "to": 5, "bg": "linear-gradient(135deg, #0a0f1e, #1e293b)", "accent": "#6366f1" }
         }
     },
     "location": {

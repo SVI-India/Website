@@ -1,5 +1,5 @@
 // ============================================================
-// VINAYAK AI WIDGET — 25 Features Complete (FINAL)
+// VINAYAK AI WIDGET — 25 Features (FIXED)
 // ============================================================
 
 (function() {
@@ -15,8 +15,8 @@
     let currentFlow = 'startup';
     let sessionContext = { viewedProducts: [], lastIntent: null };
     let messageCount = 0, ratingShown = false;
-    let userLocation = null;
-    let askedLocation = false;
+    let userLocation = null, askedLocation = false;
+    let isInitialized = false;
 
     // ---- LOAD ALL ----
     async function loadAll() {
@@ -40,7 +40,7 @@
             dataLoaded = true;
             console.log('✅ Vinayak AI loaded:', Object.keys(DATA_BUNDLE).length, 'files');
             applyTimeTheme();
-        } catch (e) { console.error(e); dataLoaded = true; }
+        } catch (e) { console.error('Load failed:', e); dataLoaded = true; }
     }
 
     // ---- TIME GREETING ----
@@ -59,7 +59,10 @@
         const h = new Date().getHours();
         const themes = FEATURE.timeThemes.themes || {};
         for (const [key, val] of Object.entries(themes)) {
-            if (h >= val.from && h < val.to) { document.body.classList.add('vyw-theme-' + key); break; }
+            if (h >= val.from && h < val.to) {
+                document.body.classList.add('vyw-theme-' + key);
+                break;
+            }
         }
     }
 
@@ -210,6 +213,7 @@
         const total = subtotal + gst + shipping;
         const fmt = n => '₹' + n.toLocaleString('en-IN', { maximumFractionDigits: 2 });
         const res = document.getElementById('vywCalcResult');
+        if (!res) return;
         res.style.display = 'block';
         res.innerHTML = `
             <div class="line"><span>Rate</span><span>${fmt(p.rate)}/${p.unit}</span></div>
@@ -450,6 +454,7 @@
         if (ratingShown || !FEATURE.rating?.enabled || messageCount < (FEATURE.rating.askAfterMessages || 5)) return;
         ratingShown = true;
         const messages = document.getElementById('vywMessages');
+        if (!messages) return;
         const div = document.createElement('div');
         div.className = 'vyw-msg bot';
         div.innerHTML = `
@@ -480,7 +485,8 @@
             stars, page: window.location.pathname, lang, messageCount,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }); } catch (e) {}
-        c.querySelector('.vyw-bubble').innerHTML = `<div style="font-weight:700;">⭐ Thanks for rating! (${stars}/5)</div>
+        const bubble = c.querySelector('.vyw-bubble');
+        if (bubble) bubble.innerHTML = `<div style="font-weight:700;">⭐ Thanks for rating! (${stars}/5)</div>
             <div style="color:#94a3b8;font-size:13px;margin-top:6px;">${stars >= 4 ? '😊 Glad you liked it!' : '🙏 We\'ll improve!'}</div>`;
     }
 
@@ -557,7 +563,6 @@
         messages.scrollTop = messages.scrollHeight;
     }
 
-    // ---- LOCATION ----
     function askLocation() {
         if (askedLocation || !FEATURE.location?.enabled || !navigator.geolocation) return;
         askedLocation = true;
@@ -584,7 +589,6 @@
 
         const t = text.toLowerCase();
 
-        // Handover shortcuts
         if (t.includes('whatsapp') || t.includes('human') || t.includes('insaan')) {
             setTimeout(() => {
                 const wa = FEATURE.whatsapp || {};
@@ -725,7 +729,7 @@
         recog.interimResults = false;
         let listening = false;
         btn.onclick = () => { if (listening) { recog.stop(); return; } recog.start(); listening = true; btn.classList.add('listening'); btn.textContent = '🔴'; };
-        recog.onresult = (e) => { document.getElementById('vywInput').value = e.results[0][0].transcript; send(); };
+        recog.onresult = (e) => { const inp = document.getElementById('vywInput'); if (inp) inp.value = e.results[0][0].transcript; send(); };
         recog.onend = () => { listening = false; btn.classList.remove('listening'); btn.textContent = '🎤'; };
         recog.onerror = () => { listening = false; btn.classList.remove('listening'); btn.textContent = '🎤'; };
     }
@@ -737,17 +741,76 @@
         return s.summaries[f] || null;
     }
 
+    // ---- CREATE WIDGET HTML ----
+    function createWidgetHTML() {
+        if (document.getElementById('vyWidgetBtn')) return; // already exists
+
+        const btn = document.createElement('button');
+        btn.id = 'vyWidgetBtn';
+        btn.innerHTML = '💬';
+        btn.setAttribute('aria-label', 'Open chat');
+        document.body.appendChild(btn);
+
+        const cartBtn = document.createElement('button');
+        cartBtn.id = 'vyCartBtn';
+        cartBtn.innerHTML = '🛒<span class="cart-count" id="vywCartCount">0</span>';
+        document.body.appendChild(cartBtn);
+
+        const panel = document.createElement('div');
+        panel.id = 'vyWidgetPanel';
+        panel.innerHTML = `
+            <div class="vyw-head">
+                <img id="vywAvatar" src="${BASE_URL}/images/logo.png" alt="Vinayak AI" onerror="this.style.display='none'">
+                <div class="vyw-head-info">
+                    <div class="vyw-head-name" id="vywName">Vinayak AI</div>
+                    <div class="vyw-status">Online • 24x7</div>
+                </div>
+                <button class="vyw-head-btn" id="vywSpeakAll" title="Voice on/off">🔊</button>
+                <button class="vyw-head-btn" id="vywClear" title="Clear">🗑️</button>
+                <a href="${BASE_URL}/ai/vinayak-ai.html" class="vyw-head-btn" title="Full screen" style="text-decoration:none;">⛶</a>
+            </div>
+            <div class="vyw-summarize" id="vywSummarizeBar" style="display:none;">
+                <span>📄 Summarize this page?</span>
+                <button id="vywSummarizeBtn">Summarize</button>
+            </div>
+            <div class="vyw-messages" id="vywMessages"></div>
+            <div class="vyw-quick" id="vywQuick"></div>
+            <div class="vyw-input-wrap">
+                <button class="vyw-mic-btn" id="vywMic" title="Voice input">🎤</button>
+                <textarea class="vyw-input" id="vywInput" placeholder="Ask me anything..." rows="1"></textarea>
+                <button class="vyw-send" id="vywSend">➤</button>
+            </div>
+            <div class="vyw-footer">
+                <a href="${BASE_URL}/contact.html" class="vyw-footer-btn">📞 Contact</a>
+                <a href="${BASE_URL}/products.html" class="vyw-footer-btn">📦 Products</a>
+                <a href="${BASE_URL}/ai/vinayak-ai.html" class="vyw-footer-btn">💬 Full Chat</a>
+            </div>
+        `;
+        document.body.appendChild(panel);
+    }
+
+    // ---- SAFE INIT ----
     async function init() {
+        if (isInitialized) return;
+        isInitialized = true;
+
+        // HTML create karo agar nahi hai
+        createWidgetHTML();
+
         const btn = document.getElementById('vyWidgetBtn');
         const panel = document.getElementById('vyWidgetPanel');
-        const cartBtn = document.getElementById('vyCartBtn');
-        if (cartBtn) cartBtn.onclick = () => addMessage('bot', '🛒 Cart is empty. Browse products to add.');
+        if (!btn || !panel) {
+            console.warn('⚠️ Widget elements not created');
+            isInitialized = false;
+            return;
+        }
 
         btn.onclick = async () => {
             panelOpen = !panelOpen;
             panel.classList.toggle('open', panelOpen);
             btn.classList.toggle('open', panelOpen);
             btn.innerHTML = panelOpen ? '✕' : '💬';
+
             if (panelOpen && !messagesRendered) {
                 await loadAll();
                 applyConfig();
@@ -755,12 +818,14 @@
                 renderQuick('startup');
                 messagesRendered = true;
                 askLocation();
+
                 const summary = getCurrentPageSummary();
                 if (summary) {
                     const bar = document.getElementById('vywSummarizeBar');
                     if (bar) {
                         bar.style.display = 'flex';
-                        document.getElementById('vywSummarizeBtn').onclick = () => {
+                        const sBtn = document.getElementById('vywSummarizeBtn');
+                        if (sBtn) sBtn.onclick = () => {
                             const s = (lang === 'hi' && summary.summaryHi) ? summary.summaryHi : summary.summary;
                             addMessage('user', lang === 'hi' ? 'इस पेज का सारांश' : 'Summarize this page');
                             setTimeout(() => addMessage('bot', `📄 **${summary.title}**\n\n${s}`), 400);
@@ -770,25 +835,43 @@
             }
         };
 
-        document.getElementById('vywSend').onclick = send;
-        document.getElementById('vywClear').onclick = clearChat;
+        const sendEl = document.getElementById('vywSend');
+        if (sendEl) sendEl.onclick = send;
+
+        const clearEl = document.getElementById('vywClear');
+        if (clearEl) clearEl.onclick = clearChat;
+
+        const cartBtn = document.getElementById('vyCartBtn');
+        if (cartBtn) cartBtn.onclick = () => addMessage('bot', '🛒 Cart is empty.');
 
         const speakAllBtn = document.getElementById('vywSpeakAll');
-        if (speakAllBtn) speakAllBtn.onclick = () => {
-            if (FEATURE.voiceOutput) FEATURE.voiceOutput.autoSpeak = !FEATURE.voiceOutput.autoSpeak;
-            speakAllBtn.textContent = FEATURE.voiceOutput?.autoSpeak ? '🔇' : '🔊';
-            window.speechSynthesis && window.speechSynthesis.cancel();
-        };
+        if (speakAllBtn) {
+            speakAllBtn.onclick = () => {
+                if (FEATURE && FEATURE.voiceOutput) FEATURE.voiceOutput.autoSpeak = !FEATURE.voiceOutput.autoSpeak;
+                speakAllBtn.textContent = (FEATURE?.voiceOutput?.autoSpeak) ? '🔇' : '🔊';
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+            };
+        }
 
         const input = document.getElementById('vywInput');
-        input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
-        input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 80) + 'px'; });
+        if (input) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+            });
+            input.addEventListener('input', () => {
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 80) + 'px';
+            });
+        }
+
         initVoiceInput();
 
         window.vyTest = (text) => matchAll(text);
         window.vyData = () => DATA_BUNDLE;
         window.vyExportPDF = exportChatPDF;
         window.vyExportJSON = exportChatJSON;
+
+        console.log('✅ Vinayak AI Widget initialized');
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
