@@ -1,5 +1,5 @@
 // ============================================================
-// VINAYAK AI — Full Page Chat with Multi-Step Lead Capture
+// VINAYAK AI — Full Page Chat (Complete with Flow + Leads)
 // ============================================================
 
 (function() {
@@ -44,11 +44,12 @@
                     .catch(() => null))
             );
             files.forEach((f, i) => { if (results[i]) DATA_BUNDLE[f] = results[i]; });
-            CONFIG = DATA_BUNDLE.config || {};
+            CONFIG = DATA_BUNDLE.config || { aiName: 'Vinayak AI', aiNameHi: 'विनयक AI', welcomeMessage: 'Hi! I am Vinayak AI 👋', welcomeMessageHi: 'नमस्ते! मैं विनयक AI हूँ 👋' };
             SMART = DATA_BUNDLE['smart-config'] || {};
             FLOW = DATA_BUNDLE['conversation-flow'] || {};
             dataLoaded = true;
             console.log('✅ Vinayak AI FULL PAGE ready:', Object.keys(DATA_BUNDLE).length, 'files');
+            console.log('📋 Flow loaded:', FLOW && FLOW.flows ? Object.keys(FLOW.flows).length : 0, 'flows');
         } catch (e) {
             console.error('Data load failed:', e);
             dataLoaded = true;
@@ -247,7 +248,7 @@
             'greetings': 'startup', 'help': 'startup', 'policies': 'refund_flow',
             'contact': 'contact_menu', 'company': 'startup', 'catalog': 'product_menu',
             'responses': 'startup', 'faq': 'startup', 'product': 'product_detail',
-            'sentence': 'product_detail'
+            'sentence': 'product_detail', 'combo': 'product_detail'
         };
         return map[matchType] || 'startup';
     }
@@ -397,43 +398,60 @@
             addMessage('bot', match.reply, true, buttons);
             sendBtn.disabled = false;
             currentFlow = match.nextFlow || 'startup';
+            console.log('🔄 Flow →', currentFlow);
             renderQuick(currentFlow);
         }, 400 + Math.random() * 400);
     }
 
-    function renderQuick(flowType = 'startup') {
+    // ---- RENDER QUICK REPLIES (from conversation flow) ----
+    function renderQuick(flowType) {
         if (!quickEl) return;
 
+        if (!flowType || typeof flowType !== 'string') flowType = 'startup';
+
+        const flows = (FLOW && FLOW.flows) ? FLOW.flows : {};
         let items = [];
-        if (FLOW && FLOW.flows && FLOW.flows[flowType] && FLOW.flows[flowType].chips) {
-            items = FLOW.flows[flowType].chips;
+
+        // Try requested flow
+        if (flows[flowType] && Array.isArray(flows[flowType].chips)) {
+            items = flows[flowType].chips;
         }
-        if (!items.length && FLOW && FLOW.flows && FLOW.flows.startup) {
-            items = FLOW.flows.startup.chips;
+
+        // Fallback to startup
+        if (!items.length && flows.startup && Array.isArray(flows.startup.chips)) {
+            items = flows.startup.chips;
         }
+
+        // Final fallback
         if (!items.length) {
             const tg = getTimeGreeting();
             items = [
-                { label: `👋 ${tg.chip}`, labelHi: `👋 ${tg.chip}`, query: tg.chip.toLowerCase() },
-                { label: '📦 Products', labelHi: '📦 उत्पाद', query: 'products' },
-                { label: '💰 Pricing', labelHi: '💰 मूल्य', query: 'price' },
-                { label: '📞 Contact', labelHi: '📞 संपर्क', query: 'contact' }
+                { label: `👋 ${tg.chip}`, labelHi: `👋 ${tg.chip}`, query: tg.chip.toLowerCase(), next: 'startup' },
+                { label: '📦 Products', labelHi: '📦 उत्पाद', query: 'products', next: 'product_menu' },
+                { label: '💰 Pricing', labelHi: '💰 मूल्य', query: 'price', next: 'pricing_flow' },
+                { label: '📞 Contact', labelHi: '📞 संपर्क', query: 'contact', next: 'contact_menu' }
             ];
         }
 
-        quickEl.innerHTML = items.map(i => `
-            <button class="vy-chip" data-query="${escapeHtml(i.query)}" data-next="${i.next || ''}">
-                ${escapeHtml((lang === 'hi' && i.labelHi) ? i.labelHi : i.label)}
-            </button>
-        `).join('');
+        quickEl.innerHTML = items.map(i => {
+            const label = (lang === 'hi' && i.labelHi) ? i.labelHi : i.label;
+            const query = i.query || '';
+            const next = i.next || '';
+            return `<button class="vy-chip" data-query="${escapeHtml(query)}" data-next="${escapeHtml(next)}">${escapeHtml(label)}</button>`;
+        }).join('');
 
         quickEl.querySelectorAll('.vy-chip').forEach(btn => {
             btn.onclick = () => {
                 inputEl.value = btn.dataset.query;
-                if (btn.dataset.next) currentFlow = btn.dataset.next;
+                if (btn.dataset.next) {
+                    currentFlow = btn.dataset.next;
+                    console.log('🔄 Flow changing to:', currentFlow);
+                }
                 sendMessage();
             };
         });
+
+        console.log('🎨 Chips rendered for flow:', flowType, '| Count:', items.length);
     }
 
     function escapeHtml(s) {
