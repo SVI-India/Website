@@ -1,0 +1,44 @@
+{
+    "suggestions": {
+        "after_product": [
+            { "text": "Show me pricing", "textHi": "मूल्य बताओ", "query": "price" },
+            { "text": "Order now", "textHi": "अभी ऑर्डर करें", "query": "i want to buy" },
+            { "text": "Bulk order", "textHi": "थोक ऑर्डर", "query": "bulk order" },
+            { "text": "Delivery time", "textHi": "डिलीवरी समय", "query": "delivery time" }
+        ],
+        "after_price": [
+            { "text": "Order now", "textHi": "अभी ऑर्डर करें", "query": "i want to buy" },
+            { "text": "Bulk price", "textHi": "थोक मूल्य", "query": "bulk price" },
+            { "text": "Payment methods", "textHi": "भुगतान विधि", "query": "payment methods" }
+        ],
+        "after_order": [
+            { "text": "Track order", "textHi": "ऑर्डर ट्रैक", "query": "track order" },
+            { "text": "Delivery time", "textHi": "डिलीवरी समय", "query": "delivery time" },
+            { "text": "Contact support", "textHi": "सहायता", "query": "contact" }
+        ],
+        "after_shipping": [
+            { "text": "Track my order", "textHi": "ऑर्डर ट्रैक", "query": "track order" },
+            { "text": "Order now", "textHi": "अभी ऑर्डर करें", "query": "i want to buy" },
+            { "text": "Refund policy", "textHi": "वापसी नीति", "query": "refund policy" }
+        ],
+        "after_complaint": [
+            { "text": "Talk to human", "textHi": "इंसान से बात", "query": "contact" },
+            { "text": "Call now", "textHi": "अभी कॉल करें", "query": "call us" },
+            { "text": "Email us", "textHi": "ईमेल करें", "query": "send email" }
+        ]
+    },
+    "emojiMap": {
+        "price": "💰",
+        "product": "📦",
+        "order": "🛒",
+        "delivery": "🚚",
+        "contact": "📞",
+        "bulk": "📊",
+        "quality": "🔬",
+        "thanks": "🙏",
+        "greeting": "👋",
+        "refund": "🔙",
+        "help": "❓",
+        "success": "✅"
+    }
+}

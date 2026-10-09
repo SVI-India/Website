@@ -1,578 +1,368 @@
 /* ============================================================
-   VINAYAK AI WIDGET — COMPLETE STYLES
-   Floating button + Mini chat + Smart buttons + Time greeting
+   VINAYAK AI WIDGET — COMPLETE STYLES (25 Features)
    ============================================================ */
 
-/* ============================================================
-   FLOATING BUTTON
-   ============================================================ */
+* { box-sizing: border-box; }
+
+/* FLOATING BUTTON */
 #vyWidgetBtn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+    position: fixed; bottom: 24px; right: 24px;
+    width: 64px; height: 64px; border-radius: 50%;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    z-index: 9998;
-    box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 0 rgba(59, 130, 246, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none; color: #fff; cursor: pointer; z-index: 9998;
+    box-shadow: 0 10px 30px rgba(30,64,175,0.5), 0 0 0 0 rgba(59,130,246,0.7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     animation: vyWidgetPulse 2.5s infinite;
     font-family: 'Inter', sans-serif;
 }
-#vyWidgetBtn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 15px 40px rgba(30, 64, 175, 0.7);
-}
-#vyWidgetBtn.open {
-    animation: none;
-    transform: rotate(90deg);
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-
+#vyWidgetBtn:hover { transform: scale(1.1); box-shadow: 0 15px 40px rgba(30,64,175,0.7); }
+#vyWidgetBtn.open { animation: none; transform: rotate(90deg); background: linear-gradient(135deg, #ef4444, #dc2626); }
 @keyframes vyWidgetPulse {
-    0%, 100% { box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 0 rgba(59, 130, 246, 0.7); }
-    50% { box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5), 0 0 0 15px rgba(59, 130, 246, 0); }
+    0%,100% { box-shadow: 0 10px 30px rgba(30,64,175,0.5), 0 0 0 0 rgba(59,130,246,0.7); }
+    50% { box-shadow: 0 10px 30px rgba(30,64,175,0.5), 0 0 0 15px rgba(59,130,246,0); }
 }
 
-/* Tooltip bubble */
-#vyWidgetBtn::before {
-    content: 'Chat with Vinayak AI';
-    position: absolute;
-    right: 80px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #1e293b;
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-    font-family: 'Inter', sans-serif;
+/* CART BUTTON */
+#vyCartBtn {
+    position: fixed; bottom: 100px; right: 24px;
+    width: 50px; height: 50px; border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none; color: #fff; cursor: pointer; z-index: 9997;
+    box-shadow: 0 8px 20px rgba(16,185,129,0.4);
+    display: none; align-items: center; justify-content: center;
+    font-size: 20px; transition: all 0.3s;
 }
-#vyWidgetBtn:hover::before {
-    opacity: 1;
+#vyCartBtn.visible { display: flex; }
+#vyCartBtn:hover { transform: scale(1.1); }
+#vyCartBtn .cart-count {
+    position: absolute; top: -4px; right: -4px;
+    background: #ef4444; color: #fff; font-size: 11px; font-weight: 700;
+    min-width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; padding: 0 5px;
 }
 
-/* ============================================================
-   MINI CHAT PANEL
-   ============================================================ */
+/* MINI CHAT PANEL */
 #vyWidgetPanel {
-    position: fixed;
-    bottom: 100px;
-    right: 24px;
-    width: 380px;
-    max-width: calc(100vw - 48px);
-    height: 560px;
-    max-height: calc(100vh - 120px);
-    background: #0f172a;
-    border-radius: 20px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #1e293b;
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: fixed; bottom: 100px; right: 24px;
+    width: 400px; max-width: calc(100vw - 48px);
+    height: 620px; max-height: calc(100vh - 120px);
+    background: #0f172a; border-radius: 20px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7); z-index: 9999;
+    display: flex; flex-direction: column; overflow: hidden;
+    border: 1px solid #1e293b; opacity: 0;
+    transform: translateY(20px) scale(0.95); pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     font-family: 'Inter', sans-serif;
 }
-#vyWidgetPanel.open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-}
+#vyWidgetPanel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
-/* Header */
+/* HEADER */
 #vyWidgetPanel .vyw-head {
     padding: 14px 16px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+    color: #fff; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
 }
-#vyWidgetPanel .vyw-head img {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #fff;
-    padding: 2px;
-    object-fit: cover;
-}
+#vyWidgetPanel .vyw-head img { width: 38px; height: 38px; border-radius: 50%; background: #fff; padding: 2px; object-fit: cover; }
 #vyWidgetPanel .vyw-head-info { flex: 1; min-width: 0; }
-#vyWidgetPanel .vyw-head-name {
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.2;
-}
+#vyWidgetPanel .vyw-head-name { font-size: 15px; font-weight: 800; line-height: 1.2; }
 #vyWidgetPanel .vyw-status {
-    font-size: 11px;
-    opacity: 0.9;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 2px;
+    font-size: 11px; opacity: 0.9; display: flex; align-items: center; gap: 5px; margin-top: 2px;
 }
 #vyWidgetPanel .vyw-status::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    background: #10b981;
-    border-radius: 50%;
+    content: ''; width: 7px; height: 7px; background: #10b981; border-radius: 50%;
     animation: vywPulse 2s infinite;
 }
-@keyframes vywPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
+@keyframes vywPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 #vyWidgetPanel .vyw-head-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: #fff;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-    text-decoration: none;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; width: 32px; height: 32px; border-radius: 8px;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; transition: all 0.2s; flex-shrink: 0; text-decoration: none;
 }
-#vyWidgetPanel .vyw-head-btn:hover {
-    background: rgba(255,255,255,0.3);
-}
+#vyWidgetPanel .vyw-head-btn:hover { background: rgba(255,255,255,0.3); }
 
-/* Messages */
+/* MESSAGES */
 #vyWidgetPanel .vyw-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: #0a0f1e;
-    scroll-behavior: smooth;
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: #0a0f1e; scroll-behavior: smooth;
 }
 #vyWidgetPanel .vyw-messages::-webkit-scrollbar { width: 5px; }
-#vyWidgetPanel .vyw-messages::-webkit-scrollbar-track { background: transparent; }
-#vyWidgetPanel .vyw-messages::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 3px;
-}
+#vyWidgetPanel .vyw-messages::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
-.vyw-msg {
-    display: flex;
-    gap: 8px;
-    max-width: 85%;
-    animation: vywFade 0.3s ease;
-}
-@keyframes vywFade {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.vyw-msg.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
+.vyw-msg { display: flex; gap: 8px; max-width: 88%; animation: vywFade 0.3s ease; }
+@keyframes vywFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.vyw-msg.user { align-self: flex-end; flex-direction: row-reverse; }
 .vyw-msg.bot { align-self: flex-start; }
 
 .vyw-msg-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    flex-shrink: 0;
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 800;
-    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 12px; font-weight: 800; overflow: hidden;
 }
-.vyw-msg-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.vyw-msg.user .vyw-msg-avatar {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
+.vyw-msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.vyw-msg.user .vyw-msg-avatar { background: linear-gradient(135deg, #10b981, #059669); }
 
 .vyw-bubble {
-    padding: 10px 14px;
-    border-radius: 14px;
-    font-size: 13.5px;
-    line-height: 1.55;
-    word-break: break-word;
-    white-space: pre-wrap;
+    padding: 10px 14px; border-radius: 14px; font-size: 13.5px;
+    line-height: 1.55; word-break: break-word; white-space: pre-wrap;
 }
-.vyw-msg.bot .vyw-bubble {
-    background: #1e293b;
-    color: #e2e8f0;
-    border-bottom-left-radius: 4px;
-}
-.vyw-msg.user .vyw-bubble {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    border-bottom-right-radius: 4px;
-}
-.vyw-bubble a {
-    color: #60a5fa;
-    text-decoration: underline;
-}
-.vyw-msg.user .vyw-bubble a { color: #fff; }
+.vyw-msg.bot .vyw-bubble { background: #1e293b; color: #e2e8f0; border-bottom-left-radius: 4px; }
+.vyw-msg.user .vyw-bubble { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border-bottom-right-radius: 4px; }
+.vyw-bubble a { color: #60a5fa; text-decoration: underline; }
 .vyw-bubble strong { color: #fff; font-weight: 700; }
-.vyw-bubble em { color: #93c5fd; font-style: italic; }
 
-/* Typing */
-.vyw-typing .vyw-bubble {
-    display: flex;
-    gap: 4px;
-    padding: 12px 16px;
-    align-items: center;
+/* PRODUCT CARDS */
+.vyw-product-card {
+    background: #0f172a; border: 1px solid #334155; border-radius: 12px;
+    overflow: hidden; margin: 0.5rem 0; max-width: 100%; transition: all 0.3s;
 }
+.vyw-product-card:hover { border-color: #3b82f6; box-shadow: 0 10px 25px rgba(59,130,246,0.2); }
+.vyw-product-image { width: 100%; height: 140px; object-fit: cover; background: #1e293b; }
+.vyw-product-body { padding: 12px 14px; }
+.vyw-product-title-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+.vyw-product-name { font-size: 15px; font-weight: 800; color: #fff; }
+.vyw-product-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 50px;
+    background: #f59e0b; color: #fff; text-transform: uppercase;
+}
+.vyw-product-badge.new { background: #10b981; }
+.vyw-product-desc { font-size: 12.5px; color: #94a3b8; margin-bottom: 10px; line-height: 1.5; }
+.vyw-product-price { font-size: 14px; font-weight: 700; color: #10b981; margin-bottom: 8px; }
+.vyw-product-price .from { font-size: 11px; color: #64748b; font-weight: 500; }
+.vyw-product-rating { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #f59e0b; margin-bottom: 10px; }
+.vyw-product-rating .count { color: #64748b; font-size: 11px; }
+.vyw-product-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.vyw-product-btn {
+    flex: 1; padding: 8px 12px; border-radius: 8px; font-size: 12px;
+    font-weight: 700; cursor: pointer; border: none; text-decoration: none;
+    text-align: center; transition: all 0.2s; font-family: inherit; white-space: nowrap;
+}
+.vyw-product-btn.primary { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
+.vyw-product-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,64,175,0.4); }
+.vyw-product-btn.outline { background: transparent; color: #60a5fa; border: 1.5px solid #3b82f6; }
+.vyw-product-btn.outline:hover { background: #1e40af; color: #fff; }
+
+/* INLINE BUTTONS */
+.vyw-inline-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.vyw-inline-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.82rem;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; font-family: inherit; border: 1.5px solid transparent;
+    white-space: nowrap;
+}
+.vyw-inline-btn.primary { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
+.vyw-inline-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,64,175,0.4); }
+.vyw-inline-btn.outline { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
+.vyw-inline-btn.outline:hover { background: #1e40af; color: #fff; transform: translateY(-2px); }
+.vyw-inline-btn.success { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.vyw-inline-btn.success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,185,129,0.4); }
+.vyw-inline-btn.warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+.vyw-inline-btn.warning:hover { transform: translateY(-2px); }
+.vyw-inline-btn.info { background: #0f172a; color: #60a5fa; border-color: #334155; }
+.vyw-inline-btn.info:hover { background: #1e40af; color: #fff; }
+
+/* FEEDBACK */
+.vyw-feedback {
+    display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 8px 12px; background: #0f172a; border-radius: 8px;
+    font-size: 12px; color: #94a3b8; border: 1px solid #1e293b;
+}
+.vyw-feedback button {
+    background: transparent; border: 1px solid #334155; color: #cbd5e1;
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 14px;
+}
+.vyw-feedback button:hover { background: #1e293b; border-color: #3b82f6; }
+.vyw-feedback button.active { background: #10b981; border-color: #10b981; color: #fff; }
+
+/* TRACKING */
+.vyw-track-result {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 10px; padding: 14px; margin: 10px 0;
+}
+.vyw-track-result .status {
+    display: inline-block; padding: 4px 12px; border-radius: 50px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+}
+.vyw-track-result .status.delivered { background: #10b981; color: #fff; }
+.vyw-track-result .status.dispatched { background: #f59e0b; color: #fff; }
+.vyw-track-result .status.processing { background: #3b82f6; color: #fff; }
+.vyw-track-result .row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    border-bottom: 1px solid #1e293b; font-size: 12.5px;
+}
+.vyw-track-result .row:last-child { border-bottom: none; }
+.vyw-track-result .label { color: #94a3b8; }
+.vyw-track-result .value { color: #e2e8f0; font-weight: 600; }
+
+/* BULK CALCULATOR */
+.vyw-calc {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 10px; padding: 14px; margin: 10px 0;
+}
+.vyw-calc label {
+    display: block; font-size: 11.5px; font-weight: 600;
+    color: #94a3b8; margin-bottom: 4px; text-transform: uppercase;
+}
+.vyw-calc select, .vyw-calc input {
+    width: 100%; padding: 9px 12px; background: #1e293b;
+    border: 1.5px solid #334155; border-radius: 8px; color: #e2e8f0;
+    font-size: 13px; font-family: inherit; margin-bottom: 10px;
+}
+.vyw-calc .result {
+    background: #1e293b; border-radius: 8px; padding: 12px; margin-top: 10px;
+}
+.vyw-calc .result .line {
+    display: flex; justify-content: space-between; font-size: 13px;
+    padding: 4px 0; color: #cbd5e1;
+}
+.vyw-calc .result .line.total {
+    border-top: 1.5px solid #334155; margin-top: 6px;
+    padding-top: 10px; font-size: 15px; font-weight: 800; color: #10b981;
+}
+
+/* SPEAK BUTTON */
+.vyw-speak-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; background: #1e293b; border: 1px solid #334155;
+    color: #94a3b8; border-radius: 50%; cursor: pointer;
+    font-size: 12px; transition: all 0.2s; vertical-align: middle;
+}
+.vyw-speak-btn:hover { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+.vyw-speak-btn.speaking {
+    background: #ef4444; color: #fff; border-color: #ef4444;
+    animation: vywSpeakPulse 1s infinite;
+}
+@keyframes vywSpeakPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+/* RATING */
+.vyw-rating-stars { display: flex; gap: 6px; font-size: 26px; margin: 4px 0; }
+.vyw-rating-stars span {
+    color: #475569; cursor: pointer; transition: all 0.2s;
+    user-select: none; line-height: 1;
+}
+.vyw-rating-stars span:hover, .vyw-rating-stars span.active { color: #f59e0b; transform: scale(1.15); }
+
+/* TYPING */
+.vyw-typing .vyw-bubble { display: flex; gap: 4px; padding: 12px 16px; align-items: center; }
 .vyw-typing .dot {
-    width: 6px;
-    height: 6px;
-    background: #60a5fa;
-    border-radius: 50%;
+    width: 6px; height: 6px; background: #60a5fa; border-radius: 50%;
     animation: vywDot 1.4s infinite;
 }
 .vyw-typing .dot:nth-child(2) { animation-delay: 0.2s; }
 .vyw-typing .dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes vywDot {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    0%,60%,100% { transform: translateY(0); opacity: 0.5; }
     30% { transform: translateY(-5px); opacity: 1; }
 }
 
-/* Quick replies (chips) */
+/* QUICK REPLIES */
 #vyWidgetPanel .vyw-quick {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px 14px 10px;
-    background: #0a0f1e;
-    flex-shrink: 0;
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 14px 10px;
+    background: #0a0f1e; flex-shrink: 0; max-height: 120px; overflow-y: auto;
 }
 #vyWidgetPanel .vyw-chip {
-    padding: 6px 11px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #cbd5e1;
-    border-radius: 50px;
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    animation: vywChipIn 0.3s ease;
+    padding: 6px 11px; background: #1e293b; border: 1px solid #334155;
+    color: #cbd5e1; border-radius: 50px; font-size: 11.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+    animation: vywChipIn 0.3s ease; white-space: nowrap;
 }
 #vyWidgetPanel .vyw-chip:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-    transform: translateY(-2px);
+    background: #1e40af; color: #fff; border-color: #1e40af; transform: translateY(-2px);
 }
-@keyframes vywChipIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes vywChipIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Input */
+/* INPUT */
 #vyWidgetPanel .vyw-input-wrap {
-    padding: 10px 14px 14px;
-    background: #0f172a;
+    padding: 10px 14px 14px; background: #0f172a;
     border-top: 1px solid #1e293b;
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-    flex-shrink: 0;
+    display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
 }
 #vyWidgetPanel .vyw-input {
-    flex: 1;
-    background: #1e293b;
-    border: 1.5px solid #334155;
-    color: #e2e8f0;
-    padding: 10px 14px;
-    border-radius: 22px;
-    font-size: 13.5px;
-    font-family: inherit;
-    resize: none;
-    max-height: 80px;
-    min-height: 40px;
-    line-height: 1.4;
-    transition: border 0.2s;
+    flex: 1; background: #1e293b; border: 1.5px solid #334155;
+    color: #e2e8f0; padding: 10px 14px; border-radius: 22px;
+    font-size: 13.5px; font-family: inherit; resize: none;
+    max-height: 80px; min-height: 40px; line-height: 1.4;
 }
-#vyWidgetPanel .vyw-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-#vyWidgetPanel .vyw-input::placeholder { color: #64748b; }
-
+#vyWidgetPanel .vyw-input:focus { outline: none; border-color: #3b82f6; }
 #vyWidgetPanel .vyw-send {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    border: none;
-    border-radius: 50%;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    border: none; border-radius: 50%; color: #fff; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
 }
-#vyWidgetPanel .vyw-send:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 18px rgba(30,64,175,0.5);
+#vyWidgetPanel .vyw-send:hover { transform: scale(1.1); }
+#vyWidgetPanel .vyw-mic-btn {
+    width: 40px; height: 40px; background: #1e293b;
+    border: 1.5px solid #334155; border-radius: 50%;
+    color: #cbd5e1; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
 }
-#vyWidgetPanel .vyw-send:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+#vyWidgetPanel .vyw-mic-btn:hover { background: #1e40af; color: #fff; border-color: #1e40af; }
+#vyWidgetPanel .vyw-mic-btn.listening {
+    background: #ef4444; color: #fff; border-color: #ef4444;
+    animation: vywSpeakPulse 1s infinite;
 }
 
-/* Footer buttons */
+/* FOOTER */
 #vyWidgetPanel .vyw-footer {
-    padding: 8px 14px;
-    background: #0a0f1e;
+    padding: 8px 14px; background: #0a0f1e;
     border-top: 1px solid #1e293b;
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
+    display: flex; gap: 6px; flex-shrink: 0;
 }
 #vyWidgetPanel .vyw-footer-btn {
-    flex: 1;
-    padding: 7px 10px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #cbd5e1;
-    border-radius: 8px;
-    font-size: 11.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    text-align: center;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+    flex: 1; padding: 7px 6px; background: #1e293b;
+    border: 1px solid #334155; color: #cbd5e1;
+    border-radius: 8px; font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+    text-align: center; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
 }
-#vyWidgetPanel .vyw-footer-btn:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-}
+#vyWidgetPanel .vyw-footer-btn:hover { background: #1e40af; color: #fff; border-color: #1e40af; }
 
-/* Summarize banner */
+/* SUMMARIZE */
 #vyWidgetPanel .vyw-summarize {
     padding: 10px 14px;
     background: linear-gradient(135deg, rgba(30,64,175,0.15), rgba(59,130,246,0.1));
     border-bottom: 1px solid #1e293b;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: #93c5fd;
-    flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: #93c5fd; flex-shrink: 0;
 }
 #vyWidgetPanel .vyw-summarize button {
-    background: #1e40af;
-    color: #fff;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 11.5px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-#vyWidgetPanel .vyw-summarize button:hover {
-    background: #3b82f6;
+    background: #1e40af; color: #fff; border: none;
+    padding: 5px 12px; border-radius: 6px; font-size: 11.5px;
+    font-weight: 700; cursor: pointer; font-family: inherit; flex-shrink: 0;
 }
 
-/* ============================================================
-   SMART INLINE BUTTONS (Inside chat bubbles)
-   ============================================================ */
-.vyw-inline-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
-.vyw-inline-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    font-family: inherit;
-    border: 1.5px solid transparent;
-    line-height: 1.3;
-    white-space: nowrap;
-}
-.vyw-inline-btn.primary {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
-}
-.vyw-inline-btn.primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(30,64,175,0.4);
-}
-.vyw-inline-btn.outline {
-    background: #1e293b;
-    color: #60a5fa;
-    border-color: #3b82f6;
-}
-.vyw-inline-btn.outline:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-    transform: translateY(-2px);
-}
-.vyw-inline-btn.success {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: #fff;
-}
-.vyw-inline-btn.success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16,185,129,0.4);
-}
-.vyw-inline-btn.warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: #fff;
-}
-.vyw-inline-btn.warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(245,158,11,0.4);
-}
-.vyw-inline-btn.info {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: #60a5fa;
-    border-color: #334155;
-}
-.vyw-inline-btn.info:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-}
+/* TIME THEMES */
+.vyw-theme-morning #vyWidgetPanel .vyw-head { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.vyw-theme-afternoon #vyWidgetPanel .vyw-head { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.vyw-theme-evening #vyWidgetPanel .vyw-head { background: linear-gradient(135deg, #ec4899, #f472b6); }
+.vyw-theme-night #vyWidgetPanel .vyw-head { background: linear-gradient(135deg, #4c1d95, #6d28d9); }
+.vyw-theme-lateNight #vyWidgetPanel .vyw-head { background: linear-gradient(135deg, #1e1b4b, #312e81); }
 
-/* Time greeting badge */
-.vyw-time-greeting {
-    display: inline-block;
-    background: rgba(59,130,246,0.15);
-    color: #60a5fa;
-    padding: 3px 10px;
-    border-radius: 50px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-/* Auto-suggested chips wrapper */
-.vyw-suggested {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-/* ============================================================
-   MOBILE RESPONSIVE
-   ============================================================ */
+/* MOBILE */
 @media (max-width: 480px) {
-    #vyWidgetBtn {
-        bottom: 16px;
-        right: 16px;
-        width: 56px;
-        height: 56px;
-        font-size: 22px;
-    }
-    #vyWidgetBtn::before { display: none; }
+    #vyWidgetBtn { bottom: 16px; right: 16px; width: 56px; height: 56px; font-size: 22px; }
+    #vyCartBtn { bottom: 80px; right: 16px; width: 46px; height: 46px; }
     #vyWidgetPanel {
-        bottom: 84px;
-        right: 8px;
-        left: 8px;
-        width: auto;
-        max-width: none;
-        height: 70vh;
-        max-height: calc(100vh - 110px);
+        bottom: 84px; right: 8px; left: 8px;
+        width: auto; max-width: none;
+        height: 75vh; max-height: calc(100vh - 110px);
     }
-    .vyw-inline-buttons {
-        gap: 0.4rem;
-    }
-    .vyw-inline-btn {
-        padding: 0.45rem 0.75rem;
-        font-size: 0.78rem;
-    }
-    .vyw-msg {
-        max-width: 90%;
-    }
-    .vyw-bubble {
-        font-size: 13px;
-        padding: 9px 12px;
-    }
+    .vyw-product-image { height: 120px; }
+    .vyw-inline-btn { padding: 0.45rem 0.75rem; font-size: 0.78rem; }
 }
 
-@media (max-width: 380px) {
-    #vyWidgetPanel {
-        bottom: 76px;
-        right: 6px;
-        left: 6px;
-        height: 75vh;
-        max-height: calc(100vh - 100px);
-    }
-    #vyWidgetPanel .vyw-head { padding: 12px 14px; }
-    #vyWidgetPanel .vyw-head img { width: 34px; height: 34px; }
-    #vyWidgetPanel .vyw-head-name { font-size: 14px; }
-    #vyWidgetPanel .vyw-messages { padding: 14px; gap: 10px; }
-    .vyw-inline-btn { padding: 0.4rem 0.65rem; font-size: 0.75rem; }
-    #vyWidgetPanel .vyw-chip { padding: 5px 9px; font-size: 11px; }
-}
-
-/* ============================================================
-   REDUCED MOTION
-   ============================================================ */
+/* REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
-    #vyWidgetBtn,
-    .vyw-msg,
-    .vyw-chip,
-    .vyw-inline-btn,
-    .vyw-typing .dot {
+    #vyWidgetBtn, .vyw-msg, .vyw-chip, .vyw-inline-btn, .vyw-typing .dot,
+    .vyw-speak-btn, .vyw-mic-btn, .vyw-rating-stars span {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;

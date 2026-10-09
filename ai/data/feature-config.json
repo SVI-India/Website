@@ -1,0 +1,128 @@
+{
+    "productCards": {
+        "enabled": true,
+        "showImage": true,
+        "showPrice": true,
+        "showRating": true,
+        "showStock": true
+    },
+    "voiceOutput": {
+        "enabled": true,
+        "autoSpeak": false,
+        "rate": 1.0,
+        "pitch": 1.0,
+        "preferredVoice": {
+            "en": "en-IN",
+            "hi": "hi-IN",
+            "bn": "bn-IN",
+            "mr": "mr-IN",
+            "ta": "ta-IN"
+        }
+    },
+    "voiceInput": {
+        "enabled": true,
+        "lang": "auto"
+    },
+    "feedback": {
+        "enabled": true,
+        "showAfterEveryBot": true,
+        "saveToFirestore": true
+    },
+    "orderTracking": {
+        "enabled": true,
+        "requiredFields": ["orderId", "phone"],
+        "firestoreCollection": "orders"
+    },
+    "smartSuggestions": {
+        "enabled": true,
+        "maxSuggestions": 4
+    },
+    "languages": {
+        "available": ["en", "hi", "bn", "mr", "ta"],
+        "default": "en"
+    },
+    "sentiment": {
+        "enabled": true,
+        "keywords": {
+            "negative": ["bakwas", "bad", "worst", "faltu", "ganda", "खराब", "बेकार", "खराब", "निराशा", "angry", "झूठ", "fraud", "चोर", "धोखा", "problem", "issue", "complaint", "not good", "disappointed"],
+            "positive": ["good", "best", "nice", "great", "excellent", "achha", "badhiya", "शानदार", "बहुत अच्छा", "love", "awesome", "perfect", "satisfied", "khush", "thanks", "धन्यवाद"],
+            "urgent": ["urgent", "jaldi", "तुरंत", "emergency", "fast", "asap", "जल्दी"]
+        },
+        "negativeReply": "🙏 I'm sorry to hear about your experience. Let me connect you with our support team immediately.\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
+        "negativeReplyHi": "🙏 मुझे आपकी समस्या के बारे में सुनकर खेद है। मैं आपको तुरंत हमारी सपोर्ट टीम से जोड़ता हूँ।\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
+        "positiveReply": "😊 Thank you so much! We're glad you liked it. Anything else I can help you with?",
+        "positiveReplyHi": "😊 बहुत-बहुत धन्यवाद! हमें खुशी है कि आपको पसंद आया। और कुछ मदद कर सकता हूँ?"
+    },
+    "bulkCalculator": {
+        "enabled": true,
+        "products": {
+            "nikolux": { "rate": 75, "unit": "kg" },
+            "life-star": { "rate": 55, "unit": "kg" },
+            "sanjivni": { "rate": 85, "unit": "kg" }
+        },
+        "gstPercent": 18,
+        "freeShippingAbove": 5000,
+        "shippingCharge": 200
+    },
+    "cart": {
+        "enabled": true,
+        "storageKey": "sve_cart",
+        "showFloatingButton": true
+    },
+    "whatsapp": {
+        "enabled": true,
+        "number": "918119964445",
+        "defaultMessage": "Hi, I'm interested in Siddhi Vinayak products. Please share details.",
+        "defaultMessageHi": "नमस्ते, मुझे सिद्धि विनायक उत्पादों में रुचि है। कृपया विवरण भेजें।"
+    },
+    "email": {
+        "enabled": true,
+        "default": "info@sve-in.xubi.org",
+        "sales": "sales@sve-in.xubi.org",
+        "bulk": "bulk@sve-in.xubi.org"
+    },
+    "pdfExport": {
+        "enabled": true,
+        "title": "Vinayak AI Chat — Siddhi Vinayak Enterprises",
+        "logo": "https://www.sveindia.mywire.org/images/logo.png"
+    },
+    "analytics": {
+        "enabled": true,
+        "trackEveryMessage": true,
+        "firestoreCollection": "ai_analytics"
+    },
+    "chatHistory": {
+        "enabled": true,
+        "maxMessages": 100,
+        "exportJSON": true
+    },
+    "rating": {
+        "enabled": true,
+        "firestoreCollection": "ai_ratings",
+        "askAfterMessages": 5
+    },
+    "faqAutoLearn": {
+        "enabled": true,
+        "minCount": 3,
+        "firestoreCollection": "ai_learned_faq"
+    },
+    "smartEmojis": {
+        "enabled": true,
+        "autoAdd": true
+    },
+    "timeThemes": {
+        "enabled": true,
+        "themes": {
+            "morning": { "from": 5, "to": 12, "bg": "linear-gradient(135deg, #fef3c7, #fde68a)", "accent": "#f59e0b" },
+            "afternoon": { "from": 12, "to": 17, "bg": "linear-gradient(135deg, #dbeafe, #bfdbfe)", "accent": "#3b82f6" },
+            "evening": { "from": 17, "to": 21, "bg": "linear-gradient(135deg, #fce7f3, #fbcfe8)", "accent": "#ec4899" },
+            "night": { "from": 21, "to": 24, "bg": "linear-gradient(135deg, #1e1b4b, #312e81)", "accent": "#8b5cf6" },
+            "lateNight": { "from": 0, "to": 5, "bg": "linear-gradient(135deg, #0f172a, #1e293b)", "accent": "#6366f1" }
+        }
+    },
+    "location": {
+        "enabled": true,
+        "askOnce": true,
+        "purpose": "delivery_time"
+    }
+}

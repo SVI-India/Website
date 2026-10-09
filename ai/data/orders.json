@@ -1,0 +1,32 @@
+{
+    "orders": {
+        "SVE000001": {
+            "status": "Delivered",
+            "statusHi": "डिलीवर हो गया",
+            "product": "Nikolux 5kg",
+            "quantity": 5,
+            "orderDate": "2026-10-01",
+            "deliveryDate": "2026-10-05",
+            "location": "Delhi Hub",
+            "trackingUrl": "https://track.example.com/SVE000001"
+        },
+        "SVE000002": {
+            "status": "Dispatched",
+            "statusHi": "भेज दिया गया",
+            "product": "Life Star 2kg",
+            "quantity": 10,
+            "orderDate": "2026-10-07",
+            "expectedDate": "2026-10-12",
+            "location": "In Transit — Jaipur",
+            "trackingUrl": "https://track.example.com/SVE000002"
+        },
+        "SVE000003": {
+            "status": "Processing",
+            "statusHi": "प्रोसेसिंग",
+            "product": "Sanjivni 1kg",
+            "quantity": 20,
+            "orderDate": "2026-10-09",
+            "expectedDate": "2026-10-14"
+        }
+    }
+}

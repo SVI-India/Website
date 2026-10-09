@@ -1,6 +1,8 @@
 /* ============================================================
-   VINAYAK AI — Full Page Chat (SMART Version)
+   VINAYAK AI — Full Page Chat (25 Features Complete)
    ============================================================ */
+
+* { box-sizing: border-box; }
 
 .vy-ai-page {
     min-height: 100vh;
@@ -8,395 +10,314 @@
     padding: 20px;
     font-family: 'Inter', -apple-system, sans-serif;
     color: #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
 }
 
 .vy-ai-wrap {
-    max-width: 900px;
-    width: 100%;
-    height: 90vh;
-    max-height: 850px;
-    background: #0f172a;
-    border-radius: 20px;
+    max-width: 900px; width: 100%;
+    height: 90vh; max-height: 850px;
+    background: #0f172a; border-radius: 20px;
     box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #1e293b;
+    display: flex; flex-direction: column;
+    overflow: hidden; border: 1px solid #1e293b;
 }
 
-/* ---------- Header ---------- */
+/* HEADER */
 .vy-head {
     padding: 16px 20px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
+    color: #fff; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
 }
 .vy-head img {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #fff;
-    padding: 3px;
-    object-fit: cover;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #fff; padding: 3px; object-fit: cover;
 }
 .vy-head-info { flex: 1; min-width: 0; }
-.vy-head-name {
-    font-size: 16px;
-    font-weight: 800;
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.vy-head-name { font-size: 16px; font-weight: 800; line-height: 1.2; }
 .vy-status {
-    font-size: 11px;
-    opacity: 0.9;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 2px;
+    font-size: 11px; opacity: 0.9; display: flex; align-items: center;
+    gap: 6px; margin-top: 2px;
 }
 .vy-status::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border-radius: 50%;
-    animation: vyPulse 2s infinite;
+    content: ''; width: 8px; height: 8px; background: #10b981;
+    border-radius: 50%; animation: vyPulse 2s infinite;
 }
-@keyframes vyPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.3); }
-}
+@keyframes vyPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
 .vy-head-btn {
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.25);
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: all 0.2s;
-    text-decoration: none;
-    flex-shrink: 0;
+    color: #fff; width: 36px; height: 36px; border-radius: 10px;
+    cursor: pointer; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 16px;
+    transition: all 0.2s; text-decoration: none; flex-shrink: 0;
 }
-.vy-head-btn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: scale(1.05);
-}
+.vy-head-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
 
-/* ---------- Messages ---------- */
+/* MESSAGES */
 .vy-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    background: #0a0f1e;
-    scroll-behavior: smooth;
+    flex: 1; overflow-y: auto; padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+    background: #0a0f1e; scroll-behavior: smooth;
 }
 .vy-messages::-webkit-scrollbar { width: 6px; }
-.vy-messages::-webkit-scrollbar-track { background: transparent; }
-.vy-messages::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 3px;
-}
+.vy-messages::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
-.vy-msg {
-    display: flex;
-    gap: 10px;
-    max-width: 85%;
-    animation: vyFade 0.3s ease;
-}
-@keyframes vyFade {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.vy-msg.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
+.vy-msg { display: flex; gap: 10px; max-width: 85%; animation: vyFade 0.3s ease; }
+@keyframes vyFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.vy-msg.user { align-self: flex-end; flex-direction: row-reverse; }
 .vy-msg.bot { align-self: flex-start; }
 
 .vy-msg-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 800;
-    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; font-weight: 800; overflow: hidden;
 }
-.vy-msg-avatar img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-}
-.vy-msg.user .vy-msg-avatar {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
+.vy-msg-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.vy-msg.user .vy-msg-avatar { background: linear-gradient(135deg, #10b981, #059669); }
 
 .vy-bubble {
-    padding: 12px 16px;
-    border-radius: 16px;
-    font-size: 14.5px;
-    line-height: 1.6;
-    word-break: break-word;
-    white-space: pre-wrap;
+    padding: 12px 16px; border-radius: 16px; font-size: 14.5px;
+    line-height: 1.6; word-break: break-word; white-space: pre-wrap;
 }
-.vy-msg.bot .vy-bubble {
-    background: #1e293b;
-    color: #e2e8f0;
-    border-bottom-left-radius: 4px;
-}
-.vy-msg.user .vy-bubble {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    border-bottom-right-radius: 4px;
-}
-.vy-bubble a {
-    color: #60a5fa;
-    text-decoration: underline;
-}
-.vy-msg.user .vy-bubble a { color: #fff; }
+.vy-msg.bot .vy-bubble { background: #1e293b; color: #e2e8f0; border-bottom-left-radius: 4px; }
+.vy-msg.user .vy-bubble { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; border-bottom-right-radius: 4px; }
+.vy-bubble a { color: #60a5fa; text-decoration: underline; }
 .vy-bubble strong { color: #fff; font-weight: 700; }
 .vy-bubble em { color: #93c5fd; font-style: italic; }
+.vy-time { font-size: 10px; opacity: 0.6; margin-top: 4px; display: block; }
 
-.vy-time {
-    font-size: 10px;
-    opacity: 0.6;
-    margin-top: 4px;
-    display: block;
+/* PRODUCT CARDS */
+.vy-product-card {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 12px; overflow: hidden; margin: 0.5rem 0;
+    max-width: 100%; transition: all 0.3s;
+}
+.vy-product-card:hover { border-color: #3b82f6; box-shadow: 0 10px 25px rgba(59,130,246,0.2); }
+.vy-product-image { width: 100%; height: 160px; object-fit: cover; background: #1e293b; }
+.vy-product-body { padding: 14px 16px; }
+.vy-product-title-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+.vy-product-name { font-size: 16px; font-weight: 800; color: #fff; }
+.vy-product-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 50px; background: #f59e0b; color: #fff;
+    text-transform: uppercase;
+}
+.vy-product-badge.new { background: #10b981; }
+.vy-product-desc { font-size: 13px; color: #94a3b8; margin-bottom: 10px; line-height: 1.5; }
+.vy-product-price { font-size: 15px; font-weight: 700; color: #10b981; margin-bottom: 8px; }
+.vy-product-price .from { font-size: 11px; color: #64748b; font-weight: 500; }
+.vy-product-rating { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #f59e0b; margin-bottom: 10px; }
+.vy-product-rating .count { color: #64748b; font-size: 11px; }
+.vy-product-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.vy-product-btn {
+    flex: 1; padding: 9px 14px; border-radius: 8px; font-size: 13px;
+    font-weight: 700; cursor: pointer; border: none; text-decoration: none;
+    text-align: center; transition: all 0.2s; font-family: inherit;
+    white-space: nowrap; display: inline-block;
+}
+.vy-product-btn.primary { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
+.vy-product-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,64,175,0.4); }
+.vy-product-btn.outline { background: transparent; color: #60a5fa; border: 1.5px solid #3b82f6; }
+.vy-product-btn.outline:hover { background: #1e40af; color: #fff; }
+
+/* INLINE BUTTONS */
+.vy-inline-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.vy-inline-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.82rem;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; font-family: inherit;
+    border: 1.5px solid transparent; white-space: nowrap;
+}
+.vy-inline-btn.primary { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
+.vy-inline-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,64,175,0.4); }
+.vy-inline-btn.outline { background: #1e293b; color: #60a5fa; border-color: #3b82f6; }
+.vy-inline-btn.outline:hover { background: #1e40af; color: #fff; transform: translateY(-2px); }
+.vy-inline-btn.success { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.vy-inline-btn.success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,185,129,0.4); }
+.vy-inline-btn.warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+.vy-inline-btn.warning:hover { transform: translateY(-2px); }
+.vy-inline-btn.info { background: #0f172a; color: #60a5fa; border-color: #334155; }
+.vy-inline-btn.info:hover { background: #1e40af; color: #fff; }
+
+/* FEEDBACK */
+.vy-feedback {
+    display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 8px 12px; background: #0f172a; border-radius: 8px;
+    font-size: 12px; color: #94a3b8; border: 1px solid #1e293b;
+}
+.vy-feedback button {
+    background: transparent; border: 1px solid #334155;
+    color: #cbd5e1; padding: 4px 10px; border-radius: 6px;
+    cursor: pointer; font-size: 14px;
+}
+.vy-feedback button:hover { background: #1e293b; border-color: #3b82f6; }
+.vy-feedback button.active { background: #10b981; border-color: #10b981; color: #fff; }
+
+/* TRACKING */
+.vy-track-result {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 10px; padding: 14px; margin: 10px 0;
+}
+.vy-track-result .status {
+    display: inline-block; padding: 4px 12px;
+    border-radius: 50px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 8px;
+}
+.vy-track-result .status.delivered { background: #10b981; color: #fff; }
+.vy-track-result .status.dispatched { background: #f59e0b; color: #fff; }
+.vy-track-result .status.processing { background: #3b82f6; color: #fff; }
+.vy-track-result .row {
+    display: flex; justify-content: space-between;
+    padding: 6px 0; border-bottom: 1px solid #1e293b; font-size: 12.5px;
+}
+.vy-track-result .row:last-child { border-bottom: none; }
+.vy-track-result .label { color: #94a3b8; }
+.vy-track-result .value { color: #e2e8f0; font-weight: 600; }
+
+/* BULK CALCULATOR */
+.vy-calc {
+    background: #0f172a; border: 1px solid #334155;
+    border-radius: 10px; padding: 14px; margin: 10px 0;
+}
+.vy-calc label {
+    display: block; font-size: 11.5px; font-weight: 600;
+    color: #94a3b8; margin-bottom: 4px; text-transform: uppercase;
+}
+.vy-calc select, .vy-calc input {
+    width: 100%; padding: 9px 12px; background: #1e293b;
+    border: 1.5px solid #334155; border-radius: 8px;
+    color: #e2e8f0; font-size: 13px; font-family: inherit;
+    margin-bottom: 10px;
+}
+.vy-calc .result {
+    background: #1e293b; border-radius: 8px;
+    padding: 12px; margin-top: 10px;
+}
+.vy-calc .result .line {
+    display: flex; justify-content: space-between;
+    font-size: 13px; padding: 4px 0; color: #cbd5e1;
+}
+.vy-calc .result .line.total {
+    border-top: 1.5px solid #334155; margin-top: 6px;
+    padding-top: 10px; font-size: 15px;
+    font-weight: 800; color: #10b981;
 }
 
-/* ---------- Typing indicator ---------- */
+/* SPEAK BUTTON */
+.vy-speak-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; background: #1e293b;
+    border: 1px solid #334155; color: #94a3b8;
+    border-radius: 50%; cursor: pointer; font-size: 12px;
+    transition: all 0.2s; vertical-align: middle;
+}
+.vy-speak-btn:hover { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+.vy-speak-btn.speaking {
+    background: #ef4444; color: #fff; border-color: #ef4444;
+    animation: vySpeakPulse 1s infinite;
+}
+@keyframes vySpeakPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+/* RATING */
+.vy-rating-stars { display: flex; gap: 6px; font-size: 26px; margin: 4px 0; }
+.vy-rating-stars span {
+    color: #475569; cursor: pointer;
+    transition: all 0.2s; user-select: none; line-height: 1;
+}
+.vy-rating-stars span:hover, .vy-rating-stars span.active {
+    color: #f59e0b; transform: scale(1.15);
+}
+
+/* TYPING */
 .vy-typing .vy-bubble {
-    display: flex;
-    gap: 4px;
-    padding: 14px 18px;
-    align-items: center;
+    display: flex; gap: 4px;
+    padding: 14px 18px; align-items: center;
 }
 .vy-typing .dot {
-    width: 8px;
-    height: 8px;
-    background: #60a5fa;
-    border-radius: 50%;
-    animation: vyDot 1.4s infinite;
+    width: 8px; height: 8px; background: #60a5fa;
+    border-radius: 50%; animation: vyDot 1.4s infinite;
 }
 .vy-typing .dot:nth-child(2) { animation-delay: 0.2s; }
 .vy-typing .dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes vyDot {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    0%,60%,100% { transform: translateY(0); opacity: 0.5; }
     30% { transform: translateY(-6px); opacity: 1; }
 }
 
-/* ---------- Quick replies (chips) ---------- */
+/* QUICK REPLIES */
 .vy-quick {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 20px 12px;
-    background: #0a0f1e;
-    flex-shrink: 0;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 8px 20px 12px; background: #0a0f1e;
+    flex-shrink: 0; max-height: 130px; overflow-y: auto;
 }
 .vy-chip {
-    padding: 8px 14px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #cbd5e1;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    animation: vyChipIn 0.3s ease;
+    padding: 8px 14px; background: #1e293b;
+    border: 1px solid #334155; color: #cbd5e1;
+    border-radius: 50px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit; animation: vyChipIn 0.3s ease;
+    white-space: nowrap;
 }
 .vy-chip:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-    transform: translateY(-2px);
+    background: #1e40af; color: #fff;
+    border-color: #1e40af; transform: translateY(-2px);
 }
-@keyframes vyChipIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes vyChipIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ---------- Input ---------- */
+/* INPUT */
 .vy-input-wrap {
-    padding: 14px 20px 18px;
-    background: #0f172a;
+    padding: 14px 20px 18px; background: #0f172a;
     border-top: 1px solid #1e293b;
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-    flex-shrink: 0;
+    display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0;
 }
 .vy-input {
-    flex: 1;
-    background: #1e293b;
-    border: 1.5px solid #334155;
-    color: #e2e8f0;
-    padding: 12px 16px;
-    border-radius: 24px;
-    font-size: 14.5px;
-    font-family: inherit;
-    resize: none;
-    max-height: 100px;
-    min-height: 44px;
-    line-height: 1.5;
-    transition: border 0.2s;
+    flex: 1; background: #1e293b;
+    border: 1.5px solid #334155; color: #e2e8f0;
+    padding: 12px 16px; border-radius: 24px;
+    font-size: 14.5px; font-family: inherit;
+    resize: none; max-height: 100px;
+    min-height: 44px; line-height: 1.5;
 }
-.vy-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
+.vy-input:focus { outline: none; border-color: #3b82f6; }
 .vy-input::placeholder { color: #64748b; }
 
 .vy-send {
-    width: 44px;
-    height: 44px;
+    width: 44px; height: 44px;
     background: linear-gradient(135deg, #1e40af, #3b82f6);
-    border: none;
-    border-radius: 50%;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    border: none; border-radius: 50%; color: #fff;
+    cursor: pointer; display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
     box-shadow: 0 6px 18px rgba(30,64,175,0.4);
 }
-.vy-send:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 24px rgba(30,64,175,0.6);
-}
-.vy-send:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
+.vy-send:hover { transform: scale(1.1); }
+.vy-send:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .vy-icon-btn {
-    width: 44px;
-    height: 44px;
-    background: #1e293b;
-    border: 1.5px solid #334155;
-    border-radius: 50%;
-    color: #cbd5e1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    width: 44px; height: 44px; background: #1e293b;
+    border: 1.5px solid #334155; border-radius: 50%;
+    color: #cbd5e1; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
 }
 .vy-icon-btn:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
+    background: #1e40af; color: #fff; border-color: #1e40af;
 }
 
-/* ============================================================
-   SMART INLINE BUTTONS (Inside chat bubbles)
-   ============================================================ */
-.vy-inline-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
-.vy-inline-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    font-family: inherit;
-    border: 1.5px solid transparent;
-    line-height: 1.3;
-    white-space: nowrap;
-}
-.vy-inline-btn.primary {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(30,64,175,0.3);
-}
-.vy-inline-btn.primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(30,64,175,0.4);
-}
-.vy-inline-btn.outline {
-    background: #1e293b;
-    color: #60a5fa;
-    border-color: #3b82f6;
-}
-.vy-inline-btn.outline:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-    transform: translateY(-2px);
-}
-.vy-inline-btn.success {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: #fff;
-}
-.vy-inline-btn.success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16,185,129,0.4);
-}
-.vy-inline-btn.warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: #fff;
-}
-.vy-inline-btn.warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(245,158,11,0.4);
-}
-.vy-inline-btn.info {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: #60a5fa;
-    border-color: #334155;
-}
-.vy-inline-btn.info:hover {
-    background: #1e40af;
-    color: #fff;
-    border-color: #1e40af;
-}
+/* TIME THEMES */
+.vy-theme-morning .vy-head { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.vy-theme-afternoon .vy-head { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.vy-theme-evening .vy-head { background: linear-gradient(135deg, #ec4899, #f472b6); }
+.vy-theme-night .vy-head { background: linear-gradient(135deg, #4c1d95, #6d28d9); }
+.vy-theme-lateNight .vy-head { background: linear-gradient(135deg, #1e1b4b, #312e81); }
 
-/* ---------- Mobile ---------- */
+/* MOBILE */
 @media (max-width: 600px) {
     .vy-ai-page { padding: 0; }
-    .vy-ai-wrap {
-        height: 100vh;
-        max-height: 100vh;
-        border-radius: 0;
-    }
+    .vy-ai-wrap { height: 100vh; max-height: 100vh; border-radius: 0; }
     .vy-msg { max-width: 92%; }
     .vy-bubble { font-size: 14px; padding: 10px 14px; }
     .vy-inline-btn { padding: 0.45rem 0.75rem; font-size: 0.78rem; }
@@ -414,9 +335,9 @@
     .vy-input { font-size: 14px; }
 }
 
-/* ---------- Reduced Motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-    .vy-msg, .vy-chip, .vy-inline-btn, .vy-typing .dot {
+    .vy-msg, .vy-chip, .vy-inline-btn, .vy-typing .dot,
+    .vy-speak-btn, .vy-rating-stars span {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
