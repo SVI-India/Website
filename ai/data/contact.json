@@ -1,13 +1,13 @@
 {
     "general": {
         "patterns": ["contact", "email", "reach", "संपर्क"],
-        "reply": "📞 Contact Us:\n\n📧 General: info@svein.mywire.org\n📧 Sales: sales@svein.mywire.org\n📧 Bulk Orders: bulk@svein.mywire.org\n📧 B2B: b2b@svein.mywire.org\n📧 Support: support@svein.mywire.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 001\n\n🌐 https://www.sveindia.mywire.org",
-        "replyHi": "📞 हमसे संपर्क करें:\n\n📧 सामान्य: info@svein.mywire.org\n📧 बिक्री: sales@svein.mywire.org\n📧 थोक: bulk@svein.mywire.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 001"
+        "reply": "📞 Contact Us:\n\n📧 General: info@svein.mywire.org\n📧 Sales: sales@svein.mywire.org\n📧 Bulk Orders: bulk@svein.mywire.org\n📧 B2B: b2b@svein.mywire.org\n📧 Support: support@svein.mywire.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 802\n\n🌐 https://www.sveindia.mywire.org",
+        "replyHi": "📞 हमसे संपर्क करें:\n\n📧 सामान्य: info@svein.mywire.org\n📧 बिक्री: sales@svein.mywire.org\n📧 थोक: bulk@svein.mywire.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 802"
     },
     "address": {
         "patterns": ["address", "location", "where", "factory", "पता", "कहाँ"],
-        "reply": "📍 Our Location:\n\nSiddhi Vinayak Enterprises\nLachharsar, District Churu\nRajasthan — 331 001, India\n\n📧 info@svein.mywire.org\n\n🗺️ View on map: /contact.html",
-        "replyHi": "📍 हमारा स्थान:\n\nसिद्धि विनायक एंटरप्राइज़ेज़\nलछारसर, ज़िला चूरू\nराजस्थान — 331 001, भारत"
+        "reply": "📍 Our Location:\n\nSiddhi Vinayak Enterprises\nLachharsar, District Churu\nRajasthan — 331 802, India\n\n📧 info@svein.mywire.org\n\n🗺️ View on map: /contact.html",
+        "replyHi": "📍 हमारा स्थान:\n\nसिद्धि विनायक एंटरप्राइज़ेज़\nलछारसर, ज़िला चूरू\nराजस्थान — 331 802, भारत"
     },
     "sales": {
         "patterns": ["sales email", "sales team"],

@@ -126,8 +126,8 @@ const DEFAULT_FOOTER = {
         { label: "Sanjivni",  url: "products/sanjivni.html" }
     ],
     contactInfo: {
-        address: "Lachharsar, District Churu, Rajasthan — 331 001, India",
-        addressHi: "लछारसर, ज़िला चूरू, राजस्थान — 331 001, भारत",
+        address: "Lachharsar, District Churu, Rajasthan — 331 802, India",
+        addressHi: "लछारसर, ज़िला चूरू, राजस्थान — 331 802, भारत",
         phone: "",
         email: "info@svein.mywire.org",
         salesEmail: "sales@svein.mywire.org",
