@@ -68,12 +68,12 @@
         "privacy": { "label": "Privacy", "labelHi": "गोपनीयता", "icon": "🔒", "url": "/privacy.html", "type": "outline" }
     },
     "emailLinks": {
-        "info": "info@sve-in.xubi.org",
-        "sales": "sales@sve-in.xubi.org",
-        "bulk": "bulk@sve-in.xubi.org",
-        "b2b": "b2b@sve-in.xubi.org",
-        "support": "support@sve-in.xubi.org",
-        "orders": "orders@sve-in.xubi.org"
+        "info": "info@svein.mywire.org",
+        "sales": "sales@svein.mywire.org",
+        "bulk": "bulk@svein.mywire.org",
+        "b2b": "b2b@svein.mywire.org",
+        "support": "support@svein.mywire.org",
+        "orders": "orders@svein.mywire.org"
     },
     "phoneLink": "+918119964445"
 }

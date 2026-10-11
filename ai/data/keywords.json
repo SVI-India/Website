@@ -39,14 +39,14 @@
         {
             "id": "price_nikolux",
             "must_have": ["price", "nikolux"],
-            "reply": "💰 Nikolux Pricing:\n\n• 500g — Best for trial\n• 1kg — Regular use\n• 2kg — Family pack\n• 5kg — Value pack\n• 10kg — Bulk pack\n\nPlease share quantity & city for exact quote.\n📧 sales@sve-in.xubi.org",
+            "reply": "💰 Nikolux Pricing:\n\n• 500g — Best for trial\n• 1kg — Regular use\n• 2kg — Family pack\n• 5kg — Value pack\n• 10kg — Bulk pack\n\nPlease share quantity & city for exact quote.\n📧 sales@svein.mywire.org",
             "replyHi": "💰 निकोलक्स मूल्य:\n\n• 500g — ट्रायल के लिए\n• 1kg — नियमित उपयोग\n• 2kg — फैमिली पैक\n• 5kg — वैल्यू पैक\n• 10kg — थोक पैक\n\nमात्रा और शहर बताएं।"
         },
         {
             "id": "price_life_star",
             "must_have": ["price", "life-star"],
-            "reply": "💰 Life Star Pricing:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\n*Contact for exact price: sales@sve-in.xubi.org",
-            "replyHi": "💰 लाइफ स्टार मूल्य:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\nसटीक मूल्य: sales@sve-in.xubi.org"
+            "reply": "💰 Life Star Pricing:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\n*Contact for exact price: sales@svein.mywire.org",
+            "replyHi": "💰 लाइफ स्टार मूल्य:\n\n• 500g — ₹XX\n• 1kg — ₹XX\n• 2kg — ₹XX\n• 5kg — ₹XX\n\nसटीक मूल्य: sales@svein.mywire.org"
         },
         {
             "id": "delivery_rajasthan",
@@ -57,8 +57,8 @@
         {
             "id": "bulk_nikolux",
             "must_have": ["bulk", "nikolux"],
-            "reply": "📦 Nikolux Bulk Order:\n\n• Minimum: 500 kg\n• Custom packaging\n• Special pricing\n• Priority dispatch\n\n📧 bulk@sve-in.xubi.org",
-            "replyHi": "📦 निकोलक्स थोक ऑर्डर:\n\n• न्यूनतम: 500 किग्रा\n• कस्टम पैकेजिंग\n• विशेष मूल्य\n\n📧 bulk@sve-in.xubi.org"
+            "reply": "📦 Nikolux Bulk Order:\n\n• Minimum: 500 kg\n• Custom packaging\n• Special pricing\n• Priority dispatch\n\n📧 bulk@svein.mywire.org",
+            "replyHi": "📦 निकोलक्स थोक ऑर्डर:\n\n• न्यूनतम: 500 किग्रा\n• कस्टम पैकेजिंग\n• विशेष मूल्य\n\n📧 bulk@svein.mywire.org"
         },
         {
             "id": "quality_herbal",

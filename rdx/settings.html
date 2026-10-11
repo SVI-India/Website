@@ -42,7 +42,7 @@
 
         <div class="card">
             <h3>📧 Email Aliases</h3>
-            <p class="card-desc">All official emails on <strong>@sve-in.xubi.org</strong>. Shown on contact page directory.</p>
+            <p class="card-desc">All official emails on <strong>@svein.mywire.org</strong>. Shown on contact page directory.</p>
             <div id="emailEditor" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:1rem;"></div>
             <button class="btn btn-success" style="margin-top:1.5rem;" onclick="saveEmails()">💾 Save Emails</button>
         </div>
@@ -95,7 +95,7 @@
                 document.getElementById('emailEditor').innerHTML = EMAIL_FIELDS.map(([key, label]) => `
                     <div class="form-group" style="margin-bottom:0;">
                         <label>${label}</label>
-                        <input type="email" data-key="${key}" value="${esc(ed[key] || (key + '@sve-in.xubi.org'))}">
+                        <input type="email" data-key="${key}" value="${esc(ed[key] || (key + '@svein.mywire.org'))}">
                     </div>
                 `).join('');
 

@@ -48,8 +48,8 @@
             "positive": ["good", "best", "nice", "great", "excellent", "achha", "badhiya", "शानदार", "बहुत अच्छा", "love", "awesome", "perfect", "satisfied", "khush", "thanks", "धन्यवाद"],
             "urgent": ["urgent", "jaldi", "तुरंत", "emergency", "fast", "asap", "जल्दी"]
         },
-        "negativeReply": "🙏 I'm sorry to hear about your experience. Let me connect you with our support team immediately.\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
-        "negativeReplyHi": "🙏 मुझे आपकी समस्या के बारे में सुनकर खेद है। मैं आपको तुरंत हमारी सपोर्ट टीम से जोड़ता हूँ।\n\n📞 +91 81199 64445\n📧 grievance@sve-in.xubi.org",
+        "negativeReply": "🙏 I'm sorry to hear about your experience. Let me connect you with our support team immediately.\n\n📞 +91 81199 64445\n📧 grievance@svein.mywire.org",
+        "negativeReplyHi": "🙏 मुझे आपकी समस्या के बारे में सुनकर खेद है। मैं आपको तुरंत हमारी सपोर्ट टीम से जोड़ता हूँ।\n\n📞 +91 81199 64445\n📧 grievance@svein.mywire.org",
         "positiveReply": "😊 Thank you so much! We're glad you liked it.",
         "positiveReplyHi": "😊 बहुत-बहुत धन्यवाद! हमें खुशी है कि आपको पसंद आया।"
     },
@@ -77,9 +77,9 @@
     },
     "email": {
         "enabled": true,
-        "default": "info@sve-in.xubi.org",
-        "sales": "sales@sve-in.xubi.org",
-        "bulk": "bulk@sve-in.xubi.org"
+        "default": "info@svein.mywire.org",
+        "sales": "sales@svein.mywire.org",
+        "bulk": "bulk@svein.mywire.org"
     },
     "pdfExport": {
         "enabled": true,

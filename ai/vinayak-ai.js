@@ -227,7 +227,7 @@
             <div class="line"><span>GST</span><span>${fmt(gst)}</span></div>
             <div class="line"><span>Shipping</span><span>${shipping === 0 ? '✅ FREE' : fmt(shipping)}</span></div>
             <div class="line total"><span>Total</span><span>${fmt(total)}</span></div>
-            <a href="mailto:${FEATURE.email?.bulk || 'bulk@sve-in.xubi.org'}?subject=Bulk Order&body=Product: ${productId}%0AQty: ${qty}kg%0ATotal: ${fmt(total)}" class="vy-product-btn primary" style="display:block;margin-top:12px;padding:10px;text-align:center;">📦 Place Order</a>`;
+            <a href="mailto:${FEATURE.email?.bulk || 'bulk@svein.mywire.org'}?subject=Bulk Order&body=Product: ${productId}%0AQty: ${qty}kg%0ATotal: ${fmt(total)}" class="vy-product-btn primary" style="display:block;margin-top:12px;padding:10px;text-align:center;">📦 Place Order</a>`;
     };
 
     // ---- VOICE OUTPUT ----
@@ -276,7 +276,7 @@
                 ${rating ? `<div class="vy-product-rating">${stars} <span class="count">(${p.ratingCount || 0})</span></div>` : ''}
                 <div class="vy-product-actions">
                     <a href="${BASE_URL}${p.page || '/products.html'}" target="_blank" class="vy-product-btn primary">🔗 Details</a>
-                    <a href="mailto:${FEATURE.email?.sales || 'sales@sve-in.xubi.org'}?subject=Enquiry: ${p.name}" class="vy-product-btn outline">📧 Enquire</a>
+                    <a href="mailto:${FEATURE.email?.sales || 'sales@svein.mywire.org'}?subject=Enquiry: ${p.name}" class="vy-product-btn outline">📧 Enquire</a>
                 </div>
             </div>
         </div>`;
@@ -600,7 +600,7 @@
         }
         if (t.includes('send email') || t.includes('email karo')) {
             setTimeout(() => {
-                addMessage('bot', '📧 **Opening email...**', true, [{ label: 'Send Email', labelHi: 'ईमेल भेजें', icon: '📧', url: `mailto:${FEATURE.email?.default || 'info@sve-in.xubi.org'}?subject=Enquiry from Vinayak AI`, type: 'warning', external: true }]);
+                addMessage('bot', '📧 **Opening email...**', true, [{ label: 'Send Email', labelHi: 'ईमेल भेजें', icon: '📧', url: `mailto:${FEATURE.email?.default || 'info@svein.mywire.org'}?subject=Enquiry from Vinayak AI`, type: 'warning', external: true }]);
                 sendBtn.disabled = false;
             }, 400);
             return;

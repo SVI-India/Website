@@ -38,7 +38,7 @@
     "price": [
         {
             "patterns": ["price", "pricing", "cost", "rate", "how much", "कीमत", "दाम"],
-            "reply": "For accurate pricing, please share:\n\n1. Which product? (Nikolux / Life Star / Sanjivni)\n2. Quantity needed?\n3. Your city/pincode\n\nOur team will send you the best quote within 24 hours. You can also email us at info@sve-in.xubi.org",
+            "reply": "For accurate pricing, please share:\n\n1. Which product? (Nikolux / Life Star / Sanjivni)\n2. Quantity needed?\n3. Your city/pincode\n\nOur team will send you the best quote within 24 hours. You can also email us at info@svein.mywire.org",
             "replyHi": "सटीक मूल्य के लिए, कृपया बताएं:\n\n1. कौन सा उत्पाद?\n2. कितनी मात्रा चाहिए?\n3. आपका शहर/पिनकोड\n\nहमारी टीम 24 घंटे में कोट भेजेगी।"
         }
     ],
@@ -46,8 +46,8 @@
     "bulk_order": [
         {
             "patterns": ["bulk", "wholesale", "distributor", "dealer", "retailer", "थोक"],
-            "reply": "Yes! We offer special bulk pricing 🎯\n\n• Minimum order: 500 kg\n• Custom packaging available\n• Private labeling option\n• Pan-India delivery\n\nPlease share your requirement at bulk@sve-in.xubi.org or contact us at /contact.html",
-            "replyHi": "हाँ! हम विशेष थोक मूल्य प्रदान करते हैं 🎯\n\n• न्यूनतम ऑर्डर: 500 किग्रा\n• कस्टम पैकेजिंग उपलब्ध\n• प्राइवेट लेबलिंग विकल्प\n\nकृपया अपनी आवश्यकता bulk@sve-in.xubi.org पर भेजें"
+            "reply": "Yes! We offer special bulk pricing 🎯\n\n• Minimum order: 500 kg\n• Custom packaging available\n• Private labeling option\n• Pan-India delivery\n\nPlease share your requirement at bulk@svein.mywire.org or contact us at /contact.html",
+            "replyHi": "हाँ! हम विशेष थोक मूल्य प्रदान करते हैं 🎯\n\n• न्यूनतम ऑर्डर: 500 किग्रा\n• कस्टम पैकेजिंग उपलब्ध\n• प्राइवेट लेबलिंग विकल्प\n\nकृपया अपनी आवश्यकता bulk@svein.mywire.org पर भेजें"
         }
     ],
 
@@ -62,16 +62,16 @@
     "refund": [
         {
             "patterns": ["refund", "return", "cancel", "वापसी", "रिफंड"],
-            "reply": "💰 Refund Policy:\n\nRefunds available if:\n• Product damaged on arrival (report within 48 hours)\n• Wrong product delivered\n• Manufacturing defect\n\nProcess:\n1. Report with photos to orders@sve-in.xubi.org\n2. Verification: 3-5 business days\n3. Refund: 7-10 business days\n\nFull details: /refund.html",
-            "replyHi": "💰 वापसी नीति:\n\nवापसी उपलब्ध है यदि:\n• क्षतिग्रस्त उत्पाद (48 घंटे में रिपोर्ट करें)\n• गलत उत्पाद वितरित\n• निर्माण दोष\n\nप्रक्रिया: orders@sve-in.xubi.org पर फोटो भेजें"
+            "reply": "💰 Refund Policy:\n\nRefunds available if:\n• Product damaged on arrival (report within 48 hours)\n• Wrong product delivered\n• Manufacturing defect\n\nProcess:\n1. Report with photos to orders@svein.mywire.org\n2. Verification: 3-5 business days\n3. Refund: 7-10 business days\n\nFull details: /refund.html",
+            "replyHi": "💰 वापसी नीति:\n\nवापसी उपलब्ध है यदि:\n• क्षतिग्रस्त उत्पाद (48 घंटे में रिपोर्ट करें)\n• गलत उत्पाद वितरित\n• निर्माण दोष\n\nप्रक्रिया: orders@svein.mywire.org पर फोटो भेजें"
         }
     ],
 
     "contact": [
         {
             "patterns": ["contact", "email", "phone", "reach", "call", "संपर्क", "ईमेल"],
-            "reply": "📞 Contact Information:\n\n📧 General: info@sve-in.xubi.org\n📧 Sales: sales@sve-in.xubi.org\n📧 Bulk: bulk@sve-in.xubi.org\n📧 B2B: b2b@sve-in.xubi.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 001\n\n🌐 Website: https://www.sveindia.mywire.org",
-            "replyHi": "📞 संपर्क जानकारी:\n\n📧 सामान्य: info@sve-in.xubi.org\n📧 बिक्री: sales@sve-in.xubi.org\n📧 थोक: bulk@sve-in.xubi.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 001"
+            "reply": "📞 Contact Information:\n\n📧 General: info@svein.mywire.org\n📧 Sales: sales@svein.mywire.org\n📧 Bulk: bulk@svein.mywire.org\n📧 B2B: b2b@svein.mywire.org\n\n📍 Lachharsar, District Churu, Rajasthan — 331 001\n\n🌐 Website: https://www.sveindia.mywire.org",
+            "replyHi": "📞 संपर्क जानकारी:\n\n📧 सामान्य: info@svein.mywire.org\n📧 बिक्री: sales@svein.mywire.org\n📧 थोक: bulk@svein.mywire.org\n\n📍 लछारसर, ज़िला चूरू, राजस्थान — 331 001"
         }
     ],
 
