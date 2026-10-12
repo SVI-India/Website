@@ -98,7 +98,7 @@ const DEFAULT_HEADER = {
     logoImage: "/images/logo.png",
     b2bButtonText: "B2B Portal",
     b2bButtonTextHi: "B2B पोर्टल",
-    b2bButtonUrl: "https://sve.tedbuy.com/",
+    b2bButtonUrl: "https://buy.sveindia.mywire.org/",
     showLangToggle: true,
     showModeToggle: true,
     navItems: [
