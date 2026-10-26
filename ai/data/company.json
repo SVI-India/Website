@@ -16,7 +16,7 @@
     },
     "stats": {
         "patterns": ["stats", "numbers", "how many"],
-        "reply": "📊 Our Numbers:\n\n• 15+ Years of Experience\n• 50+ Distributors\n• 3 Premium Brands\n• 1M+ Happy Customers\n• 6000 Tons/year capacity",
-        "replyHi": "📊 हमारे आंकड़े:\n\n• 15+ वर्षों का अनुभव\n• 50+ वितरक\n• 3 प्रीमियम ब्रांड\n• 1M+ खुश ग्राहक"
+        "reply": "📊 Our Numbers:\n\n• 15+ Years of Experience\n• 500+ Distributors\n• 3 Premium Brands\n• 1M+ Happy Customers\n• 6000 Tons/year capacity",
+        "replyHi": "📊 हमारे आंकड़े:\n\n• 15+ वर्षों का अनुभव\n• 500+ वितरक\n• 3 प्रीमियम ब्रांड\n• 1M+ खुश ग्राहक"
     }
 }
