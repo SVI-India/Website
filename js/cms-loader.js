@@ -145,7 +145,7 @@ const DEFAULT_FOOTER = {
     ],
     socialLinks: {
         youtube:   "https://www.youtube.com/@SVE_India",
-        facebook:  "https://www.facebook.com/profile.php?id=61595117367741",
+        facebook:  "https://www.facebook.com/SVEInd/",
         instagram: "https://www.instagram.com/sve_india",
         twitter:   "https://x.com/SVE_India_",
         linkedin:  "https://www.linkedin.com/in/sve-india",
