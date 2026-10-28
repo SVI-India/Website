@@ -34,8 +34,8 @@
             <div class="login-divider">Authorized Access Only</div>
 
             <p class="login-note">
-                🔒 Login is restricted to the authorized administrator account.<br>
-                Only <strong>shidhivinayakindustry.SVE@gmail.com</strong> can access this panel.
+                🔒 Login is restricted to authorized administrator accounts only.<br>
+                Access is verified securely via Firebase.
             </p>
 
             <a href="../index.html" class="login-back">← Back to Website</a>
@@ -52,34 +52,46 @@
         provider.setCustomParameters({ prompt: 'select_account' });
 
         // Auto-redirect if already logged in as admin
-        auth.onAuthStateChanged(user => {
-            if (user && user.email === window.ADMIN_EMAIL) {
-                location.href = 'index.html';
-            } else if (user && user.email !== window.ADMIN_EMAIL) {
-                auth.signOut();
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                try {
+                    // Security Handshake: Check if Rules allow this user
+                    await db.collection('settings').doc('header').update({ 
+                        _lastAdminCheck: new Date().toISOString() 
+                    });
+                    location.href = 'index.html'; 
+                } catch (e) {
+                    // Not an admin, sign them out
+                    await auth.signOut();
+                }
             }
         });
 
         async function signInWithGoogle() {
             const btn = document.getElementById('googleBtn');
             const txt = document.getElementById('googleBtnText');
-            const alert = document.getElementById('loginAlert');
+            const alertBox = document.getElementById('loginAlert');
 
             btn.disabled = true;
             txt.textContent = 'Signing in...';
-            alert.className = 'alert';
+            alertBox.className = 'alert';
 
             try {
                 const result = await auth.signInWithPopup(provider);
                 const user = result.user;
 
-                if (user.email !== window.ADMIN_EMAIL) {
+                // Security Handshake: Verify via Firebase Rules
+                try {
+                    await db.collection('settings').doc('header').update({ 
+                        _lastAdminCheck: new Date().toISOString() 
+                    });
+                } catch (ruleError) {
                     await auth.signOut();
                     throw new Error('Access denied — this Google account is not authorized.');
                 }
 
-                alert.className = 'alert alert-success show';
-                alert.textContent = '✅ Login successful! Redirecting...';
+                alertBox.className = 'alert alert-success show';
+                alertBox.textContent = '✅ Login successful! Redirecting...';
                 setTimeout(() => { location.href = 'index.html'; }, 700);
 
             } catch (err) {
@@ -90,8 +102,8 @@
                 else if (err.code === 'auth/unauthorized-domain') msg = 'Domain not authorized. Add it in Firebase Console.';
                 else if (err.code === 'auth/network-request-failed') msg = 'Network error. Check your internet connection.';
 
-                alert.className = 'alert alert-error show';
-                alert.textContent = '❌ ' + msg;
+                alertBox.className = 'alert alert-error show';
+                alertBox.textContent = '❌ ' + msg;
                 btn.disabled = false;
                 txt.textContent = 'Sign in with Google';
             }

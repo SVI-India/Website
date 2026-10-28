@@ -19,12 +19,13 @@ if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
-const ADMIN_EMAIL = "shidhivinayakindustry.svi@gmail.com";
+
+// ADMIN_EMAIL hata diya gaya hai security ke liye.
+// Ab admin kaun hai, ye sirf Firebase Security Rules decide karega.
 
 window.auth = auth;
 window.db = db;
 window.storage = storage;
-window.ADMIN_EMAIL = ADMIN_EMAIL;
 
 console.log('✅ Firebase Ready!');
 
