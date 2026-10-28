@@ -4,7 +4,7 @@
 // ============================================================
 
 // 🔥 SAFE EMAIL FALLBACK
-window.SVI_EMAILS = window.SVI_EMAILS || {
+window.SVE_EMAILS = window.SVE_EMAILS || {
     general:     "info@svein.mywire.org",
     contact:     "contact@svein.mywire.org",
     sales:       "sales@svein.mywire.org",
@@ -31,8 +31,8 @@ window.SVI_EMAILS = window.SVI_EMAILS || {
     sanjivni:    "sanjivni@svein.mywire.org",
     help:        "help@svein.mywire.org"
 };
-window.SVI_REPLY_FROM = window.SVI_REPLY_FROM || "sve.raj.in@gmail.com";
-window.SVI_REPLY_NOTICE = window.SVI_REPLY_NOTICE || "Reply will be from sve.raj.in@gmail.com";
+window.SVE_REPLY_FROM = window.SVE_REPLY_FROM || "sve.raj.in@gmail.com";
+window.SVE_REPLY_NOTICE = window.SVE_REPLY_NOTICE || "Reply will be from sve.raj.in@gmail.com";
 
 // ============================================================
 // ABSOLUTE PATH HELPER
@@ -246,7 +246,7 @@ async function renderFooter() {
         s.telegram3 ? `<a href="${s.telegram3}" target="_blank" rel="noopener" title="Telegram Channel 3" class="social-btn telegram">${SVG_LOGOS.telegram}</a>` : ''
     ].filter(Boolean).join('');
 
-    const replyNotice = c.replyNotice || window.SVI_REPLY_NOTICE;
+    const replyNotice = c.replyNotice || window.SVE_REPLY_NOTICE;
 
     el.innerHTML = `
         <footer class="footer">
@@ -270,7 +270,7 @@ async function renderFooter() {
                     <h4 data-i18n="footer.contact">Contact</h4>
                     <ul>
                         <li>📍 ${address}</li>
-                        <li>✉️ <a href="mailto:${c.email || window.SVI_EMAILS.general}">${c.email || window.SVI_EMAILS.general}</a></li>
+                        <li>✉️ <a href="mailto:${c.email || window.SVE_EMAILS.general}">${c.email || window.SVE_EMAILS.general}</a></li>
                         ${c.salesEmail ? `<li>💼 <a href="mailto:${c.salesEmail}">${c.salesEmail}</a></li>` : ''}
                         ${c.b2bEmail ? `<li>🤝 <a href="mailto:${c.b2bEmail}">${c.b2bEmail}</a></li>` : ''}
                     </ul>

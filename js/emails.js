@@ -1,7 +1,7 @@
 // ============================================================
 // EMAILS CONFIG — All official email addresses
 // ============================================================
-window.SVI_EMAILS = {
+window.SVE_EMAILS = {
     general:     "info@svein.mywire.org",
     contact:     "contact@svein.mywire.org",
     sales:       "sales@svein.mywire.org",
@@ -29,7 +29,7 @@ window.SVI_EMAILS = {
     help:        "help@svein.mywire.org"
 };
 
-window.SVI_REPLY_FROM = "sve.raj.in@gmail.com";
-window.SVI_REPLY_NOTICE = "Reply will be from sve.raj.in@gmail.com";
+window.SVE_REPLY_FROM = "sve.raj.in@gmail.com";
+window.SVE_REPLY_NOTICE = "Reply will be from sve.raj.in@gmail.com";
 
-console.log('📧 Email config loaded:', Object.keys(window.SVI_EMAILS).length, 'aliases');
+console.log('📧 Email config loaded:', Object.keys(window.SVE_EMAILS).length, 'aliases');

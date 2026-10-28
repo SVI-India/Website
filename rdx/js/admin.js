@@ -105,7 +105,7 @@ function renderSidebar(activePage) {
     el.innerHTML = `
         <div class="sidebar-logo">
             <img src="../images/logo.png" alt="" onerror="this.style.display='none'">
-            SVI <span>CMS</span>
+            SVE <span>CMS</span>
         </div>
         <ul class="sidebar-nav">
             ${items.map(i => `

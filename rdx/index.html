@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | SVI CMS</title>
+    <title>Dashboard | SVE CMS</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="../images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -147,7 +147,7 @@
         async function loadEmailSnapshot() {
             try {
                 const doc = await db.collection('settings').doc('emails').get();
-                const data = doc.exists ? doc.data() : window.SVI_EMAILS;
+                const data = doc.exists ? doc.data() : window.SVE_EMAILS;
                 document.getElementById('emailSnapshot').innerHTML =
                     Object.entries(data).slice(0, 12).map(([k, v]) =>
                         `<div><strong style="color:#1e40af;">${k}:</strong> ${esc(v)}</div>`

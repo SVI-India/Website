@@ -194,7 +194,7 @@
 
         const grid = document.getElementById('emailGrid');
         grid.innerHTML = EMAIL_DIRECTORY.map(e => {
-            const email = window.SVI_EMAILS[e.key];
+            const email = window.SVE_EMAILS[e.key];
             if (!email) return '';
             return `
                 <a href="mailto:${email}" class="email-card">
@@ -217,10 +217,10 @@
                     email: document.getElementById('email').value,
                     phone: document.getElementById('phone').value,
                     type: type,
-                    assignedEmail: window.SVI_EMAILS[type] || window.SVI_EMAILS.general,
+                    assignedEmail: window.SVE_EMAILS[type] || window.SVE_EMAILS.general,
                     message: document.getElementById('message').value,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    replyFrom: window.SVI_REPLY_FROM,
+                    replyFrom: window.SVE_REPLY_FROM,
                     status: 'new'
                 });
                 alert.className = 'alert success';
