@@ -149,8 +149,8 @@ const DEFAULT_FOOTER = {
         instagram: "https://www.instagram.com/sve_india",
         twitter:   "https://x.com/SVE_India_",
         linkedin:  "https://www.linkedin.com/in/sve-india",
-        whatsapp:  "https://chat.whatsapp.com/DVNqlTMeLbV1xUe6Tdukus",
-        whatsapp2: "https://chat.whatsapp.com/BydI9rLuMBSFE6GIB4IARj",
+        whatsapp:  "https://wa.me/+918119964445",
+        whatsapp2: "https://chat.whatsapp.com/Fyg6mxUYX2hAYQIWuGPClw",
         telegram:  "https://t.me/Siddhivinayakindustries1",
         telegram2: "https://t.me/+Ec_Dn-qKI45hNTA1",
         telegram3: "https://t.me/shidhivinayakindustries"
