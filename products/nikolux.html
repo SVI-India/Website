@@ -5,13 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0f1e">
     <title>Nikolux Detergent | Premium Stain Removal Powder | Siddhi Vinayak Enterprises</title>
-    <meta name="description" content="Nikolux — premium detergent powder with advanced stain removal. Bulk supply across India.">
+    <meta name="description" content="Buy Nikolux Premium Detergent Powder. Advanced stain removal formula for sparkling whites. Available in 1kg to 25kg packs. Bulk supply across India.">
     <link rel="canonical" href="https://www.sveindia.mywire.org/products/nikolux.html">
+    
+    <!-- Favicons -->
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
     <link rel="manifest" href="/images/site.webmanifest">
+    
+    <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+    <meta property="og:type" content="product">
+    <meta property="og:title" content="Nikolux Detergent | Premium Stain Removal Powder">
+    <meta property="og:description" content="Advanced stain removal formula for sparkling whites. Available in 1kg to 25kg packs.">
+    <meta property="og:url" content="https://www.sveindia.mywire.org/products/nikolux.html">
+    <meta property="og:image" content="https://www.sveindia.mywire.org/images/nikolux.jpg">
+    <meta property="og:site_name" content="Siddhi Vinayak Enterprises">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nikolux Detergent | Premium Stain Removal Powder">
+    <meta name="twitter:description" content="Advanced stain removal formula for sparkling whites.">
+    <meta name="twitter:image" content="https://www.sveindia.mywire.org/images/nikolux.jpg">
+
+    <!-- Product Schema (Google Rich Snippets ke liye) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Nikolux Detergent Powder",
+      "image": "https://www.sveindia.mywire.org/images/nikolux.jpg",
+      "description": "Nikolux is our flagship premium detergent powder, formulated with advanced stain-removal technology and long-lasting freshness.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Nikolux"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "https://www.sveindia.mywire.org/products/nikolux.html",
+        "priceCurrency": "INR",
+        "lowPrice": "36",
+        "highPrice": "900",
+        "offerCount": "8",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -70,7 +111,37 @@
             color: var(--text-muted);
             font-size: clamp(0.95rem, 1.6vw, 1.05rem);
             line-height: 1.75;
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
+        }
+        /* Size Selector */
+        .variant-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .variant-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .variant-btn:hover { border-color: var(--primary); }
+        .variant-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        .price-display {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 1.5rem;
         }
         .product-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; }
         .feature-list {
@@ -161,6 +232,7 @@
             .product-hero { grid-template-columns: 1fr; text-align: center; }
             .product-hero-image { max-width: 450px; margin: 0 auto; }
             .product-cta { justify-content: center; }
+            .variant-selector { justify-content: center; }
             .product-hero .desc { margin-left: auto; margin-right: auto; }
         }
     </style>
@@ -185,8 +257,16 @@
                 <h1 data-cms="name">Nikolux</h1>
                 <p class="tagline" data-cms="tagline">Powerful Cleaning for Sparkling Whites</p>
                 <p class="desc" data-cms="desc">Nikolux is our flagship premium detergent powder, formulated with advanced stain-removal technology and long-lasting freshness.</p>
+                
+                <!-- Size Selector aur Price -->
+                <div class="variant-selector" id="variantSelector"></div>
+                <div class="price-display" id="priceDisplay">₹-- <span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/ pack</span></div>
+
                 <div class="product-cta">
-                    <a href="/contact.html" class="btn btn-primary" data-i18n="product.enquire">📞 Enquire Now</a>
+                    <!-- Add to Cart button (Dynamic URL) -->
+                    <a href="#" id="addToCartBtn" class="btn btn-primary" target="_blank" rel="noopener">🛒 Add to Cart</a>
+                    <a href="https://www.buysve.mywire.org/" class="btn btn-outline" target="_blank" rel="noopener">💼 B2B Portal</a>
+                    <a href="/contact.html" class="btn btn-outline" data-i18n="product.enquire">📞 Enquire Now</a>
                     <a href="/products.html" class="btn btn-outline" data-i18n="product.allProducts">← All Products</a>
                 </div>
             </div>
@@ -250,6 +330,17 @@
             tagline: 'Powerful Cleaning for Sparkling Whites',
             desc: 'Nikolux is our flagship premium detergent powder, formulated with advanced stain-removal technology and long-lasting freshness.',
             image: '/images/nikolux.jpg',
+            // CSV se liye gaye variants
+            variants: [
+                { size: '1kg', price: 36 },
+                { size: '2kg', price: 72 },
+                { size: '2.5kg', price: 90 },
+                { size: '4kg', price: 144 },
+                { size: '5kg', price: 180 },
+                { size: '10kg', price: 360 },
+                { size: '20kg', price: 720 },
+                { size: '25kg', price: 900 }
+            ],
             features: [
                 'Advanced stain removal technology',
                 'Long-lasting freshness',
@@ -279,6 +370,7 @@
                 }
             } catch (e) { console.warn(e); }
 
+            // Render Text Data
             document.querySelectorAll('[data-cms]').forEach(el => {
                 const key = el.dataset.cms;
                 if (data[key]) el.innerHTML = data[key];
@@ -287,6 +379,7 @@
             const img = document.getElementById('productImage');
             if (data.image) img.src = window.absImg(data.image);
 
+            // Render Features
             const features = data.features || DEFAULT_PRODUCT.features;
             document.getElementById('featuresList').innerHTML = features.map(f => `
                 <div class="feature-item">
@@ -295,10 +388,46 @@
                 </div>
             `).join('');
 
+            // Render Specs
             const specs = data.specs || DEFAULT_PRODUCT.specs;
             document.getElementById('specsTable').innerHTML = specs.map(([k, v]) => `
                 <tr><td>${k}</td><td>${v}</td></tr>
             `).join('');
+
+            // Logic for Variants (Size & Price)
+            const variants = data.variants || DEFAULT_PRODUCT.variants;
+            const variantSelector = document.getElementById('variantSelector');
+            const priceDisplay = document.getElementById('priceDisplay');
+            const addToCartBtn = document.getElementById('addToCartBtn');
+
+            function updateUI(selectedVariant) {
+                // Update Active Button
+                document.querySelectorAll('.variant-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.size === selectedVariant.size);
+                });
+                // Update Price
+                priceDisplay.innerHTML = `₹${selectedVariant.price} <span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/ ${selectedVariant.size} pack</span>`;
+                // Update Cart URL
+                addToCartBtn.href = `https://www.buysve.mywire.org/#nikocart?size=${selectedVariant.size}&price=${selectedVariant.price}`;
+            }
+
+            variantSelector.innerHTML = variants.map((v, index) => `
+                <button class="variant-btn ${index === 0 ? 'active' : ''}" data-size="${v.size}">
+                    ${v.size}
+                </button>
+            `).join('');
+
+            // Add click events
+            document.querySelectorAll('.variant-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const selectedSize = btn.dataset.size;
+                    const variant = variants.find(v => v.size === selectedSize);
+                    updateUI(variant);
+                });
+            });
+
+            // Initialize with first variant
+            if(variants.length > 0) updateUI(variants[0]);
 
             document.title = `${data.name} | Premium Detergent | Siddhi Vinayak Enterprises`;
         })();

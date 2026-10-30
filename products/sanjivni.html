@@ -5,13 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0f1e">
     <title>Sanjivni Herbal Detergent | Skin-Friendly Formula | Siddhi Vinayak Enterprises</title>
-    <meta name="description" content="Sanjivni — herbal detergent for sensitive fabrics. Eco-friendly formula.">
+    <meta name="description" content="Buy Sanjivni Herbal Detergent Powder. Eco-friendly, skin-friendly formula for sensitive fabrics. Available in 1kg to 25kg packs.">
     <link rel="canonical" href="https://www.sveindia.mywire.org/products/sanjivni.html">
+    
+    <!-- Favicons -->
     <link rel="icon" href="/images/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
     <link rel="manifest" href="/images/site.webmanifest">
+    
+    <!-- Open Graph (WhatsApp, Facebook) -->
+    <meta property="og:type" content="product">
+    <meta property="og:title" content="Sanjivni Herbal Detergent | Skin-Friendly Formula">
+    <meta property="og:description" content="Eco-friendly herbal detergent for sensitive fabrics.">
+    <meta property="og:url" content="https://www.sveindia.mywire.org/products/sanjivni.html">
+    <meta property="og:image" content="https://www.sveindia.mywire.org/images/sanjivni.jpg">
+    <meta property="og:site_name" content="Siddhi Vinayak Enterprises">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sanjivni Herbal Detergent | Skin-Friendly Formula">
+    <meta name="twitter:description" content="Eco-friendly herbal detergent for sensitive fabrics.">
+    <meta name="twitter:image" content="https://www.sveindia.mywire.org/images/sanjivni.jpg">
+
+    <!-- Product Schema (Google Rich Snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Sanjivni Herbal Detergent Powder",
+      "image": "https://www.sveindia.mywire.org/images/sanjivni.jpg",
+      "description": "Sanjivni is our herbal-based detergent, specially formulated for sensitive fabrics and skin. Made with natural ingredients, it provides gentle yet effective cleaning.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Sanjivni"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "https://www.sveindia.mywire.org/products/sanjivni.html",
+        "priceCurrency": "INR",
+        "lowPrice": "95",
+        "highPrice": "2375",
+        "offerCount": "8",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -56,7 +97,37 @@
         .product-hero .desc {
             color: var(--text-muted);
             font-size: clamp(0.95rem, 1.6vw, 1.05rem);
-            line-height: 1.75; margin-bottom: 2rem;
+            line-height: 1.75; margin-bottom: 1.25rem;
+        }
+        /* Size Selector */
+        .variant-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .variant-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .variant-btn:hover { border-color: var(--success); }
+        .variant-btn.active {
+            border-color: var(--success);
+            background: var(--success);
+            color: #fff;
+        }
+        .price-display {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 1.5rem;
         }
         .product-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; }
         .feature-list {
@@ -110,6 +181,7 @@
             .product-hero { grid-template-columns: 1fr; text-align: center; }
             .product-hero-image { max-width: 450px; margin: 0 auto; }
             .product-cta { justify-content: center; }
+            .variant-selector { justify-content: center; }
             .product-hero .desc { margin-left: auto; margin-right: auto; }
         }
     </style>
@@ -134,8 +206,16 @@
                 <h1 data-cms="name">Sanjivni</h1>
                 <p class="tagline" data-cms="tagline">Herbal Care for Sensitive Fabrics</p>
                 <p class="desc" data-cms="desc">Sanjivni is our herbal-based detergent, specially formulated for sensitive fabrics and skin. Made with natural ingredients, it provides gentle yet effective cleaning.</p>
+                
+                <!-- Size Selector aur Price -->
+                <div class="variant-selector" id="variantSelector"></div>
+                <div class="price-display" id="priceDisplay">₹-- <span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/ pack</span></div>
+
                 <div class="product-cta">
-                    <a href="/contact.html" class="btn btn-primary" data-i18n="product.enquire">📞 Enquire Now</a>
+                    <!-- Add to Cart button (Dynamic URL) -->
+                    <a href="#" id="addToCartBtn" class="btn btn-primary" target="_blank" rel="noopener">🛒 Add to Cart</a>
+                    <a href="https://www.buysve.mywire.org/" class="btn btn-outline" target="_blank" rel="noopener">💼 B2B Portal</a>
+                    <a href="/contact.html" class="btn btn-outline" data-i18n="product.enquire">📞 Enquire Now</a>
                     <a href="/products.html" class="btn btn-outline" data-i18n="product.allProducts">← All Products</a>
                 </div>
             </div>
@@ -199,6 +279,17 @@
             tagline: 'Herbal Care for Sensitive Fabrics',
             desc: 'Sanjivni is our herbal-based detergent, specially formulated for sensitive fabrics and skin.',
             image: '/images/sanjivni.jpg',
+            // CSV se liye gaye variants
+            variants: [
+                { size: '1kg', price: 95 },
+                { size: '2kg', price: 190 },
+                { size: '2.5kg', price: 237 },
+                { size: '4kg', price: 380 },
+                { size: '5kg', price: 475 },
+                { size: '10kg', price: 950 },
+                { size: '20kg', price: 1900 },
+                { size: '25kg', price: 2375 }
+            ],
             features: [
                 'Herbal ingredients',
                 'Skin-friendly formula',
@@ -241,6 +332,37 @@
             document.getElementById('specsTable').innerHTML = specs.map(([k, v]) => `
                 <tr><td>${k}</td><td>${v}</td></tr>
             `).join('');
+
+            // Logic for Variants (Size & Price)
+            const variants = data.variants || DEFAULT_PRODUCT.variants;
+            const variantSelector = document.getElementById('variantSelector');
+            const priceDisplay = document.getElementById('priceDisplay');
+            const addToCartBtn = document.getElementById('addToCartBtn');
+
+            function updateUI(selectedVariant) {
+                document.querySelectorAll('.variant-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.size === selectedVariant.size);
+                });
+                priceDisplay.innerHTML = `₹${selectedVariant.price} <span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/ ${selectedVariant.size} pack</span>`;
+                // Update Cart URL with #sanjivnicart
+                addToCartBtn.href = `https://www.buysve.mywire.org/#sanjivnicart?size=${selectedVariant.size}&price=${selectedVariant.price}`;
+            }
+
+            variantSelector.innerHTML = variants.map((v, index) => `
+                <button class="variant-btn ${index === 0 ? 'active' : ''}" data-size="${v.size}">
+                    ${v.size}
+                </button>
+            `).join('');
+
+            document.querySelectorAll('.variant-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const selectedSize = btn.dataset.size;
+                    const variant = variants.find(v => v.size === selectedSize);
+                    updateUI(variant);
+                });
+            });
+
+            if(variants.length > 0) updateUI(variants[0]);
 
             document.title = `${data.name} | Herbal Detergent | Siddhi Vinayak Enterprises`;
         })();

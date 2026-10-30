@@ -19,12 +19,18 @@ if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
-const ADMIN_EMAIL = "shidhivinayakindustry.svi@gmail.com";
+
+// 🔥 Dono emails yahan add kar diye hain
+const ADMIN_EMAILS = [
+    "shidhivinayakindustry.svi@gmail.com",
+    "sve.raj.in@gmail.com"
+];
 
 window.auth = auth;
 window.db = db;
 window.storage = storage;
-window.ADMIN_EMAIL = ADMIN_EMAIL;
+window.ADMIN_EMAILS = ADMIN_EMAILS;
+window.ADMIN_EMAIL = ADMIN_EMAILS[0]; // Fallback ke liye
 
 console.log('✅ Firebase Ready!');
 
