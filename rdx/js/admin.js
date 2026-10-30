@@ -6,8 +6,9 @@
 function guardAdmin() {
     return new Promise((resolve) => {
         auth.onAuthStateChanged(user => {
-            if (!user || user.email !== window.ADMIN_EMAIL) {
-                location.href = 'login.html';
+            // Dono emails ko allow karne ke liye window.ADMIN_EMAILS check kiya
+            if (!user || !window.ADMIN_EMAILS || !window.ADMIN_EMAILS.includes(user.email)) {
+                location.href = '/rdx/login.html';
                 return;
             }
             document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = user.email);
@@ -19,7 +20,7 @@ function guardAdmin() {
 // ---------- LOGOUT ----------
 function adminLogout() {
     if (!confirm('Logout from admin panel?')) return;
-    auth.signOut().then(() => location.href = 'login.html');
+    auth.signOut().then(() => location.href = '/rdx/login.html');
 }
 
 // ---------- TOAST ----------
@@ -90,21 +91,21 @@ function renderSidebar(activePage) {
     if (!el) return;
 
     const items = [
-        { id: 'index',      icon: '📊', label: 'Dashboard',       href: 'index.html' },
-        { id: 'header',     icon: '🔝', label: 'Header',          href: 'header.html' },
-        { id: 'footer',     icon: '🔻', label: 'Footer',          href: 'footer.html' },
-        { id: 'pages',      icon: '📄', label: 'Pages',           href: 'pages.html' },
-        { id: 'products',   icon: '📦', label: 'Products',        href: 'products.html' },
-        { id: 'ai-leads',   icon: '🤖', label: 'AI Leads',        href: 'ai-leads.html' },
-        { id: 'notices',    icon: '📢', label: 'Notices & Popups', href: 'notices.html' },
-        { id: 'theme',      icon: '🎨', label: 'Theme & CSS',     href: 'theme.html' },
-        { id: 'settings',   icon: '⚙️', label: 'Settings',        href: 'settings.html' },
-        { id: 'enquiries',  icon: '✉️', label: 'Enquiries',       href: 'enquiries.html' }
+        { id: 'index',      icon: '📊', label: 'Dashboard',       href: '/rdx/index.html' },
+        { id: 'header',     icon: '🔝', label: 'Header',          href: '/rdx/header.html' },
+        { id: 'footer',     icon: '🔻', label: 'Footer',          href: '/rdx/footer.html' },
+        { id: 'pages',      icon: '📄', label: 'Pages',           href: '/rdx/pages.html' },
+        { id: 'products',   icon: '📦', label: 'Products',        href: '/rdx/products.html' },
+        { id: 'ai-leads',   icon: '🤖', label: 'AI Leads',        href: '/rdx/ai-leads.html' },
+        { id: 'notices',    icon: '📢', label: 'Notices & Popups', href: '/rdx/notices.html' },
+        { id: 'theme',      icon: '🎨', label: 'Theme & CSS',     href: '/rdx/theme.html' },
+        { id: 'settings',   icon: '⚙️', label: 'Settings',        href: '/rdx/settings.html' },
+        { id: 'enquiries',  icon: '✉️', label: 'Enquiries',       href: '/rdx/enquiries.html' }
     ];
 
     el.innerHTML = `
         <div class="sidebar-logo">
-            <img src="../images/logo.png" alt="" onerror="this.style.display='none'">
+            <img src="/images/logo.png" alt="" onerror="this.style.display='none'">
             SVE <span>CMS</span>
         </div>
         <ul class="sidebar-nav">
