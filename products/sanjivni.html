@@ -345,7 +345,7 @@
                 });
                 priceDisplay.innerHTML = `₹${selectedVariant.price} <span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/ ${selectedVariant.size} pack</span>`;
                 // Update Cart URL with #sanjivnicart
-                addToCartBtn.href = `https://www.buysve.mywire.org/#sanjivnicart?size=${selectedVariant.size}&price=${selectedVariant.price}`;
+                addToCartBtn.href = `https://www.buysve.mywire.org/sanjivni?size=${selectedVariant.size}&price=${selectedVariant.price}`;
             }
 
             variantSelector.innerHTML = variants.map((v, index) => `
