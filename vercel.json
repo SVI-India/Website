@@ -1,11 +1,21 @@
 {
   "cleanUrls": true,
-  "trailingSlash": true,
-  "redirects": [
+  "rewrites": [
     {
-      "source": "/:path*.html",
-      "destination": "/:path*",
-      "permanent": true
+      "source": "/rdx/css/:path*",
+      "destination": "/rdx/css/:path*"
+    },
+    {
+      "source": "/rdx/js/:path*",
+      "destination": "/rdx/js/:path*"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/js/:path*"
     }
   ]
 }
