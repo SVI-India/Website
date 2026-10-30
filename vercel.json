@@ -1,21 +1,4 @@
 {
   "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/rdx/css/:path*",
-      "destination": "/rdx/css/:path*"
-    },
-    {
-      "source": "/rdx/js/:path*",
-      "destination": "/rdx/js/:path*"
-    },
-    {
-      "source": "/css/:path*",
-      "destination": "/css/:path*"
-    },
-    {
-      "source": "/js/:path*",
-      "destination": "/js/:path*"
-    }
-  ]
+  "trailingSlash": false
 }
