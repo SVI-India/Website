@@ -5,27 +5,13 @@
 // ---------- AUTH GUARD ----------
 function guardAdmin() {
     return new Promise((resolve) => {
-        auth.onAuthStateChanged(async user => {
-            if (!user) {
+        auth.onAuthStateChanged(user => {
+            if (!user || user.email !== window.ADMIN_EMAIL) {
                 location.href = 'login.html';
                 return;
             }
-            
-            try {
-                // SECURITY CHECK: Firebase Rules se verify karo
-                // Agar Rules ne allow kiya, tabhi aage badhega
-                await db.collection('settings').doc('header').update({ 
-                    _lastAdminCheck: new Date().toISOString() 
-                });
-                
-                document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = user.email);
-                resolve(user);
-                
-            } catch (error) {
-                console.warn("Access denied by security rules");
-                await auth.signOut();
-                location.href = 'login.html';
-            }
+            document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = user.email);
+            resolve(user);
         });
     });
 }
